@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Exact Modern European Coffee-House Palette */
+    --color-velvet-beige: #C8B39A;
+    --color-dusty-rose: #C58F98;
+    --color-creme-latte: #F5EBDD;
+    --color-cocoa-sand: #B59A83;
+    --color-soft-olive: #96977A;
+    --color-burgundy: #6F1737;
+    --color-decadent-chocolate: #3B2527;
+    --color-mauve-madness: #A77C91;
+    --color-flowering-chestnut: #8D514B;
+    --color-deep-espresso: #241A1A;
+    --color-warm-ivory: #FFF9F0;
+
+    /* Semantic Light Theme */
+    --bg-page: var(--color-creme-latte);
+    --bg-surface: var(--color-warm-ivory);
+    --bg-surface-elevated: #ffffff;
+    --bg-sidebar: var(--color-warm-ivory);
+    --border-warm: rgba(181, 154, 131, 0.35); /* Cocoa Sand light border */
+    --border-accent: rgba(111, 23, 55, 0.25); /* Burgundy subtle border */
+    --text-primary: var(--color-deep-espresso);
+    --text-secondary: #4A3A37;
+    --text-muted: #7E6962;
+    --heading-primary: var(--color-burgundy);
+    --accent-primary: var(--color-burgundy);
+    --accent-hover: #55122B;
+    --accent-secondary: var(--color-dusty-rose);
+    --accent-badge: var(--color-mauve-madness);
+    --accent-success: var(--color-soft-olive);
+    --accent-alert: var(--color-flowering-chestnut);
+    --glass-bg: rgba(255, 249, 240, 0.85);
+    --glass-border: rgba(200, 179, 154, 0.45);
+  }
+
+  .dark {
+    /* Semantic Dark Theme */
+    --bg-page: var(--color-deep-espresso);
+    --bg-surface: var(--color-decadent-chocolate);
+    --bg-surface-elevated: #2E1F21;
+    --bg-sidebar: #1F1515;
+    --border-warm: rgba(181, 154, 131, 0.25);
+    --border-accent: rgba(197, 143, 152, 0.35);
+    --text-primary: var(--color-warm-ivory);
+    --text-secondary: var(--color-creme-latte);
+    --text-muted: var(--color-cocoa-sand);
+    --heading-primary: #F0C4CC;
+    --accent-primary: var(--color-dusty-rose);
+    --accent-hover: #D8A3AB;
+    --accent-secondary: var(--color-mauve-madness);
+    --accent-badge: var(--color-mauve-madness);
+    --accent-success: var(--color-soft-olive);
+    --accent-alert: #F2958D;
+    --glass-bg: rgba(59, 37, 39, 0.75);
+    --glass-border: rgba(197, 143, 152, 0.2);
+  }
+
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+}
+
+/* Typography Utility Classes */
+.font-display-serif {
+  font-family: 'DM Serif Display', 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.01em;
+}
+
+.font-editorial-italic {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.font-sans-ui {
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+.font-mono-code {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Coffee-House Glassmorphism Panels */
+.glass-panel-coffee {
+  background: var(--glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Card Styling */
+.card-coffee {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-warm);
+  border-radius: 1.125rem;
+  box-shadow: 0 4px 20px -2px rgba(36, 26, 26, 0.06);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-coffee:hover {
+  border-color: var(--color-dusty-rose);
+  box-shadow: 0 12px 32px -4px rgba(111, 23, 55, 0.12);
+}
+
+.dark .card-coffee {
+  box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.45);
+}
+
+.dark .card-coffee:hover {
+  border-color: var(--color-dusty-rose);
+  box-shadow: 0 12px 35px -4px rgba(0, 0, 0, 0.65);
+}
+
+/* Primary Button in Burgundy */
+.btn-burgundy {
+  background-color: var(--color-burgundy);
+  color: var(--color-warm-ivory);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-burgundy:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 14px rgba(111, 23, 55, 0.3);
+}
+
+.dark .btn-burgundy {
+  background-color: var(--color-dusty-rose);
+  color: var(--color-deep-espresso);
+}
+
+.dark .btn-burgundy:hover {
+  background-color: #D8A3AB;
+  box-shadow: 0 4px 14px rgba(197, 143, 152, 0.4);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(181, 154, 131, 0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(111, 23, 55, 0.5);
+}
+
+/* High Contrast Focus States for WCAG AAA Accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--color-burgundy);
+  outline-offset: 2px;
+}
+
+.dark a:focus-visible, .dark button:focus-visible, .dark input:focus-visible, .dark select:focus-visible, .dark textarea:focus-visible {
+  outline: 2px solid var(--color-dusty-rose);
+  outline-offset: 2px;
+}
