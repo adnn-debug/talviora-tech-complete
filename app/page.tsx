@@ -30,6 +30,7 @@ import {
   Zap,
   Bookmark,
   BookmarkCheck,
+  AlertCircle,
 } from "lucide-react";
 
 import {
@@ -466,7 +467,7 @@ export default function Home() {
                   key={item.id}
                   className="rounded-2xl border border-[rgba(var(--color-burgundy-rgb),0.14)] bg-[var(--color-warm-ivory)] p-5 space-y-3.5 shadow-2xs hover:shadow-xs hover:border-[var(--color-burgundy)] transition-all flex flex-col justify-between group"
                 >
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     {/* Card Badges */}
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.4)] truncate">
@@ -485,42 +486,98 @@ export default function Home() {
                       </span>
                     </div>
 
-                    {/* Title */}
+                    {/* 1. Name of the field or technology */}
                     <h3 className="font-display-serif text-lg font-bold text-[var(--color-burgundy)] group-hover:text-[var(--color-burgundy)] transition-colors">
                       {item.name}
                     </h3>
 
-                    {/* Summary */}
-                    <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed line-clamp-3">
+                    {/* 2. One- or two-sentence beginner-friendly explanation */}
+                    <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
                       {item.plainLanguageSummary}
                     </p>
 
-                    {/* Career Roles Chips */}
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {item.careerRoles.slice(0, 2).map((role, idx) => (
-                        <span
-                          key={idx}
-                          className="text-[9px] px-2 py-0.5 rounded-md bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] font-medium"
-                        >
-                          {role}
-                        </span>
-                      ))}
-                      {item.careerRoles.length > 2 && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-[var(--color-creme-latte)] text-[var(--color-burgundy)]/70">
-                          +{item.careerRoles.length - 2}
+                    {/* 3. What a learner can create or accomplish with it */}
+                    <div className="p-2.5 rounded-xl bg-[var(--color-creme-latte)]/70 border border-[rgba(var(--color-burgundy-rgb),0.08)] text-[11px] text-[var(--color-burgundy)] space-y-0.5">
+                      <span className="font-bold block text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75">
+                        What you can create:
+                      </span>
+                      <p className="leading-relaxed text-[var(--color-burgundy)]/90">
+                        {item.purpose}
+                      </p>
+                    </div>
+
+                    {/* 4. Recommended prerequisites, if any */}
+                    <div className="text-[11px] text-[var(--color-burgundy)]/85 space-y-1">
+                      <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                        Recommended Prerequisites:
+                      </span>
+                      {item.prerequisites.length > 0 ? (
+                        <div className="flex flex-wrap gap-1">
+                          {item.prerequisites.slice(0, 3).map((pre, pidx) => (
+                            <span key={pidx} className="px-1.5 py-0.5 rounded bg-[var(--surface-rose)] text-[10px] font-semibold text-[var(--color-burgundy)]">
+                              {pre}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <span className="text-[10px] font-medium text-emerald-800 dark:text-emerald-300">
+                          None • Complete beginner friendly
                         </span>
                       )}
                     </div>
+
+                    {/* 5. Example projects */}
+                    {item.projectIdeas && item.projectIdeas.length > 0 && (
+                      <div className="text-[11px] text-[var(--color-burgundy)]/85 space-y-1">
+                        <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                          Example Project:
+                        </span>
+                        <div className="p-2 rounded-lg bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.08)]">
+                          <strong className="text-[10px] text-[var(--color-burgundy)] block font-semibold truncate">
+                            💡 {item.projectIdeas[0].title}
+                          </strong>
+                          <p className="text-[10px] text-[var(--color-burgundy)]/75 line-clamp-1 mt-0.5">
+                            {item.projectIdeas[0].description}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 6. Common career or practical uses */}
+                    <div className="space-y-1">
+                      <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                        Common Career Uses:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {item.careerRoles.slice(0, 3).map((role, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--color-creme-latte)]/80 text-[var(--color-burgundy)] font-medium"
+                          >
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Non-blocking advanced topic guidance */}
+                    {item.difficulty === "Advanced" && (
+                      <div className="p-2 rounded-lg bg-[var(--surface-rose)]/60 border border-[rgba(var(--color-dusty-rose-rgb),0.5)] text-[10px] text-[var(--color-burgundy)] leading-tight">
+                        <span className="font-bold">⚡ Advanced Topic:</span> Prerequisites recommended, but you are free to explore anytime!
+                      </div>
+                    )}
                   </div>
 
                   {/* Card Footer Actions */}
                   <div className="pt-3 border-t border-[rgba(var(--color-burgundy-rgb),0.1)] flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
+                      {/* 7. Clear "Explore This Field" action */}
                       <button
                         onClick={() => setSelectedItem(item)}
-                        className="px-3 py-1.5 rounded-xl text-xs font-bold text-[var(--color-burgundy)] bg-[var(--surface-rose)]/60 hover:bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.4)] transition cursor-pointer"
+                        className="btn-burgundy px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer"
                       >
-                        Quick Overview
+                        <span>Explore This Field</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
                       </button>
 
                       <button
@@ -537,20 +594,12 @@ export default function Home() {
                       </button>
                     </div>
 
-                    {isSandboxSupported ? (
+                    {isSandboxSupported && (
                       <Link
                         href="/learning"
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-burgundy)] hover:underline"
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-burgundy)] hover:underline shrink-0"
                       >
                         <span>Try in Sandbox</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/catalogue"
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[var(--color-burgundy)] hover:underline"
-                      >
-                        <span>Full Syllabus</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     )}
@@ -621,6 +670,20 @@ export default function Home() {
 
             {/* Modal Scrollable Body */}
             <div className="p-6 overflow-y-auto space-y-5 text-xs text-[var(--color-burgundy)]">
+              {/* Advanced Technology Guidance Callout (Non-blocking) */}
+              {selectedItem.difficulty === "Advanced" && (
+                <div className="p-4 rounded-2xl bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] space-y-1.5 shadow-2xs">
+                  <div className="flex items-center gap-2 font-bold text-xs text-[var(--color-burgundy)]">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-burgundy)]" />
+                    <span>Advanced Technology • Direct Learning Permitted</span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-[var(--color-burgundy)]/90">
+                    You can explore and study {selectedItem.name} right now without restriction! To build strong foundations, we recommend exploring prerequisite topics first:{" "}
+                    <strong>{selectedItem.prerequisites.length > 0 ? selectedItem.prerequisites.join(", ") : "General programming foundations"}</strong>. Your choice is never blocked.
+                  </p>
+                </div>
+              )}
+
               <div>
                 <h4 className="font-bold text-[11px] uppercase tracking-wider text-[var(--color-burgundy)]/75 mb-1">
                   Plain-Language Summary

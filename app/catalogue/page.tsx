@@ -586,16 +586,22 @@ export default function CompleteCataloguePage() {
                   <span className="text-[11px] font-bold text-[var(--color-burgundy)]/70 uppercase">
                     Difficulty:
                   </span>
-                  <select
-                    value={selectedDifficulty}
-                    onChange={(e) => setSelectedDifficulty(e.target.value)}
-                    className="px-2.5 py-1.5 rounded-lg bg-[var(--color-creme-latte)] border border-[rgba(var(--color-burgundy-rgb),0.18)] text-[var(--color-burgundy)] text-xs font-semibold cursor-pointer"
-                  >
-                    <option value="All">All Levels</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                  </select>
+                  <div className="flex items-center gap-1">
+                    {(["All", "Beginner", "Intermediate", "Advanced"] as const).map((diff) => (
+                      <button
+                        key={diff}
+                        type="button"
+                        onClick={() => setSelectedDifficulty(diff)}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                          selectedDifficulty === diff
+                            ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-2xs"
+                            : "bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.12)] hover:bg-[var(--surface-rose)]"
+                        }`}
+                      >
+                        {diff}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Free / Open Source Toggle */}
@@ -752,11 +758,11 @@ export default function CompleteCataloguePage() {
                     key={item.id}
                     className="p-5 sm:p-6 rounded-2xl bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.15)] hover:border-[var(--color-dusty-rose)] shadow-xs hover:shadow-sm transition flex flex-col justify-between space-y-4"
                   >
-                    <div>
+                    <div className="space-y-3">
                       {/* Top Badges */}
-                      <div className="flex items-center justify-between gap-2 text-[10px] mb-2.5">
+                      <div className="flex items-center justify-between gap-2 text-[10px]">
                         <span className="font-bold uppercase px-2 py-0.5 rounded-md bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.1)] truncate max-w-[180px]">
-                          {item.subcategory}
+                          {item.subcategory || item.category}
                         </span>
                         <div className="flex items-center gap-1 shrink-0">
                           <span
@@ -773,7 +779,7 @@ export default function CompleteCataloguePage() {
                         </div>
                       </div>
 
-                      {/* Tool Title & Bookmark Toggle */}
+                      {/* 1. Name of the field or technology & Bookmark Toggle */}
                       <div className="flex items-start justify-between gap-2">
                         <h2 className="font-display-serif text-lg font-bold text-[var(--color-burgundy)] leading-snug">
                           {item.name}
@@ -791,31 +797,85 @@ export default function CompleteCataloguePage() {
                         </button>
                       </div>
 
-                      {/* Plain-Language Explanation */}
-                      <p className="text-xs text-[var(--color-burgundy)]/90 mt-2 leading-relaxed">
+                      {/* 2. One- or two-sentence beginner-friendly explanation */}
+                      <p className="text-xs text-[var(--color-burgundy)]/90 leading-relaxed">
                         {item.plainLanguageSummary}
                       </p>
 
-                      {/* Purpose */}
-                      <div className="mt-3 p-2.5 rounded-xl bg-[var(--color-warm-ivory)]/40 border border-[rgba(var(--color-burgundy-rgb),0.08)] text-[11px] text-[var(--color-burgundy)]/85">
-                        <strong className="text-[var(--color-burgundy)] font-semibold">Core Use:</strong> {item.purpose}
+                      {/* 3. What a learner can create or accomplish with it */}
+                      <div className="p-2.5 rounded-xl bg-[var(--color-creme-latte)]/70 border border-[rgba(var(--color-burgundy-rgb),0.08)] text-[11px] text-[var(--color-burgundy)] space-y-0.5">
+                        <span className="font-bold block text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75">
+                          What you can create:
+                        </span>
+                        <p className="leading-relaxed text-[var(--color-burgundy)]/90">
+                          {item.purpose}
+                        </p>
                       </div>
 
-                      {/* Suitable Roles */}
-                      <div className="mt-3 flex flex-wrap gap-1">
-                        {item.careerRoles.slice(0, 3).map((role, idx) => (
-                          <span
-                            key={idx}
-                            className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--color-creme-latte)]/70 text-[var(--color-burgundy)] font-medium"
-                          >
-                            {role}
+                      {/* 4. Recommended prerequisites, if any */}
+                      <div className="text-[11px] text-[var(--color-burgundy)]/85 space-y-1">
+                        <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                          Recommended Prerequisites:
+                        </span>
+                        {item.prerequisites.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {item.prerequisites.slice(0, 3).map((pre, pidx) => (
+                              <span key={pidx} className="px-1.5 py-0.5 rounded bg-[var(--surface-rose)] text-[10px] font-semibold text-[var(--color-burgundy)]">
+                                {pre}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="text-[10px] font-medium text-emerald-800 dark:text-emerald-300">
+                            None • Complete beginner friendly
                           </span>
-                        ))}
+                        )}
                       </div>
+
+                      {/* 5. Example projects */}
+                      {item.projectIdeas && item.projectIdeas.length > 0 && (
+                        <div className="text-[11px] text-[var(--color-burgundy)]/85 space-y-1">
+                          <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                            Example Project:
+                          </span>
+                          <div className="p-2 rounded-lg bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.08)]">
+                            <strong className="text-[10px] text-[var(--color-burgundy)] block font-semibold truncate">
+                              💡 {item.projectIdeas[0].title}
+                            </strong>
+                            <p className="text-[10px] text-[var(--color-burgundy)]/75 line-clamp-1 mt-0.5">
+                              {item.projectIdeas[0].description}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 6. Common career or practical uses */}
+                      <div className="space-y-1">
+                        <span className="font-bold text-[10px] uppercase tracking-wider text-[var(--color-burgundy)]/75 block">
+                          Common Career Uses:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {item.careerRoles.slice(0, 3).map((role, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--color-creme-latte)]/80 text-[var(--color-burgundy)] font-medium"
+                            >
+                              {role}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Advanced Topic Guidance (Non-blocking) */}
+                      {item.difficulty === "Advanced" && (
+                        <div className="p-2 rounded-lg bg-[var(--surface-rose)]/60 border border-[rgba(var(--color-dusty-rose-rgb),0.5)] text-[10px] text-[var(--color-burgundy)] leading-tight">
+                          <span className="font-bold">⚡ Advanced Topic:</span> Prerequisites recommended, but you are free to explore anytime!
+                        </div>
+                      )}
                     </div>
 
                     {/* Card Footer: Metadata and Action */}
-                    <div className="pt-3 border-t border-[rgba(var(--color-burgundy-rgb),0.1)] flex items-center justify-between text-[11px]">
+                    <div className="pt-3 border-t border-[rgba(var(--color-burgundy-rgb),0.1)] flex items-center justify-between gap-2 text-[11px]">
                       <div className="flex items-center gap-1.5">
                         {item.isFreeOrOpenSource && (
                           <span className="text-[10px] font-bold text-[var(--color-burgundy)] bg-[var(--surface-rose)] px-1.5 py-0.5 rounded">
@@ -829,11 +889,12 @@ export default function CompleteCataloguePage() {
                         )}
                       </div>
 
+                      {/* 7. Clear "Explore This Field" action */}
                       <button
                         onClick={() => setSelectedItem(item)}
-                        className="text-xs font-bold text-[var(--color-burgundy)] hover:text-[var(--color-flowering-chestnut)] flex items-center gap-1 hover:underline cursor-pointer"
+                        className="btn-burgundy px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer"
                       >
-                        <span>Inspect Blueprint</span>
+                        <span>Explore This Field</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -1231,6 +1292,20 @@ export default function CompleteCataloguePage() {
 
             {/* Modal Scrollable Body (All 18 Rubric Fields) */}
             <div className="p-6 overflow-y-auto space-y-6 text-xs text-[var(--color-burgundy)]/90">
+              {/* Advanced Technology Guidance Callout (Non-blocking) */}
+              {selectedItem.difficulty === "Advanced" && (
+                <div className="p-4 rounded-2xl bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] space-y-1.5 shadow-2xs">
+                  <div className="flex items-center gap-2 font-bold text-xs text-[var(--color-burgundy)]">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-burgundy)]" />
+                    <span>Advanced Technology • Direct Learning Permitted</span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-[var(--color-burgundy)]/90">
+                    You can explore and study {selectedItem.name} right now without restriction! To build strong foundations, we recommend exploring prerequisite topics first:{" "}
+                    <strong>{selectedItem.prerequisites.length > 0 ? selectedItem.prerequisites.join(", ") : "General programming foundations"}</strong>. Your choice is never blocked.
+                  </p>
+                </div>
+              )}
+
               {/* 1 & 2. Plain Language & Purpose */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 rounded-2xl bg-[var(--color-warm-ivory)]/50 border border-[rgba(var(--color-burgundy-rgb),0.12)] space-y-1.5">
