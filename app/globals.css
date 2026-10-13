@@ -40,8 +40,8 @@
     --border-elevated: rgba(var(--color-dusty-rose-rgb), 0.55);
 
     --text-primary: var(--color-deep-espresso);
-    --text-secondary: color-mix(in srgb, var(--color-deep-espresso) 82%, transparent);
-    --text-muted: color-mix(in srgb, var(--color-deep-espresso) 64%, transparent);
+    --text-secondary: color-mix(in srgb, var(--color-deep-espresso) 90%, transparent);
+    --text-muted: color-mix(in srgb, var(--color-deep-espresso) 76%, transparent);
     --text-entered: var(--color-deep-espresso);
     --heading-primary: var(--color-burgundy);
     --heading-secondary: var(--color-decadent-chocolate);
@@ -72,26 +72,26 @@
     --color-creme-latte: #241A1A;
     --color-cocoa-sand: #A77C91;
     --color-soft-olive: #96977A;
-    --color-burgundy: #D8A8B3;
+    --color-burgundy: #E5AEBA;
     --color-decadent-chocolate: #3B2527;
     --color-mauve-madness: #C58F98;
     --color-flowering-chestnut: #C58F98;
     --color-deep-espresso: #FFF9F0;
-    --color-warm-ivory: #3B2527;
-    --color-burgundy-rgb: 216, 168, 179;
+    --color-warm-ivory: #362527;
+    --color-burgundy-rgb: 229, 174, 186;
     --color-dusty-rose-rgb: 197, 143, 152;
-    --surface-rose: rgba(167, 124, 145, 0.18);
+    --surface-rose: rgba(167, 124, 145, 0.22);
     --bg-sidebar: #2D2021;
     --bg-surface-secondary: #3B2527;
     --bg-surface-elevated: #4A3033;
     --bg-card-highlight: #4A3033;
-    --border-warm: rgba(197, 143, 152, 0.22);
-    --border-subtle: rgba(197, 143, 152, 0.16);
-    --border-panel: rgba(197, 143, 152, 0.2);
-    --border-elevated: rgba(197, 143, 152, 0.35);
+    --border-warm: rgba(197, 143, 152, 0.25);
+    --border-subtle: rgba(197, 143, 152, 0.18);
+    --border-panel: rgba(197, 143, 152, 0.22);
+    --border-elevated: rgba(197, 143, 152, 0.38);
     --text-primary: var(--color-deep-espresso);
-    --text-secondary: rgba(255, 249, 240, 0.82);
-    --text-muted: rgba(255, 249, 240, 0.66);
+    --text-secondary: rgba(255, 249, 240, 0.92);
+    --text-muted: rgba(255, 249, 240, 0.78);
     --text-entered: var(--color-deep-espresso);
     --heading-primary: var(--color-burgundy);
     --heading-secondary: var(--color-deep-espresso);
@@ -268,40 +268,93 @@
 /* ==========================================================================
    Buttons & Interactive Elements
    - Primary: Deep Rose Burgundy (var(--color-burgundy)) with Soft Blush Cream (var(--color-warm-ivory)) text
-   - Secondary: Dusty Rose (var(--color-dusty-rose)) with Deep Rose Burgundy (var(--color-burgundy)) text
+   - Secondary: Dusty Rose (var(--color-dusty-rose)) or Warm Ivory Outline
+   - Touch Target: minimum 42-44px touch ergonomics
    ========================================================================== */
 .btn-burgundy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.625rem; /* 42px touch target */
+  padding: 0.625rem 1.25rem;
   background-color: var(--color-deep-rose-burgundy);
   color: var(--color-warm-ivory);
   font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25;
   border-radius: 0.75rem;
   border: 1px solid rgba(var(--color-burgundy-rgb), 0.3);
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .btn-burgundy:hover {
   background-color: var(--accent-hover);
   box-shadow: 0 4px 14px rgba(var(--color-burgundy-rgb), 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-burgundy:active {
+  transform: translateY(0);
 }
 
 .btn-secondary-coffee {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.625rem;
+  padding: 0.625rem 1.25rem;
   background-color: var(--color-dusty-rose);
   border: 1px solid rgba(var(--color-burgundy-rgb), 0.2);
   color: var(--color-burgundy);
   font-weight: 600;
+  font-size: 0.875rem;
   border-radius: 0.75rem;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .btn-secondary-coffee:hover {
   background-color: var(--color-powder-blush);
   color: var(--color-burgundy);
   border-color: var(--color-burgundy);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.625rem;
+  padding: 0.625rem 1.25rem;
+  background-color: var(--color-warm-ivory);
+  color: var(--color-burgundy);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.25);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--surface-rose);
+  border-color: var(--color-burgundy);
+  transform: translateY(-1px);
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* ==========================================================================
    Form Inputs & Text Fields
-   - Backgrounds: Soft Blush Cream (var(--color-warm-ivory)) or Warm Greige (var(--color-creme-latte)) or White
+   - Backgrounds: Soft Blush Cream (var(--color-warm-ivory)) or Warm Greige (var(--color-creme-latte))
    - Text & Caret: Deep Rose Burgundy (var(--color-burgundy))
    ========================================================================== */
 .input-coffee {
@@ -310,10 +363,10 @@
   color: var(--color-burgundy);
   caret-color: var(--color-deep-rose-burgundy);
   border-radius: 0.75rem;
-  padding: 0.5625rem 0.875rem;
+  padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
   line-height: 1.4;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .input-coffee::placeholder {
@@ -323,7 +376,7 @@
 .input-coffee:focus {
   outline: none;
   border-color: var(--color-deep-rose-burgundy);
-  box-shadow: 0 0 0 3px rgba(var(--color-burgundy-rgb), 0.18);
+  box-shadow: 0 0 0 3px rgba(var(--color-burgundy-rgb), 0.22);
   color: var(--color-burgundy);
 }
 
@@ -349,7 +402,77 @@
 }
 
 /* ==========================================================================
-   Custom Scrollbars & High-Contrast WCAG Focus Indicators
+   Accessible Loading, Error, Success, and Empty States
+   ========================================================================== */
+.state-empty-card {
+  background-color: var(--color-warm-ivory);
+  border: 1px solid var(--border-panel);
+  border-radius: 1.5rem;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.state-error-alert {
+  background-color: rgba(225, 29, 72, 0.08);
+  border: 1px solid rgba(225, 29, 72, 0.35);
+  color: #9F1239;
+  border-radius: 0.875rem;
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.dark .state-error-alert {
+  background-color: rgba(225, 29, 72, 0.16);
+  border-color: rgba(225, 29, 72, 0.45);
+  color: #FECDD3;
+}
+
+.state-success-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #065F46;
+  border-radius: 9999px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dark .state-success-badge {
+  background-color: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #A7F3D0;
+}
+
+.state-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--color-burgundy-rgb), 0.06) 25%,
+    rgba(var(--color-dusty-rose-rgb), 0.14) 37%,
+    rgba(var(--color-burgundy-rgb), 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* ==========================================================================
+   Custom Scrollbars & High-Contrast WCAG 2.1 AA Focus Indicators
    ========================================================================== */
 ::-webkit-scrollbar {
   width: 6px;
@@ -369,11 +492,26 @@
   background: var(--color-deep-rose-burgundy);
 }
 
+/* High-contrast keyboard focus indicators with outer ring */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--color-deep-rose-burgundy);
-  outline-offset: 2px;
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-burgundy) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(var(--color-burgundy-rgb), 0.28) !important;
+}
+
+/* Reduced Motion Compliance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

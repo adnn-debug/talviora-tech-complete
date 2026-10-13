@@ -96,11 +96,27 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isPublic = publicRoutes.has(pathname) || pathname.startsWith("/features/");
 
+  const skipLink = (
+    <a
+      href="#main-content"
+      className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-xl focus:bg-[var(--color-burgundy)] focus:text-[var(--color-warm-ivory)] focus:font-bold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-warm-ivory)] transition"
+    >
+      Skip to main content
+    </a>
+  );
+
   if (isPublic) {
     return (
       <div className="flex min-h-screen flex-col">
+        {skipLink}
         <PublicNavigation />
-        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8">{children}</main>
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 sm:py-8 focus:outline-none"
+        >
+          {children}
+        </main>
         <Footer />
       </div>
     );
@@ -108,11 +124,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col justify-between">
+      {skipLink}
       <div>
         <Navbar />
         <div className="mx-auto flex w-full max-w-[1720px] flex-col gap-6 px-3 py-4 sm:px-6 sm:py-6 md:flex-row lg:px-8">
           <Sidebar />
-          <main className="min-w-0 flex-1">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            className="min-w-0 flex-1 focus:outline-none"
+          >
             <PreviewDataNotice />
             <Breadcrumbs />
             {children}
