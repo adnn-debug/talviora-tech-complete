@@ -12,15 +12,14 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Dashboard", href: "/" },
-    { label: "Landing", href: "/welcome" },
-    { label: "Feature Directory", href: "/features" },
+    { label: "Overview", href: "/welcome" },
     { label: "Learning Studio", href: "/learning" },
-    { label: "Assessment", href: "/assessment" },
-    { label: "Roadmap", href: "/roadmap" },
-    { label: "Project Lab", href: "/projects" },
-    { label: "AI Mentor", href: "/mentor" },
-    { label: "Opportunities", href: "/opportunities" },
-    { label: "Catalogue", href: "/catalogue" },
+    { label: "Check What You Know", href: "/assessment" },
+    { label: "Your Step-by-Step Plan", href: "/roadmap" },
+    { label: "Build Real Projects", href: "/projects" },
+    { label: "Your AI Guide", href: "/mentor" },
+    { label: "Explore All Tech Fields", href: "/catalogue" },
+    { label: "Feature Directory", href: "/features" },
   ];
 
   return (

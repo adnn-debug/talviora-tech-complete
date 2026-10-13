@@ -68,14 +68,14 @@ export default function MentorPage() {
               <Sparkles className="w-4 h-4 text-[var(--color-burgundy)]" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
-              Learning & Career Mentor
+              Your AI Learning Guide
             </span>
           </div>
           <h1 className="font-display-serif text-3xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
-            AI Engineering & Career Mentor
+            Your AI Learning Guide & Career Mentor
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
-            Ask about technology, practice, projects, or career preparation. Personal progress and live job data are not connected to this mentor.
+            Ask any question about programming concepts, learning steps, practical projects, or career preparation in simple language.
           </p>
         </div>
       </div>

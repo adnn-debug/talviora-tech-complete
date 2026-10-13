@@ -132,14 +132,14 @@ export default function DsaTrackerPage() {
               <Binary className="w-4 h-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
-              Algorithmic Acumen
+              Problem-Solving Patterns
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-display-serif font-bold text-[var(--color-burgundy)]">
-            Algorithm Pattern Tracker
+            Learn Problem-Solving Patterns
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
-            This bundled example set has {patterns.length} patterns. Mark your own progress; checkboxes are saved in this browser.
+            Learn the recurring patterns behind coding problems ({patterns.length} core patterns included). Check off what you master; your progress is saved automatically in your browser.
           </p>
         </div>
 

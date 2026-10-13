@@ -34,9 +34,9 @@ export default function CareerMatchPage() {
     <div className="space-y-6">
       <header className="flex flex-col gap-4 border-b border-[var(--border-panel)] pb-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><Compass className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Role exploration</span></div>
-          <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Career role examples</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)]">These bundled role descriptions and skill tags are examples for exploration. Fit scores, compensation, demand, and verified labor-market benchmarks are not available.</p>
+          <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><Compass className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Explore Careers That Match Your Interests</span></div>
+          <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Explore Careers That Match Your Interests</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--text-secondary)]">Discover real-world technology career paths, typical responsibilities, and the essential skills needed for each role.</p>
         </div>
         <div className="flex flex-wrap gap-2" aria-label="Filter role examples">
           {categories.map((category) => (

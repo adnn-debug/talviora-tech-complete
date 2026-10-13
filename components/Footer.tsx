@@ -31,11 +31,11 @@ export default function Footer() {
               Learning Ecosystem
             </span>
             <ul className="space-y-2 text-[var(--color-burgundy)]/80 font-medium">
-              <li><Link href="/roadmap" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">16-Week Dynamic Roadmap</Link></li>
-              <li><Link href="/projects" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Industry Project Lab</Link></li>
-              <li><Link href="/dsa-tracker" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Algorithm Pattern Tracker</Link></li>
+              <li><Link href="/roadmap" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Your Step-by-Step Plan (Roadmap)</Link></li>
+              <li><Link href="/projects" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Build Real Projects (Project Lab)</Link></li>
+              <li><Link href="/dsa-tracker" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Learn Problem-Solving Patterns</Link></li>
               <li><Link href="/learning" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Learning Studio & Modules</Link></li>
-              <li><Link href="/catalogue" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Technology & Tools Catalogue</Link></li>
+              <li><Link href="/catalogue" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Explore All Tech Fields (Catalogue)</Link></li>
             </ul>
           </div>
 
@@ -45,11 +45,11 @@ export default function Footer() {
               Career Intelligence
             </span>
             <ul className="space-y-2 text-[var(--color-burgundy)]/80 font-medium">
-              <li><Link href="/assessment" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Adaptive Assessment Centre</Link></li>
-              <li><Link href="/career-match" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Role Alignment Matrix</Link></li>
-              <li><Link href="/market" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Market Data Availability</Link></li>
-              <li><Link href="/resume" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Resume Editor & Keyword Check</Link></li>
-              <li><Link href="/simulator" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Technical Interview Simulator</Link></li>
+              <li><Link href="/assessment" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Check What You Know (Assessment)</Link></li>
+              <li><Link href="/career-match" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Explore Careers That Match Your Interests</Link></li>
+              <li><Link href="/market" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Tech Job Trends & Compensation</Link></li>
+              <li><Link href="/resume" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Improve Your Resume</Link></li>
+              <li><Link href="/simulator" className="hover:text-[var(--color-flowering-chestnut)] hover:underline transition">Interview Simulator</Link></li>
             </ul>
           </div>
 

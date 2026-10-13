@@ -28,9 +28,9 @@ export default function ResumePage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <header className="border-b border-[var(--border-panel)] pb-5">
-        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><FileText className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Resume workspace</span></div>
-        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Resume editor and keyword check</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]">Edit your own text and check for terms you provide. This page does not connect to applicant tracking systems, score hiring fit, or invent achievements or metrics.</p>
+        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><FileText className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Resume Workspace</span></div>
+        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Improve Your Resume</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]">Draft and polish your tech resume with keyword checking. Ensure important technical skills and project details are clearly highlighted. This page does not connect to applicant tracking systems, score hiring fit, or invent achievements or metrics.</p>
       </header>
 
       <aside className="rounded-xl border border-[var(--border-warm)] bg-[var(--surface-rose)] p-4 text-sm leading-relaxed text-[var(--text-primary)]" role="note">

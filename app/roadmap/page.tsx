@@ -75,14 +75,14 @@ export default function RoadmapPage() {
               <Route className="w-4 h-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
-              Reference Curriculum
+              Your Step-by-Step Plan • Learning Roadmap
             </span>
           </div>
           <h1 className="font-display-serif text-2xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
-            Learning Roadmap
+            Your Step-by-Step Plan
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
-            Generate a saved, prerequisite-aware Python pathway below. The sample checklist is retained as a separate static reference.
+            Follow a structured pathway tailored to your study hours. Each step clearly shows what to learn first.
           </p>
         </div>
 

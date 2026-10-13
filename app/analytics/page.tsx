@@ -5,9 +5,9 @@ export default function AnalyticsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header className="border-b border-[var(--border-panel)] pb-5">
-        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><ChartNoAxesCombined className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Learning activity</span></div>
-        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Learning analytics</h1>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">Personal study time, streaks, and peer comparisons need recorded activity and a sourced cohort dataset.</p>
+        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><ChartNoAxesCombined className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Your Learning Progress</span></div>
+        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Your Learning Progress</h1>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">Track what you have completed, study time, and learning milestones in one simple view. Personal study time, streaks, and peer comparisons need recorded activity and a sourced cohort dataset.</p>
       </header>
 
       <section className="rounded-2xl border border-[var(--border-panel)] bg-[var(--bg-surface)] p-6 shadow-[var(--shadow-card)] sm:p-8" aria-labelledby="analytics-empty">

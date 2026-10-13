@@ -23,7 +23,7 @@ export default function WelcomePage() {
   const learningStages = [
     { step: "01", title: "DISCOVER", subtitle: "Self-assessment", desc: "Answer technical questions and request AI feedback on those responses." },
     { step: "02", title: "UNDERSTAND", subtitle: "Deep Principles", desc: "Master architectural fundamentals and systems thinking." },
-    { step: "03", title: "PRACTISE", subtitle: "Hands-on Code", desc: "Solve algorithmic patterns and debug intentional code flaws." },
+    { step: "03", title: "PRACTISE", subtitle: "Hands-on Code", desc: "Learn problem-solving patterns and practise with real code examples." },
     { step: "04", title: "BUILD", subtitle: "Production Projects", desc: "Construct enterprise RAG, streaming, and distributed apps." },
     { step: "05", title: "PROVE", subtitle: "Public Profile", desc: "Share profile fields you choose. Repositories and credentials are not independently verified." },
     { step: "06", title: "EXPLORE", subtitle: "Career Preparation", desc: "Browse role examples and practise interviews. No live opportunities feed is connected." },
@@ -64,7 +64,7 @@ export default function WelcomePage() {
               className="btn-burgundy px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide transition shadow-sm flex items-center gap-2"
             >
               <BrainCircuit className="w-4 h-4 text-[var(--color-warm-ivory)]" />
-              <span>Launch AI Diagnostic Assessment</span>
+              <span>Check What You Know (Start Assessment)</span>
               <ArrowRight className="w-4 h-4 text-[var(--color-warm-ivory)]" />
             </Link>
 
@@ -152,7 +152,7 @@ export default function WelcomePage() {
             href="/skill-gap"
             className="inline-flex items-center gap-2 text-xs font-bold text-[var(--color-burgundy)] hover:text-[var(--color-flowering-chestnut)] hover:underline"
           >
-            <span>Explore the Skill Gap Matrix</span>
+            <span>Find What You Need to Learn (Skill Gap)</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -178,7 +178,7 @@ export default function WelcomePage() {
             <div className="p-2.5 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)] w-fit">
               <Route className="w-5 h-5" />
             </div>
-            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Learning Roadmap</h3>
+            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Your Step-by-Step Plan</h3>
             <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               An example learning sequence with checkpoints saved in this browser. The plan is not personalized and pacing is not recorded.
             </p>
@@ -191,7 +191,7 @@ export default function WelcomePage() {
             <div className="p-2.5 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)] w-fit">
               <FolderGit2 className="w-5 h-5" />
             </div>
-            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Production Project Lab</h3>
+            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Build Real Projects (Project Lab)</h3>
             <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               Example briefs for hybrid RAG pipelines, streaming feature stores, and distributed workers.
             </p>
@@ -204,7 +204,7 @@ export default function WelcomePage() {
             <div className="p-2.5 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)] w-fit">
               <TrendingUp className="w-5 h-5" />
             </div>
-            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Market Intelligence & Trends</h3>
+            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Tech Job Trends & Compensation</h3>
             <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               Salary ranges, job counts, and regional market data are unavailable until a sourced feed is connected.
             </p>
@@ -230,12 +230,12 @@ export default function WelcomePage() {
             <div className="p-2.5 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)] w-fit">
               <FileText className="w-5 h-5" />
             </div>
-            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Resume Editor & Keyword Check</h3>
+            <h3 className="title-card-editorial font-bold text-[var(--color-burgundy)]">Improve Your Resume</h3>
             <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               Edit your own resume text and check for terms you provide. No ATS score is generated and no achievements are invented.
             </p>
             <Link href="/resume" className="text-xs font-semibold text-[var(--color-burgundy)] hover:text-[var(--color-flowering-chestnut)] hover:underline block pt-2">
-              Optimize Resume →
+              Improve Resume →
             </Link>
           </div>
 

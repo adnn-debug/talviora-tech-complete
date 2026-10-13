@@ -5,9 +5,9 @@ export default function MarketPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-6">
       <header className="border-b border-[var(--border-panel)] pb-5">
-        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><TrendingUp className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Market data</span></div>
-        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Technology roles and compensation</h1>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">Regional salary ranges, demand, and open-role counts require current sources and a dated refresh.</p>
+        <div className="flex items-center gap-2 text-[var(--color-burgundy)]"><TrendingUp className="h-5 w-5" aria-hidden="true" /><span className="text-xs font-bold uppercase tracking-widest">Tech Job Trends</span></div>
+        <h1 className="mt-3 font-display-serif text-3xl font-bold text-[var(--heading-primary)] sm:text-4xl">Tech Job Trends & Compensation</h1>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">Explore industry demand, career roles, and expected compensation ranges in the technology job market. Regional salary ranges, demand, and open-role counts require current sources and a dated refresh.</p>
       </header>
 
       <section className="rounded-2xl border border-[var(--border-panel)] bg-[var(--bg-surface)] p-6 shadow-[var(--shadow-card)] sm:p-8" aria-labelledby="market-unavailable">

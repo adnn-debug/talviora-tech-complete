@@ -27,14 +27,14 @@ export default function ProjectsPage() {
               <FolderGit2 className="w-4 h-4" />
             </span>
             <span className="text-[11px] font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
-              Proof-of-Work Architecture Lab
+              Build Real Projects • Hands-On Lab
             </span>
           </div>
           <h1 className="font-display-serif text-2xl sm:text-4xl font-bold text-[var(--color-burgundy)] tracking-tight">
-            Industry Project Lab
+            Build Real Projects (Industry Project Lab)
           </h1>
           <p className="text-xs sm:text-sm text-[var(--color-burgundy)]/85 mt-1 max-w-2xl leading-relaxed font-medium">
-            Production-grade systems designed to demonstrate senior engineering rigor during technical screens.
+            Step-by-step, real-world systems you can build and showcase to demonstrate engineering rigor during technical screens.
           </p>
         </div>
 

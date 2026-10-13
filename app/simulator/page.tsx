@@ -161,7 +161,7 @@ export default function SimulatorPage() {
             ) : (
               <>
                 <Sparkles className="w-4 h-4 text-[var(--color-warm-ivory)]" />
-                <span>Submit Response for AI Critique</span>
+                <span>Check My Answer</span>
               </>
             )}
           </button>

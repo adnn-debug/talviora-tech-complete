@@ -89,14 +89,14 @@ export default function AssessmentPage() {
               <BrainCircuit className="w-4 h-4" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
-              Adaptive Evaluation Diagnostic
+              Check What You Know • Adaptive Assessment
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-display-serif font-bold text-[var(--color-burgundy)]">
-            AI Skill Assessment
+            Check What You Know
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
-            Reflect on your answers. Feedback summarizes this quiz and is not an external market benchmark or hiring score.
+            Answer questions at your own pace to find your strengths and discover what to learn next. Feedback is educational and private.
           </p>
         </div>
 
@@ -249,7 +249,7 @@ export default function AssessmentPage() {
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-[var(--color-warm-ivory)]" />
-                  <span>Submit & Synthesize Intelligence</span>
+                  <span>Check My Answer & Synthesize Plan</span>
                 </>
               )}
             </button>
