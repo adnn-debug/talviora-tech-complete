@@ -38,29 +38,44 @@ interface PaletteItem {
 }
 
 const commands: PaletteItem[] = [
-  { title: "Executive Overview Dashboard", category: "Core Intelligence", href: "/", icon: LayoutDashboard, keywords: "home dashboard metrics stats" },
-  { title: "Explore All Tech Fields (Catalogue)", category: "Ecosystem Directory", href: "/catalogue", icon: Layers, keywords: "catalogue tech skills tools ecosystem library discover framework" },
-  { title: "Check What You Know (Adaptive Assessment)", category: "Core Intelligence", href: "/assessment", icon: BrainCircuit, keywords: "quiz test evaluation diagnostic gemini" },
-  { title: "Explore Matching Careers (Career Fit Matrix)", category: "Core Intelligence", href: "/career-match", icon: Compass, keywords: "jobs roles career examples" },
-  { title: "Your AI Learning Guide (AI Mentor)", category: "Core Intelligence", href: "/mentor", icon: UserCheck, keywords: "mentor advice coach career guidance strategy" },
-  { title: "Find What You Need to Learn (Skill Gap)", category: "Core Intelligence", href: "/skill-gap", icon: LayoutDashboard, keywords: "gaps missing skills matrix learning" },
-  { title: "Career Readiness Engine", category: "Core Intelligence", href: "/readiness", icon: Gauge, keywords: "score readiness benchmark radar" },
-  { title: "Saved Pathways & Bookmarks", category: "Core Intelligence", href: "/bookmarks", icon: BookmarkCheck, keywords: "saved bookmarks favorites pinned stars" },
-  { title: "Your Step-by-Step Plan (Learning Roadmap)", category: "Growth Engine", href: "/roadmap", icon: Route, keywords: "curriculum modules phases weekly steps plan" },
-  { title: "Build Real Projects (Industry Project Lab)", category: "Growth Engine", href: "/projects", icon: FolderGit2, keywords: "production briefs rag architecture code projects" },
-  { title: "Interactive Learning Studio", category: "Growth Engine", href: "/learning", icon: BookOpen, keywords: "learning studio interactive lessons tutorial code sandbox" },
-  { title: "Sprint Kanban Planner", category: "Growth Engine", href: "/sprint-planner", icon: KanbanSquare, keywords: "tasks sprints agile backlog" },
-  { title: "Learn Problem-Solving Patterns (DSA)", category: "Growth Engine", href: "/dsa-tracker", icon: Binary, keywords: "algorithms data structures leetcode patterns" },
-  { title: "Improve Your Resume (Resume Editor)", category: "Career Toolkit", href: "/resume", icon: FileText, keywords: "resume cv keywords text editor" },
-  { title: "Technical Interview Simulator", category: "Career Toolkit", href: "/simulator", icon: MessageSquareCode, keywords: "mock interview questions ai feedback" },
-  { title: "Tech Job Trends (Market Data)", category: "Career Toolkit", href: "/market", icon: TrendingUp, keywords: "salaries hiring trends demand analytics" },
-  { title: "Current Opportunities", category: "Career Toolkit", href: "/opportunities", icon: Briefcase, keywords: "jobs hiring remote openings roles careers" },
-  { title: "Public Profile", category: "Career Toolkit", href: "/portfolio", icon: Award, keywords: "showcase profile vanity url" },
-  { title: "Certification Topics (Reference)", category: "Career Toolkit", href: "/catalogue", icon: ShieldCheck, keywords: "credentials exams certifications" },
-  { title: "Your Learning Progress (Analytics)", category: "Core Intelligence", href: "/analytics", icon: BarChart3, keywords: "analytics study activity progress" },
-  { title: "AI & LLM Application Blueprint", category: "Technical Labs", href: "/ai-blueprint", icon: Cpu, keywords: "rag fine tuning agentic vector" },
-  { title: "System Architecture Explorer", category: "Technical Labs", href: "/architecture", icon: Workflow, keywords: "distributed microservices diagrams" },
-  { title: "Profile Settings", category: "Preferences", href: "/profile", icon: Settings, keywords: "settings account configuration profile" },
+  // Home
+  { title: "Home Overview Dashboard", category: "Home", href: "/", icon: LayoutDashboard, keywords: "home dashboard metrics stats personalised journey" },
+  { title: "Public Overview", category: "Home", href: "/welcome", icon: LayoutDashboard, keywords: "welcome public overview hero learning tech" },
+  { title: "Platform Features (31 Register)", category: "Home", href: "/features", icon: LayoutDashboard, keywords: "features 31 tools directory all capabilities register" },
+
+  // Explore
+  { title: "Explore All Tech Fields (30 Catalogue Entries)", category: "Explore", href: "/catalogue", icon: Layers, keywords: "catalogue tech skills tools ecosystem library discover framework 30" },
+  { title: "Tech Job Trends (Market Data)", category: "Explore", href: "/market", icon: TrendingUp, keywords: "salaries hiring trends demand analytics compensation" },
+  { title: "News & Opportunities", category: "Explore", href: "/opportunities", icon: Briefcase, keywords: "jobs hiring remote openings roles careers opportunities" },
+
+  // My Learning
+  { title: "Your Step-by-Step Plan (Roadmap)", category: "My Learning", href: "/roadmap", icon: Route, keywords: "curriculum modules phases weekly steps plan roadmap milestones" },
+  { title: "Your Learning Progress (Analytics)", category: "My Learning", href: "/analytics", icon: BarChart3, keywords: "analytics study activity progress hours streak milestones" },
+  { title: "Sprint Tasks (Kanban Planner)", category: "My Learning", href: "/sprint-planner", icon: KanbanSquare, keywords: "tasks sprints agile backlog board kanban" },
+  { title: "Saved Pathways & Bookmarks", category: "My Learning", href: "/bookmarks", icon: BookmarkCheck, keywords: "saved bookmarks favorites pinned stars pathways" },
+  { title: "Learner Profile & Settings", category: "My Learning", href: "/profile", icon: Settings, keywords: "settings account configuration profile preferences" },
+
+  // Learn & Practise
+  { title: "Learning Studio & Sandbox", category: "Learn & Practise", href: "/learning", icon: BookOpen, keywords: "learning studio interactive lessons tutorial code sandbox editor" },
+  { title: "Interactive Practice & Lab", category: "Learn & Practise", href: "/simulator", icon: MessageSquareCode, keywords: "practice code 8 step lesson runner sandbox challenges" },
+  { title: "Check What You Know (Assessment)", category: "Learn & Practise", href: "/assessment", icon: BrainCircuit, keywords: "quiz test evaluation diagnostic check knowledge questions" },
+  { title: "Learn Problem-Solving Patterns (DSA)", category: "Learn & Practise", href: "/dsa-tracker", icon: Binary, keywords: "algorithms data structures leetcode patterns problem solving" },
+
+  // Build Projects
+  { title: "Build Real Projects (Project Lab)", category: "Build Projects", href: "/projects", icon: FolderGit2, keywords: "production briefs rag architecture code projects repo lab" },
+  { title: "System Architecture Explorer", category: "Build Projects", href: "/architecture", icon: Workflow, keywords: "distributed microservices diagrams architecture system" },
+  { title: "Public Portfolio & Showcase", category: "Build Projects", href: "/portfolio", icon: Award, keywords: "showcase profile vanity url proof of work projects" },
+
+  // AI Learning Guide
+  { title: "Your AI Learning Guide (AI Mentor)", category: "AI Learning Guide", href: "/mentor", icon: UserCheck, keywords: "mentor advice coach career guidance strategy ai chat guide" },
+  { title: "AI & Prompt Blueprint", category: "AI Learning Guide", href: "/ai-blueprint", icon: Cpu, keywords: "rag fine tuning agentic vector blueprint prompt" },
+
+  // Careers & Opportunities
+  { title: "Explore Matching Careers (Career Fit)", category: "Careers & Opportunities", href: "/career-match", icon: Compass, keywords: "jobs roles career examples fit matrix" },
+  { title: "Find What You Need to Learn (Skill Gap)", category: "Careers & Opportunities", href: "/skill-gap", icon: LayoutDashboard, keywords: "gaps missing skills matrix learning comparison" },
+  { title: "Improve Your Resume (Resume Editor)", category: "Careers & Opportunities", href: "/resume", icon: FileText, keywords: "resume cv keywords text editor bullet points" },
+  { title: "Technical Interview Simulator", category: "Careers & Opportunities", href: "/simulator?mode=interview", icon: MessageSquareCode, keywords: "mock interview questions ai feedback simulator roles" },
+  { title: "Career Readiness Diagnostic", category: "Careers & Opportunities", href: "/readiness", icon: Gauge, keywords: "score readiness benchmark radar diagnostic" },
 ];
 
 export default function CommandPalette() {

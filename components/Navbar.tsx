@@ -4,22 +4,86 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
-import { Command, Menu, X, UserRound } from "lucide-react";
+import { Command, Menu, X, UserRound, Sparkles, ChevronRight, Layers, Route, BookOpen, FolderGit2, Compass } from "lucide-react";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  const navLinks = [
-    { label: "Dashboard", href: "/" },
-    { label: "Overview", href: "/welcome" },
-    { label: "Learning Studio", href: "/learning" },
-    { label: "Check What You Know", href: "/assessment" },
-    { label: "Your Step-by-Step Plan", href: "/roadmap" },
-    { label: "Build Real Projects", href: "/projects" },
-    { label: "Your AI Guide", href: "/mentor" },
-    { label: "Explore All Tech Fields", href: "/catalogue" },
-    { label: "Feature Directory", href: "/features" },
+  // Primary 7 Navigation Group links for desktop
+  const primaryNavGroups = [
+    { label: "Home", href: "/" },
+    { label: "Explore", href: "/catalogue" },
+    { label: "My Learning", href: "/roadmap" },
+    { label: "Learn & Practise", href: "/learning" },
+    { label: "Build Projects", href: "/projects" },
+    { label: "AI Guide", href: "/mentor" },
+    { label: "Careers & Opportunities", href: "/career-match" },
+  ];
+
+  // Detailed group breakdown for mobile menu drawer
+  const mobileNavSections = [
+    {
+      title: "Home",
+      links: [
+        { label: "Home Overview", href: "/" },
+        { label: "Public Overview", href: "/welcome" },
+        { label: "Platform Features (31)", href: "/features" },
+      ],
+    },
+    {
+      title: "Explore",
+      links: [
+        { label: "Explore All Tech Fields (30)", href: "/catalogue" },
+        { label: "Tech Job Trends", href: "/market" },
+        { label: "News & Opportunities", href: "/opportunities" },
+      ],
+    },
+    {
+      title: "My Learning",
+      links: [
+        { label: "Your Step-by-Step Plan", href: "/roadmap" },
+        { label: "Your Learning Progress", href: "/analytics" },
+        { label: "Sprint Tasks", href: "/sprint-planner" },
+        { label: "Saved Pathways", href: "/bookmarks" },
+        { label: "Learner Profile", href: "/profile" },
+      ],
+    },
+    {
+      title: "Learn & Practise",
+      links: [
+        { label: "Learning Studio & Sandbox", href: "/learning" },
+        { label: "Interactive Practice & Lab", href: "/simulator" },
+        { label: "Check What You Know", href: "/assessment" },
+        { label: "Problem-Solving Patterns", href: "/dsa-tracker" },
+      ],
+    },
+    {
+      title: "Build Projects",
+      links: [
+        { label: "Build Real Projects", href: "/projects" },
+        { label: "System Architecture", href: "/architecture" },
+        { label: "Public Portfolio", href: "/portfolio" },
+      ],
+    },
+    {
+      title: "AI Learning Guide",
+      links: [
+        { label: "Your AI Learning Guide", href: "/mentor" },
+        { label: "AI & Prompt Blueprint", href: "/ai-blueprint" },
+      ],
+    },
+    {
+      title: "Careers & Opportunities",
+      links: [
+        { label: "Explore Matching Careers", href: "/career-match" },
+        { label: "Find What You Need to Learn", href: "/skill-gap" },
+        { label: "Improve Your Resume", href: "/resume" },
+        { label: "Interview Simulator", href: "/simulator?mode=interview" },
+        { label: "Readiness Diagnostic", href: "/readiness" },
+        { label: "Sign In / Account", href: "/auth" },
+      ],
+    },
   ];
 
   return (
@@ -44,10 +108,10 @@ export default function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden 2xl:flex items-center gap-1 ml-2" aria-label="Main Navigation">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+          {/* Desktop Nav Items (7 Groups) */}
+          <nav className="hidden xl:flex items-center gap-1 ml-2" aria-label="Main Navigation">
+            {primaryNavGroups.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
               return (
                 <Link
                   key={link.href}
@@ -67,11 +131,6 @@ export default function Navbar() {
 
         {/* Right Action Elements */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          {/* Preview status badge */}
-          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[11px] font-bold">
-            <span>Preview Workspace</span>
-          </div>
-
           {/* Quick Command Trigger Pill */}
           <button
             onClick={() => {
@@ -83,7 +142,7 @@ export default function Navbar() {
               window.dispatchEvent(event);
             }}
             className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-warm-ivory)] hover:bg-[var(--surface-rose)] text-[var(--color-burgundy)] text-xs font-mono-code transition cursor-pointer"
-            title="Open Command Palette"
+            title="Open Command Palette (Ctrl+K)"
           >
             <Command className="w-3 h-3 text-[var(--color-burgundy)]" />
             <span>K</span>
@@ -96,63 +155,58 @@ export default function Navbar() {
           <Link
             href="/profile"
             className="flex items-center gap-2 p-1.5 pr-2.5 rounded-full border border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-warm-ivory)] hover:border-[var(--color-burgundy)] transition group"
+            title="Learner Profile"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)]"><UserRound className="h-4 w-4" /></span>
-            <div className="hidden xl:flex flex-col text-left">
-              <span className="text-xs font-bold text-[var(--color-burgundy)] leading-tight">
-                Learner
-              </span>
-              <span className="text-[9px] text-[var(--color-dusty-rose)] leading-tight font-semibold">
-                Profile & settings
-              </span>
-            </div>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)]">
+              <UserRound className="h-4 w-4" />
+            </span>
+            <span className="text-xs font-semibold text-[var(--color-burgundy)] hidden sm:inline">
+              Learner Profile
+            </span>
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle Button */}
           <button
-            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="2xl:hidden p-2 rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.15)] text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)]"
-            aria-label="Toggle menu"
+            className="xl:hidden p-2 rounded-xl text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)] transition border border-[rgba(var(--color-burgundy-rgb),0.15)] cursor-pointer"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileMenuOpen}
-            aria-controls="application-mobile-menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Menu Dropdown with 7 Groups */}
       {mobileMenuOpen && (
-        <div id="application-mobile-menu" className="2xl:hidden border-t border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-creme-latte)] px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
-          <div className="grid grid-cols-2 gap-2 pb-3 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 rounded-lg text-xs font-semibold ${
-                  pathname === link.href
-                    ? "btn-burgundy"
-                    : "text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)]"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-          <div className="pt-2 flex items-center justify-between text-xs text-[var(--color-burgundy)]">
-            <span className="flex items-center gap-1.5 font-semibold">
-              <UserRound className="h-4 w-4 text-[var(--color-dusty-rose)]" /> Preview workspace
-            </span>
-            <Link
-              href="/auth"
-              onClick={() => setMobileMenuOpen(false)}
-              className="font-bold text-[var(--color-burgundy)] hover:underline"
-            >
-              Sign In / Session
-            </Link>
-          </div>
+        <div className="xl:hidden border-t border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-creme-latte)] px-4 py-5 space-y-4 max-h-[calc(100vh-4rem)] overflow-y-auto animate-in fade-in duration-150">
+          {mobileNavSections.map((section) => (
+            <div key={section.title} className="space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)] opacity-80 px-2 block">
+                {section.title}
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                {section.links.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition ${
+                        isActive
+                          ? "bg-[var(--surface-rose)] text-[var(--color-burgundy)] font-bold border border-[rgba(var(--color-dusty-rose-rgb),0.6)]"
+                          : "text-[var(--color-burgundy)]/90 hover:bg-[var(--surface-rose)]/50"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </header>

@@ -7,6 +7,10 @@ import {
   Trash2,
   ArrowRight,
   Layers,
+  Compass,
+  Route,
+  Sparkles,
+  Bookmark,
 } from "lucide-react";
 import { CATALOGUE_ITEMS } from "@/lib/catalogue-data";
 import { fetchWithAuth } from "@/lib/api-client";
@@ -132,14 +136,91 @@ export default function BookmarksPage() {
       {/* Bookmarks List */}
       <div className="space-y-3">
         {bookmarks.length === 0 ? (
-          <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-12 text-center text-xs text-[var(--color-burgundy)]/70 space-y-2 border border-[var(--color-creme-latte)] shadow-xs">
-            <p>You have no saved pathways or bookmarks yet.</p>
-            <Link
-              href="/career-match"
-              className="text-[var(--color-burgundy)] font-semibold hover:underline inline-block"
-            >
-              Browse Career Matches →
-            </Link>
+          <div className="bg-[var(--color-warm-ivory)] rounded-3xl p-8 sm:p-10 border border-[rgba(var(--color-burgundy-rgb),0.15)] shadow-xs space-y-6">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[var(--color-burgundy)] flex items-center justify-center mx-auto mb-3 shadow-2xs">
+                <Bookmark className="w-6 h-6" />
+              </div>
+              <h2 className="font-display-serif text-xl sm:text-2xl font-bold text-[var(--color-burgundy)]">
+                You have no saved pathways or bookmarks yet
+              </h2>
+              <p className="text-xs sm:text-sm text-[var(--color-burgundy)]/85 leading-relaxed font-normal">
+                Bookmarks allow you to pin your active technologies, career pathways, and learning roadmaps in one convenient place for quick access anytime.
+              </p>
+            </div>
+
+            {/* Quick-action recommendation cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              <div className="p-5 rounded-2xl bg-[var(--color-creme-latte)]/80 border border-[rgba(var(--color-burgundy-rgb),0.12)] flex flex-col justify-between space-y-4 hover:border-[var(--color-dusty-rose)] transition">
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] flex items-center justify-center">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-display-serif text-sm font-bold text-[var(--color-burgundy)]">
+                    Explore All Tech Fields
+                  </h3>
+                  <p className="text-xs text-[var(--color-burgundy)]/80 leading-relaxed font-normal">
+                    Browse 30 languages, frameworks, and tools. Click the bookmark icon on any card (e.g. Python, React, SQL, Docker) to pin it here.
+                  </p>
+                </div>
+                <Link
+                  href="/catalogue"
+                  className="btn-burgundy px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs"
+                >
+                  <span>Open Catalogue</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[var(--color-creme-latte)]/80 border border-[rgba(var(--color-burgundy-rgb),0.12)] flex flex-col justify-between space-y-4 hover:border-[var(--color-dusty-rose)] transition">
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] flex items-center justify-center">
+                    <Compass className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-display-serif text-sm font-bold text-[var(--color-burgundy)]">
+                    Explore Matching Careers
+                  </h3>
+                  <p className="text-xs text-[var(--color-burgundy)]/80 leading-relaxed font-normal">
+                    Discover career directions that align with your interests—from AI Engineer to Frontend Developer—and pin your target career.
+                  </p>
+                </div>
+                <Link
+                  href="/career-match"
+                  className="btn-burgundy px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs"
+                >
+                  <span>Explore Careers</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-[var(--color-creme-latte)]/80 border border-[rgba(var(--color-burgundy-rgb),0.12)] flex flex-col justify-between space-y-4 hover:border-[var(--color-dusty-rose)] transition">
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] flex items-center justify-center">
+                    <Route className="w-4 h-4" />
+                  </div>
+                  <h3 className="font-display-serif text-sm font-bold text-[var(--color-burgundy)]">
+                    Your Step-by-Step Plan
+                  </h3>
+                  <p className="text-xs text-[var(--color-burgundy)]/80 leading-relaxed font-normal">
+                    Follow guided learning roadmaps and study milestones. Bookmark modules you are actively working on to track your daily progress.
+                  </p>
+                </div>
+                <Link
+                  href="/roadmap"
+                  className="btn-burgundy px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs"
+                >
+                  <span>View Roadmap</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-[var(--surface-rose)]/60 border border-[rgba(var(--color-dusty-rose-rgb),0.5)] flex items-center gap-2 text-xs text-[var(--color-burgundy)]">
+              <Sparkles className="w-4 h-4 text-[var(--color-burgundy)] shrink-0" />
+              <span>
+                <strong>Good to know:</strong> Your bookmarks are automatically saved to your browser session. You can update or remove items at any time.
+              </span>
+            </div>
           </div>
         ) : (
           bookmarks.map((b) => {

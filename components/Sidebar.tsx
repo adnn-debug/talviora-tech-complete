@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Home,
   LayoutDashboard,
-  BrainCircuit,
   Compass,
-  Gauge,
   Route,
   FolderGit2,
   FileText,
@@ -25,9 +24,11 @@ import {
   BookOpen,
   Sparkles,
   Newspaper,
-  Home,
-  CheckCircle2,
+  BrainCircuit,
+  Gauge,
   ListChecks,
+  ChevronRight,
+  Code2,
 } from "lucide-react";
 
 interface SidebarCategory {
@@ -43,55 +44,67 @@ interface SidebarCategory {
 export default function Sidebar() {
   const pathname = usePathname();
 
+  // The 7 understandable navigation groups
   const categories: SidebarCategory[] = [
     {
-      title: "DISCOVER & OVERVIEW",
+      title: "HOME",
       items: [
-        { label: "Executive Dashboard", href: "/", icon: LayoutDashboard },
-        { label: "Public Landing Page", href: "/welcome", icon: Home, badge: "Hero" },
-        { label: "Feature Directory", href: "/features", icon: ListChecks, badge: "31" },
+        { label: "Home Overview", href: "/", icon: Home },
+        { label: "Public Overview", href: "/welcome", icon: LayoutDashboard, badge: "Hero" },
+        { label: "Platform Features", href: "/features", icon: ListChecks, badge: "31" },
+      ],
+    },
+    {
+      title: "EXPLORE",
+      items: [
         { label: "Explore All Tech Fields", href: "/catalogue", icon: Layers, badge: "30 Fields" },
+        { label: "Tech Job Trends", href: "/market", icon: TrendingUp },
         { label: "News & Opportunities", href: "/opportunities", icon: Newspaper },
       ],
     },
     {
-      title: "CORE INTELLIGENCE",
+      title: "MY LEARNING",
       items: [
-        { label: "Check What You Know", href: "/assessment", icon: BrainCircuit },
-        { label: "Explore Matching Careers", href: "/career-match", icon: Compass },
-        { label: "Find What You Need to Learn", href: "/skill-gap", icon: Layers },
-        { label: "Readiness Engine", href: "/readiness", icon: Gauge },
-        { label: "Tech Job Trends", href: "/market", icon: TrendingUp },
-      ],
-    },
-    {
-      title: "LEARNING & GROWTH",
-      items: [
-        { label: "Learning Studio", href: "/learning", icon: BookOpen, badge: "Labs" },
         { label: "Your Step-by-Step Plan", href: "/roadmap", icon: Route },
-        { label: "Build Real Projects", href: "/projects", icon: FolderGit2 },
-        { label: "Sprint Kanban", href: "/sprint-planner", icon: KanbanSquare },
-        { label: "Learn Problem-Solving Patterns", href: "/dsa-tracker", icon: Binary },
-      ],
-    },
-    {
-      title: "AI & CAREER TOOLKIT",
-      items: [
-        { label: "Your AI Learning Guide", href: "/mentor", icon: Sparkles, badge: "AI" },
-        { label: "AI & LLM Blueprint", href: "/ai-blueprint", icon: Cpu },
-        { label: "System Architecture", href: "/architecture", icon: Workflow },
-        { label: "Improve Your Resume", href: "/resume", icon: FileText },
-        { label: "Interview Simulator", href: "/simulator", icon: MessageSquareCode },
-        { label: "Public Profile", href: "/portfolio", icon: Award },
-      ],
-    },
-    {
-      title: "ACCOUNT & ANALYTICS",
-      items: [
         { label: "Your Learning Progress", href: "/analytics", icon: BarChart3 },
+        { label: "Sprint Tasks", href: "/sprint-planner", icon: KanbanSquare },
         { label: "Saved Pathways", href: "/bookmarks", icon: BookmarkCheck },
         { label: "Learner Profile", href: "/profile", icon: UserCheck },
-        { label: "Sign in", href: "/auth", icon: LockKeyhole },
+      ],
+    },
+    {
+      title: "LEARN & PRACTISE",
+      items: [
+        { label: "Learning Studio & Sandbox", href: "/learning", icon: BookOpen, badge: "Labs" },
+        { label: "Interactive Practice & Lab", href: "/simulator", icon: Code2 },
+        { label: "Check What You Know", href: "/assessment", icon: BrainCircuit },
+        { label: "Problem-Solving Patterns", href: "/dsa-tracker", icon: Binary },
+      ],
+    },
+    {
+      title: "BUILD PROJECTS",
+      items: [
+        { label: "Build Real Projects", href: "/projects", icon: FolderGit2 },
+        { label: "System Architecture", href: "/architecture", icon: Workflow },
+        { label: "Public Portfolio", href: "/portfolio", icon: Award },
+      ],
+    },
+    {
+      title: "AI LEARNING GUIDE",
+      items: [
+        { label: "Your AI Learning Guide", href: "/mentor", icon: Sparkles, badge: "AI" },
+        { label: "AI & Prompt Blueprint", href: "/ai-blueprint", icon: Cpu },
+      ],
+    },
+    {
+      title: "CAREERS & OPPORTUNITIES",
+      items: [
+        { label: "Explore Matching Careers", href: "/career-match", icon: Compass },
+        { label: "Find What You Need to Learn", href: "/skill-gap", icon: Layers },
+        { label: "Improve Your Resume", href: "/resume", icon: FileText },
+        { label: "Interview Simulator", href: "/simulator?mode=interview", icon: MessageSquareCode },
+        { label: "Readiness Diagnostic", href: "/readiness", icon: Gauge },
+        { label: "Sign In / Account", href: "/auth", icon: LockKeyhole },
       ],
     },
   ];
@@ -101,7 +114,7 @@ export default function Sidebar() {
       className="hidden md:flex flex-col w-64 shrink-0 rounded-2xl border border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-creme-latte)] p-3.5 h-fit sticky top-20 shadow-xs transition-colors"
       aria-label="Sidebar Navigation"
     >
-      <div className="space-y-5 overflow-y-auto max-h-[calc(100vh-6.5rem)] pr-1">
+      <div className="space-y-4 overflow-y-auto max-h-[calc(100vh-6.5rem)] pr-1">
         {/* Beginner Fast-Track Card */}
         <div className="rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.18)] bg-[var(--surface-rose)]/60 p-3 space-y-1.5 shadow-2xs">
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--color-burgundy)]">
@@ -109,7 +122,7 @@ export default function Sidebar() {
             <span>Beginner Fast-Track</span>
           </div>
           <p className="text-[10px] text-[var(--color-burgundy)]/85 leading-snug">
-            New to code? Follow our interactive tutorials & "Try It Yourself" sandboxes.
+            New to code? Follow our step-by-step interactive lessons and live editor.
           </p>
           <Link
             href="/learning"
@@ -119,18 +132,21 @@ export default function Sidebar() {
           </Link>
         </div>
 
+        {/* The 7 Navigation Groups */}
         {categories.map((category) => (
           <div key={category.title} className="space-y-1">
-            <h2 className="px-3 text-[10px] font-bold tracking-wider uppercase text-[var(--color-burgundy)]">
+            <h2 className="px-3 text-[10px] font-bold tracking-wider uppercase text-[var(--color-burgundy)] opacity-90">
               {category.title}
             </h2>
-            <div className="space-y-1 pt-1">
+            <div className="space-y-0.5 pt-0.5">
               {category.items.map((item) => {
                 const Icon = item.icon;
-                const isActive = pathname === item.href;
+                // Active check: exact match or matching pathname prefix
+                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href.split("?")[0]));
+
                 return (
                   <Link
-                    key={item.href}
+                    key={item.label}
                     href={item.href}
                     className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)] ${
                       isActive
@@ -149,19 +165,14 @@ export default function Sidebar() {
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           isActive
                             ? "text-[var(--color-burgundy)]"
-                            : "text-[var(--color-burgundy)]/80 group-hover:text-[var(--color-burgundy)]"
+                            : "text-[var(--color-dusty-rose)] group-hover:text-[var(--color-burgundy)]"
                         }`}
                       />
                       <span className="truncate">{item.label}</span>
                     </div>
+
                     {item.badge && (
-                      <span
-                        className={`text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase transition-colors shrink-0 ml-1.5 ${
-                          isActive
-                            ? "bg-[var(--color-burgundy)]/12 text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.25)]"
-                            : "bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)]"
-                        }`}
-                      >
+                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.1)] text-[var(--color-burgundy)] shrink-0">
                         {item.badge}
                       </span>
                     )}
