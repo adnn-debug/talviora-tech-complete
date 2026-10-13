@@ -19,20 +19,20 @@ export default function ArchitecturePage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-creme-latte)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#c58b94]/15 text-[#843e4b] dark:text-[#d8a0ab]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/30">
               <Workflow className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#c58b94] dark:text-[#d8a0ab]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
               Production System Blueprints
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h1 className="font-display-serif text-2xl sm:text-3xl font-bold text-[var(--color-burgundy)]">
             System Architecture Explorer
           </h1>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
             Interactive distributed diagrams, latency SLAs, and component trade-off matrices for senior defenses.
           </p>
         </div>
@@ -41,30 +41,30 @@ export default function ArchitecturePage() {
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setSelectedPattern("rag")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               selectedPattern === "rag"
-                ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-xs"
-                : "bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             Hybrid RAG Pipeline
           </button>
           <button
             onClick={() => setSelectedPattern("stream")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               selectedPattern === "stream"
-                ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-xs"
-                : "bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             Stream Feature Store
           </button>
           <button
             onClick={() => setSelectedPattern("auth")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               selectedPattern === "auth"
-                ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 shadow-xs"
-                : "bg-white/60 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             API Gateway & RBAC
@@ -74,84 +74,84 @@ export default function ArchitecturePage() {
 
       {/* Diagram Canvas */}
       {selectedPattern === "rag" && (
-        <div className="card-luxury p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[var(--color-creme-latte)]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#c58b94] dark:text-[#d8a0ab]">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                 Microservice Topology
               </span>
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-lg font-display-serif font-bold text-[var(--color-burgundy)]">
                 Enterprise Hybrid RAG Architecture (pgvector + Redis Semantic Cache)
               </h2>
             </div>
-            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold self-start">
-              SLA: &lt; 90ms Latency
+            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/40 font-bold self-start">
+              Example flow · not deployed
             </span>
           </div>
 
           {/* Interactive Flowchart Diagram */}
-          <div className="p-6 rounded-2xl bg-[#0d0d12] border border-zinc-800 text-white space-y-6 overflow-x-auto">
+          <div className="p-6 rounded-2xl bg-[var(--color-creme-latte)]/50 border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] space-y-6 overflow-x-auto">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4 min-w-[700px]">
               {/* Step 1 */}
-              <div className="w-48 p-4 rounded-xl bg-zinc-900 border border-zinc-700 text-center space-y-2">
-                <span className="text-[10px] font-bold text-rose-300 uppercase">1. Ingestion Layer</span>
-                <p className="text-xs font-bold text-white">Document Parser</p>
-                <span className="text-[10px] text-zinc-400 block">PDF / Markdown → Chunks (512 tokens with 50 overlap)</span>
+              <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-center space-y-2 shadow-xs">
+                <span className="text-[10px] font-bold text-[var(--color-burgundy)]/80 uppercase">1. Ingestion Layer</span>
+                <p className="text-xs font-bold text-[var(--color-burgundy)]">Document Parser</p>
+                <span className="text-[10px] text-[var(--color-burgundy)]/70 block">PDF / Markdown → split into overlapping chunks</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-zinc-500 shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-zinc-500 shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
 
               {/* Step 2 */}
-              <div className="w-48 p-4 rounded-xl bg-zinc-900 border border-rose-500/50 text-center space-y-2 ring-1 ring-rose-500/30">
-                <span className="text-[10px] font-bold text-[#d8a0ab] uppercase">2. Semantic Cache</span>
-                <p className="text-xs font-bold text-white">Redis Cache</p>
-                <span className="text-[10px] text-zinc-400 block">Cosine sim &gt; 0.88? Serve instant cached response (12ms)</span>
+              <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border-2 border-[var(--color-burgundy)] text-center space-y-2 shadow-xs">
+                <span className="text-[10px] font-bold text-[var(--color-burgundy)] uppercase">2. Semantic Cache</span>
+                <p className="text-xs font-bold text-[var(--color-burgundy)]">Redis Cache</p>
+                <span className="text-[10px] text-[var(--color-burgundy)]/70 block">Compare similarity with a threshold selected for your data</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-zinc-500 shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-zinc-500 shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
 
               {/* Step 3 */}
-              <div className="w-48 p-4 rounded-xl bg-zinc-900 border border-cyan-500/50 text-center space-y-2 ring-1 ring-cyan-500/30">
-                <span className="text-[10px] font-bold text-cyan-300 uppercase">3. Vector Search</span>
-                <p className="text-xs font-bold text-white">PostgreSQL pgvector</p>
-                <span className="text-[10px] text-zinc-400 block">HNSW index with m=16, ef_construction=64 + BM25</span>
+              <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-dusty-rose)] text-center space-y-2 shadow-xs">
+                <span className="text-[10px] font-bold text-[var(--color-burgundy)] uppercase">3. Vector Search</span>
+                <p className="text-xs font-bold text-[var(--color-burgundy)]">PostgreSQL pgvector</p>
+                <span className="text-[10px] text-[var(--color-burgundy)]/70 block">Tune vector-index settings and combine with lexical search as needed</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-zinc-500 shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-zinc-500 shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
 
               {/* Step 4 */}
-              <div className="w-48 p-4 rounded-xl bg-zinc-900 border border-emerald-500/50 text-center space-y-2 ring-1 ring-emerald-500/30">
-                <span className="text-[10px] font-bold text-emerald-300 uppercase">4. Generation</span>
-                <p className="text-xs font-bold text-white">Gemini 1.5 Flash</p>
-                <span className="text-[10px] text-zinc-400 block">Streaming SSE tokens with citation footnotes</span>
+              <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-center space-y-2 shadow-xs">
+                <span className="text-[10px] font-bold text-[var(--color-burgundy)] uppercase">4. Generation</span>
+                <p className="text-xs font-bold text-[var(--color-burgundy)]">Configured text model</p>
+                <span className="text-[10px] text-[var(--color-burgundy)]/70 block">Generate grounded output and return source references</span>
               </div>
             </div>
           </div>
 
           {/* Trade-off Matrix */}
           <div className="space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100 block">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)] block">
               Architectural Trade-Off Analysis
             </span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100">
+              <div className="p-4 rounded-xl bg-[var(--color-warm-ivory)]/40 border border-[var(--color-creme-latte)] space-y-1">
+                <span className="font-bold text-[var(--color-burgundy)]">
                   HNSW Index vs Inverted File (IVF):
                 </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  HNSW consumes ~1.8x more RAM but provides 98% recall at &lt;15ms query times. Chosen for mission-critical enterprise docs.
+                <p className="text-[var(--color-burgundy)]/80 leading-relaxed">
+                  HNSW can trade additional memory for approximate nearest-neighbor lookup speed. Recall and latency depend on data, parameters, and hardware; measure them with a representative workload.
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 space-y-1">
-                <span className="font-bold text-zinc-900 dark:text-zinc-100">
+              <div className="p-4 rounded-xl bg-[var(--color-warm-ivory)]/40 border border-[var(--color-creme-latte)] space-y-1">
+                <span className="font-bold text-[var(--color-burgundy)]">
                   Semantic Cache Hit Ratio:
                 </span>
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  In enterprise workloads, repeat and paraphrased queries account for 40-65% of traffic. Cuts OpenAI/Gemini costs by over 50%.
+                <p className="text-[var(--color-burgundy)]/80 leading-relaxed">
+                  Caching may reduce repeated model calls. Measure the real hit rate, staleness risk, and cost impact from production traces before tuning it.
                 </p>
               </div>
             </div>
@@ -160,23 +160,23 @@ export default function ArchitecturePage() {
       )}
 
       {selectedPattern === "stream" && (
-        <div className="card-luxury p-6 sm:p-8 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="flex items-center justify-between pb-4 border-b border-[var(--color-creme-latte)]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                 Event-Driven Kappa Topology
               </span>
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-lg font-display-serif font-bold text-[var(--color-burgundy)]">
                 Real-Time Streaming Feature Store (Kafka + Redis + gRPC)
               </h2>
             </div>
-            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold">
+            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/40 font-bold">
               Throughput: 10,000 events/sec
             </span>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0d12] border border-zinc-800 text-white space-y-4">
-            <p className="text-xs text-zinc-300 leading-relaxed">
+          <div className="p-6 rounded-2xl bg-[var(--color-warm-ivory)]/40 border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] space-y-4">
+            <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               Decoupled real-time sliding window aggregates (e.g. 5-minute transaction velocity) stored in Redis with point-in-time correctness for ML inference scoring.
             </p>
           </div>
@@ -184,23 +184,23 @@ export default function ArchitecturePage() {
       )}
 
       {selectedPattern === "auth" && (
-        <div className="card-luxury p-6 sm:p-8 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="flex items-center justify-between pb-4 border-b border-[var(--color-creme-latte)]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                 Multi-Tenant Security
               </span>
-              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
+              <h2 className="text-lg font-display-serif font-bold text-[var(--color-burgundy)]">
                 API Gateway, Token Bucket Rate Limiter & Supabase RLS
               </h2>
             </div>
-            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">
+            <span className="text-xs font-mono-code px-2.5 py-1 rounded-full bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/40 font-bold">
               Zero-Trust Architecture
             </span>
           </div>
 
-          <div className="p-6 rounded-2xl bg-[#0d0d12] border border-zinc-800 text-white space-y-4">
-            <p className="text-xs text-zinc-300 leading-relaxed">
+          <div className="p-6 rounded-2xl bg-[var(--color-warm-ivory)]/40 border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] space-y-4">
+            <p className="text-xs text-[var(--color-burgundy)]/85 leading-relaxed">
               Next.js Edge middleware validates Supabase JWT claims, verifies rate limit token buckets in Redis, and injects secure tenant isolation headers before executing PostgreSQL queries.
             </p>
           </div>

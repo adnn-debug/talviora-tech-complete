@@ -74,7 +74,7 @@ export default function RadarChart({
               key={lvl}
               points={points}
               fill="none"
-              stroke="#B59A83"
+              stroke="var(--color-dusty-rose)"
               strokeOpacity={0.35}
               strokeDasharray={lvl < 1 ? "3 3" : undefined}
             />
@@ -91,31 +91,30 @@ export default function RadarChart({
               y1={center}
               x2={x}
               y2={y}
-              stroke="#B59A83"
+              stroke="var(--color-dusty-rose)"
               strokeOpacity={0.4}
             />
           );
         })}
 
-        {/* Target Benchmark Area (Soft Olive Dashed) */}
+        {/* Target Benchmark Area (Dusty Rose Dashed) */}
         <polygon
           points={benchmarkPoints}
-          fill="rgba(150, 151, 122, 0.12)"
-          stroke="#96977A"
+          fill="rgba(var(--color-dusty-rose-rgb), 0.15)"
+          stroke="var(--color-dusty-rose)"
           strokeWidth="1.5"
           strokeDasharray="4 4"
         />
 
-        {/* Candidate Area (Burgundy / Dusty Rose Fill) */}
+        {/* Candidate Area (Deep Rose Burgundy Fill) */}
         <polygon
           points={candidatePoints}
-          fill="rgba(111, 23, 55, 0.22)"
-          stroke="#6F1737"
+          fill="rgba(var(--color-burgundy-rgb), 0.18)"
+          stroke="var(--color-burgundy)"
           strokeWidth="2.5"
-          className="dark:fill-[#C58F98]/20 dark:stroke-[#C58F98]"
         />
 
-        {/* Candidate Points & Hover Indicators */}
+        {/* Candidate Points & Indicators */}
         {data.map((d, i) => {
           const { x, y } = getCoordinates(d.candidateValue, i);
           return (
@@ -124,10 +123,10 @@ export default function RadarChart({
               cx={x}
               cy={y}
               r="4.5"
-              fill="#6F1737"
-              stroke="#FFF9F0"
+              fill="var(--color-burgundy)"
+              stroke="var(--color-warm-ivory)"
               strokeWidth="1.5"
-              className="dark:fill-[#C58F98] transition-transform hover:scale-125"
+              className="transition-transform hover:scale-125"
             />
           );
         })}
@@ -145,7 +144,7 @@ export default function RadarChart({
               y={ly}
               textAnchor="middle"
               dominantBaseline="middle"
-              className="text-[10px] font-bold fill-[#241A1A] dark:fill-[#F5EBDD]"
+              className="text-[10px] font-bold fill-[var(--color-burgundy)]"
             >
               {d.axis}
             </text>
@@ -156,12 +155,12 @@ export default function RadarChart({
       {/* Legend */}
       <div className="flex items-center gap-6 mt-4 text-xs font-semibold">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#6F1737] dark:bg-[#C58F98]"></span>
-          <span className="text-[#241A1A] dark:text-[#FFF9F0]">Your Current Acumen</span>
+          <span className="w-3 h-3 rounded-full bg-[var(--color-burgundy)]"></span>
+          <span className="text-[var(--color-burgundy)]">Your Current Acumen</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-0.5 border-t-2 border-dashed border-[#96977A]"></span>
-          <span className="text-[#96977A]">Target Role Benchmark</span>
+          <span className="w-3 h-0.5 border-t-2 border-dashed border-[var(--color-dusty-rose)]"></span>
+          <span className="text-[var(--color-dusty-rose)]">Target Role Benchmark</span>
         </div>
       </div>
     </div>

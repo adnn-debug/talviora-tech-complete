@@ -1,65 +1,129 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   BookmarkCheck,
-  Compass,
-  FolderGit2,
-  Route,
   Trash2,
   ArrowRight,
+  Layers,
 } from "lucide-react";
+import { CATALOGUE_ITEMS } from "@/lib/catalogue-data";
+import { fetchWithAuth } from "@/lib/api-client";
+import type { LucideIcon } from "lucide-react";
+
+interface BookmarkItem {
+  id: string;
+  toolId?: string;
+  title: string;
+  category: string;
+  href: string;
+  icon: LucideIcon;
+  detail: string;
+}
 
 export default function BookmarksPage() {
-  const [bookmarks, setBookmarks] = useState([
-    {
-      id: "b-1",
-      title: "AI Solutions Architect Career Track",
-      category: "Career Pathway",
-      href: "/career-match",
-      icon: Compass,
-      detail: "94% fit • $145k-$195k • High market growth",
-    },
-    {
-      id: "b-2",
-      title: "Enterprise Hybrid RAG Engine Blueprint",
-      category: "Project Lab",
-      href: "/projects",
-      icon: FolderGit2,
-      detail: "FastAPI + pgvector + Redis semantic cache",
-    },
-    {
-      id: "b-3",
-      title: "Phase 2: Transformer Attention & Quantization",
-      category: "Roadmap Module",
-      href: "/roadmap",
-      icon: Route,
-      detail: "4.5 hrs remaining in current sprint",
-    },
-  ]);
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
 
-  const handleRemove = (id: string) => {
+  useEffect(() => {
+    try {
+      // 1. Load bookmarked catalogue tools from localStorage
+      const saved = localStorage.getItem("talviora_bookmarked_tools");
+      const savedIds: string[] = saved ? JSON.parse(saved) : [];
+
+      if (Array.isArray(savedIds) && savedIds.length > 0) {
+        const dynamicItems: BookmarkItem[] = savedIds
+          .map((id) => {
+            const item = CATALOGUE_ITEMS.find((c) => c.id === id);
+            if (!item) return null;
+            return {
+              id: `tool-${item.id}`,
+              toolId: item.id,
+              title: item.name,
+              category: `Tech Catalogue • ${item.category}`,
+              href: `/catalogue?query=${encodeURIComponent(item.name)}`,
+              icon: Layers,
+              detail: `${item.plainLanguageSummary} • ${item.difficulty} • ${item.subcategory}`,
+            };
+          })
+          .filter(Boolean) as BookmarkItem[];
+
+        setBookmarks(dynamicItems);
+      }
+
+      // 2. Sync from backend API
+      fetchWithAuth("/api/bookmarks")
+        .then(async (res) => ({ ok: res.ok, data: await res.json() }))
+        .then(({ ok, data }) => {
+          if (!ok) return;
+          if (data?.bookmarks && Array.isArray(data.bookmarks)) {
+            const apiToolIds = data.bookmarks.map((b: any) => b.item_id).filter(Boolean);
+            const combinedIds = Array.from(new Set([...savedIds, ...apiToolIds]));
+            const apiItems: BookmarkItem[] = combinedIds
+              .map((id) => {
+                const item = CATALOGUE_ITEMS.find((c) => c.id === id);
+                if (!item) return null;
+                return {
+                  id: `tool-${item.id}`,
+                  toolId: item.id,
+                  title: item.name,
+                  category: `Tech Catalogue • ${item.category}`,
+                  href: `/catalogue?query=${encodeURIComponent(item.name)}`,
+                  icon: Layers,
+                  detail: `${item.plainLanguageSummary} • ${item.difficulty} • ${item.subcategory}`,
+                };
+              })
+              .filter(Boolean) as BookmarkItem[];
+
+            if (apiItems.length > 0) {
+              setBookmarks(apiItems);
+            }
+          }
+        })
+        .catch(() => {});
+    } catch (e) {
+      console.warn("Failed to hydrate bookmarks", e);
+    }
+  }, []);
+
+  const handleRemove = async (id: string, toolId?: string) => {
     setBookmarks((prev) => prev.filter((b) => b.id !== id));
+
+    if (toolId) {
+      try {
+        const saved = localStorage.getItem("talviora_bookmarked_tools");
+        if (saved) {
+          const list: string[] = JSON.parse(saved);
+          const updated = list.filter((i) => i !== toolId);
+          localStorage.setItem("talviora_bookmarked_tools", JSON.stringify(updated));
+        }
+
+        await fetchWithAuth(`/api/bookmarks?item_id=${encodeURIComponent(toolId)}&item_type=resource`, {
+          method: "DELETE",
+        });
+      } catch (err) {
+        console.warn("Failed to remove bookmark from storage/API", err);
+      }
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-creme-latte)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#c58b94]/15 text-[#843e4b] dark:text-[#d8a0ab]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/30">
               <BookmarkCheck className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#c58b94] dark:text-[#d8a0ab]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
               Saved Resources
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h1 className="font-display-serif text-2xl sm:text-3xl font-bold text-[var(--color-burgundy)]">
             Saved Pathways & Bookmarks
           </h1>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
             Quick-access repository for pinned career pathways, project briefs, and active modules.
           </p>
         </div>
@@ -68,11 +132,11 @@ export default function BookmarksPage() {
       {/* Bookmarks List */}
       <div className="space-y-3">
         {bookmarks.length === 0 ? (
-          <div className="card-luxury p-12 text-center text-xs text-zinc-400 space-y-2">
+          <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-12 text-center text-xs text-[var(--color-burgundy)]/70 space-y-2 border border-[var(--color-creme-latte)] shadow-xs">
             <p>You have no saved pathways or bookmarks yet.</p>
             <Link
               href="/career-match"
-              className="text-[#843e4b] dark:text-[#d8a0ab] font-semibold hover:underline inline-block"
+              className="text-[var(--color-burgundy)] font-semibold hover:underline inline-block"
             >
               Browse Career Matches →
             </Link>
@@ -83,20 +147,20 @@ export default function BookmarksPage() {
             return (
               <div
                 key={b.id}
-                className="card-luxury p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="bg-[var(--color-warm-ivory)] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[var(--color-creme-latte)] hover:border-[var(--color-dusty-rose)] shadow-xs transition"
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-[#c58b94] dark:text-[#d8a0ab] shrink-0">
+                  <div className="p-2.5 rounded-xl bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/30 shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                       {b.category}
                     </span>
-                    <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                    <h2 className="text-sm font-display-serif font-bold text-[var(--color-burgundy)]">
                       {b.title}
                     </h2>
-                    <p className="text-xs text-zinc-500 mt-0.5">
+                    <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
                       {b.detail}
                     </p>
                   </div>
@@ -105,15 +169,15 @@ export default function BookmarksPage() {
                 <div className="flex items-center gap-2 self-start sm:self-auto">
                   <Link
                     href={b.href}
-                    className="px-3.5 py-1.5 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-semibold hover:opacity-90 transition flex items-center gap-1.5"
+                    className="btn-burgundy px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-xs"
                   >
                     <span>Launch</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
 
                   <button
-                    onClick={() => handleRemove(b.id)}
-                    className="p-1.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:text-rose-500 transition cursor-pointer"
+                    onClick={() => handleRemove(b.id, b.toolId)}
+                    className="p-1.5 rounded-xl border border-[var(--color-creme-latte)] text-[var(--color-burgundy)]/60 hover:text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)] transition cursor-pointer"
                     title="Remove Bookmark"
                   >
                     <Trash2 className="w-4 h-4" />

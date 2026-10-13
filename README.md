@@ -1,5 +1,7 @@
 # TALVIORA TECH: AI Career Intelligence Platform
 
+> **Implementation status:** This README and the bundled QA/security reports are archived source material, not current test evidence. The workbook/checklist explicitly leaves feature definitions 12–18 pending, while this README supplies conflicting names for them. The app keeps those entries as unconfirmed scaffolds. See [`docs/IMPLEMENTATION_AUDIT.md`](docs/IMPLEMENTATION_AUDIT.md) for the current verified state.
+
 [![Next.js](https://img.shields.io/badge/Next.js-15.1.0-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.0.0-blue?logo=react)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4.0.0-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
@@ -50,7 +52,7 @@ TALVIORA TECH rejects shallow AI chatbots and static course catalogs in favor of
 - **Modern European Coffee-House Palette**: Warm, intellectual, welcoming, and luxurious without pretension.
 - **Glassmorphism with Restraint**: Subtle translucent backdrops with frosted acrylic borders (`rgba(200, 179, 154, 0.2)`).
 - **Refined Editorial Typography**: DM Serif Display / Cormorant Garamond headings paired with Inter / Manrope sans-serif body copy and JetBrains Mono code blocks.
-- **Strict Accessibility**: Contrast ratios tested against WCAG 2.1 AA standards; light and dark adaptive themes.
+- **Accessibility**: Light and dark themes and several visible focus styles are present; full-site WCAG conformance has not been audited.
 
 ### Official Brand Palette Tokens
 
@@ -115,7 +117,7 @@ All 31 features are tracked in [`docs/FEATURE_CHECKLIST.md`](docs/FEATURE_CHECKL
 - **Framework**: [Next.js 15.1.0](https://nextjs.org/) (React 19, App Router, React Server Components & Client Components)
 - **Styling**: [Tailwind CSS v4.0.0](https://tailwindcss.com/) with PostCSS
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **AI Core**: [Google Generative AI SDK (`@google/generative-ai`)](https://www.npmjs.com/package/@google/generative-ai) (Gemini 1.5 Flash / Pro)
+- **AI Core**: [Google GenAI SDK (`@google/genai`)](https://ai.google.dev/gemini-api/docs/libraries) with a configurable Gemini model. Current text model default: `gemini-3.8-flash`.
 - **Database & Auth**: [Supabase JS Client (`@supabase/supabase-js`)](https://supabase.com/docs/reference/javascript/introduction) (PostgreSQL, Row Level Security)
 - **Type Safety**: [TypeScript 5.7](https://www.typescriptlang.org/) with strict mode
 

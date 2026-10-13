@@ -1,22 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Route,
   CheckCircle2,
   Circle,
-  Lock,
   Clock,
   ExternalLink,
   KanbanSquare,
-  Sparkles,
 } from "lucide-react";
-import { roadmapPhasesList, initialUserProfile } from "@/lib/career-data";
+import { roadmapPhasesList } from "@/lib/career-data";
 import { RoadmapPhase } from "@/lib/types";
+import PythonRoadmapBuilder from "@/components/PythonRoadmapBuilder";
 
 export default function RoadmapPage() {
-  const [phases, setPhases] = useState<RoadmapPhase[]>(roadmapPhasesList);
+  const [phases, setPhases] = useState<RoadmapPhase[]>(() => roadmapPhasesList.map((phase) => ({
+    ...phase,
+    modules: phase.modules.map((module) => ({ ...module, completed: false })),
+  })));
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("talviora_roadmap_progress");
+      if (saved) {
+        const completedIds: string[] = JSON.parse(saved);
+        if (Array.isArray(completedIds)) {
+          setPhases((prev) =>
+            prev.map((phase) => ({
+              ...phase,
+              modules: phase.modules.map((m) => ({
+                ...m,
+                completed: completedIds.includes(m.id),
+              })),
+            }))
+          );
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load roadmap progress", e);
+    }
+  }, []);
 
   const toggleModule = (phaseIdx: number, modId: string) => {
     setPhases((prev) => {
@@ -26,6 +50,12 @@ export default function RoadmapPage() {
         m.id === modId ? { ...m, completed: !m.completed } : m
       );
       updated[phaseIdx] = targetPhase;
+      try {
+        const completedIds = updated.flatMap((p) => p.modules).filter((m) => m.completed).map((m) => m.id);
+        localStorage.setItem("talviora_roadmap_progress", JSON.stringify(completedIds));
+      } catch (e) {
+        console.warn("Failed to persist roadmap progress", e);
+      }
       return updated;
     });
   };
@@ -38,57 +68,58 @@ export default function RoadmapPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-creme-latte)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#c58b94]/15 text-[#843e4b] dark:text-[#d8a0ab]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)]">
               <Route className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#c58b94] dark:text-[#d8a0ab]">
-              Sprint-by-Sprint Curriculum
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
+              Reference Curriculum
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-            Dynamic Learning Roadmap
+          <h1 className="font-display-serif text-2xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
+            Learning Roadmap
           </h1>
-          <p className="text-xs text-zinc-500 mt-0.5">
-            Personalized 16-week path for <strong>{initialUserProfile.targetRole}</strong>.
-            Interactive checkboxes update your progress velocity in real time.
+          <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
+            Generate a saved, prerequisite-aware Python pathway below. The sample checklist is retained as a separate static reference.
           </p>
         </div>
 
         <Link
           href="/sprint-planner"
-          className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-950 text-xs font-semibold transition flex items-center gap-2 shadow-xs"
+          className="btn-burgundy px-4 py-2 text-xs font-semibold flex items-center gap-2 shadow-xs"
         >
           <KanbanSquare className="w-4 h-4" />
           <span>Sprint Kanban</span>
         </Link>
       </div>
 
+      <PythonRoadmapBuilder />
+
       {/* Progress Bar Card */}
-      <div className="card-luxury p-6 bg-gradient-to-r from-white to-rose-50/20 dark:from-zinc-900 dark:to-zinc-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+      <div className="bg-[var(--color-warm-ivory)] rounded-2xl border border-[var(--color-creme-latte)] p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="space-y-1">
-          <span className="text-xs font-bold uppercase text-[#c58b94] dark:text-[#d8a0ab]">
-            Total Curriculum Completion
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
+            Your checklist progress (this browser)
           </span>
-          <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="font-display-serif text-2xl font-bold text-[var(--color-burgundy)]">
             {completedCount} of {totalCount} Modules Completed ({overallPct}%)
           </div>
-          <p className="text-xs text-zinc-500">
-            Phase 1 is complete. Active focus: Transformer Attention & Quantization (Phase 2).
+          <p className="text-xs text-[var(--color-burgundy)]/80">
+            Mark checkpoints as you complete them. Nothing here is pre-completed or synced to your account.
           </p>
         </div>
 
         <div className="w-full sm:w-64 space-y-2">
-          <div className="w-full h-3 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+          <div className="w-full h-3 rounded-full bg-[var(--color-creme-latte)] overflow-hidden border border-[var(--color-dusty-rose)]/20">
             <div
-              className="h-full rounded-full bg-[#c58b94] transition-all duration-500"
+              className="h-full rounded-full bg-[var(--color-burgundy)] transition-all duration-500"
               style={{ width: `${overallPct}%` }}
             />
           </div>
-          <span className="text-[10px] text-zinc-400 block text-right">
-            ~12 hrs/week pacing
+          <span className="text-[10px] text-[var(--color-burgundy)]/70 block text-right font-medium">
+            Suggested curriculum time estimates
           </span>
         </div>
       </div>
@@ -96,42 +127,40 @@ export default function RoadmapPage() {
       {/* Phases Timeline */}
       <div className="space-y-6">
         {phases.map((phase, pIdx) => {
-          const isPhaseDone = phase.status === "completed";
-          const isPhaseActive = phase.status === "in-progress";
-          const isPhaseLocked = phase.status === "locked";
+          const isPhaseDone = phase.modules.length > 0 && phase.modules.every((module) => module.completed);
+          const isPhaseActive = phase.modules.some((module) => module.completed) && !isPhaseDone;
+          const phaseStatus = isPhaseDone ? "Complete" : isPhaseActive ? "Started" : "Not started";
 
           return (
             <div
               key={phase.phaseNumber}
-              className={`card-luxury p-6 transition-all ${
+              className={`bg-[var(--color-warm-ivory)] rounded-2xl p-6 shadow-xs transition-all ${
                 isPhaseActive
-                  ? "border-[#c58b94] ring-1 ring-[#c58b94]/40"
-                  : isPhaseLocked
-                  ? "opacity-80"
-                  : ""
+                  ? "border-2 border-[var(--color-burgundy)] ring-2 ring-[var(--color-burgundy)]/10"
+                  : "border border-[var(--color-creme-latte)]"
               }`}
             >
               {/* Phase Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-zinc-100 dark:border-zinc-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[var(--color-creme-latte)]">
                 <div className="flex items-center gap-3">
                   <div
                     className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${
                       isPhaseDone
-                        ? "bg-emerald-500 text-white"
+                        ? "bg-[var(--surface-rose)] text-[var(--color-burgundy)] font-bold"
                         : isPhaseActive
-                        ? "bg-[#c58b94] text-white"
-                        : "bg-zinc-200 dark:bg-zinc-800 text-zinc-500"
+                        ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)]"
+                        : "bg-[var(--color-creme-latte)] text-[var(--color-burgundy)]/80"
                     }`}
                   >
                     {isPhaseDone ? "✓" : `P${phase.phaseNumber}`}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                         {phase.durationWeeks} • {phase.estimatedHours} Hours
                       </span>
                     </div>
-                    <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                    <h2 className="font-display-serif text-base sm:text-lg font-bold text-[var(--color-burgundy)]">
                       Phase {phase.phaseNumber}: {phase.phaseTitle}
                     </h2>
                   </div>
@@ -140,13 +169,13 @@ export default function RoadmapPage() {
                 <span
                   className={`self-start sm:self-auto text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
                     isPhaseDone
-                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                      ? "bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/40"
                       : isPhaseActive
-                      ? "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20"
-                      : "bg-zinc-200 dark:bg-zinc-800 text-zinc-500"
+                      ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)]"
+                      : "bg-[var(--color-creme-latte)] text-[var(--color-burgundy)]/80 border border-[var(--color-dusty-rose)]/20"
                   }`}
                 >
-                  {phase.status}
+                  {phaseStatus}
                 </span>
               </div>
 
@@ -157,19 +186,20 @@ export default function RoadmapPage() {
                     key={mod.id}
                     className={`p-3.5 rounded-xl border transition-all flex items-start gap-3.5 ${
                       mod.completed
-                        ? "bg-emerald-50/30 dark:bg-emerald-950/10 border-emerald-200/50 dark:border-emerald-900/30 text-zinc-700 dark:text-zinc-300"
-                        : "bg-zinc-50/60 dark:bg-zinc-900/40 border-zinc-200/80 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700"
+                        ? "bg-[var(--surface-rose)]/40 border-[var(--color-dusty-rose)]/40 text-[var(--color-burgundy)]"
+                        : "bg-[var(--color-warm-ivory)]/40 border-[var(--color-creme-latte)] hover:border-[var(--color-dusty-rose)]/70"
                     }`}
                   >
                     {/* Interactive Checkbox */}
                     <button
                       type="button"
                       onClick={() => toggleModule(pIdx, mod.id)}
-                      className="mt-0.5 text-zinc-400 hover:text-[#c58b94] transition cursor-pointer"
+                      aria-pressed={mod.completed}
+                      className="mt-0.5 text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] transition cursor-pointer"
                       aria-label={`Toggle module ${mod.title}`}
                     >
                       {mod.completed ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                        <CheckCircle2 className="w-5 h-5 text-[var(--color-burgundy)]" />
                       ) : (
                         <Circle className="w-5 h-5" />
                       )}
@@ -180,17 +210,17 @@ export default function RoadmapPage() {
                         <span
                           className={`text-xs sm:text-sm font-bold ${
                             mod.completed
-                              ? "line-through text-zinc-400 dark:text-zinc-500"
-                              : "text-zinc-900 dark:text-zinc-100"
+                              ? "line-through text-[var(--color-burgundy)]/50"
+                              : "text-[var(--color-burgundy)]"
                           }`}
                         >
                           {mod.title}
                         </span>
-                        <span className="text-[11px] font-mono-code text-zinc-400 shrink-0">
+                        <span className="text-[11px] font-mono-code text-[var(--color-burgundy)]/70 shrink-0 font-semibold">
                           {mod.hours} hrs
                         </span>
                       </div>
-                      <p className="text-xs text-zinc-500 mt-1 leading-relaxed">
+                      <p className="text-xs text-[var(--color-burgundy)]/80 mt-1 leading-relaxed">
                         {mod.description}
                       </p>
                     </div>
@@ -200,7 +230,7 @@ export default function RoadmapPage() {
                         href={mod.resourceLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-zinc-400 hover:text-[#c58b94] p-1 transition"
+                        className="text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] p-1 transition"
                         title="View Documentation"
                       >
                         <ExternalLink className="w-4 h-4" />

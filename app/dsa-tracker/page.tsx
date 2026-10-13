@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Binary,
   CheckCircle2,
@@ -29,7 +29,7 @@ export default function DsaTrackerPage() {
       timeComplexity: "O(N)",
       spaceComplexity: "O(1)",
       highFrequencyProblems: ["Two Sum II", "3Sum", "Container With Most Water", "Trapping Rain Water"],
-      solved: true,
+      solved: false,
       notes: "Optimal for sorted arrays and palindrome validations.",
     },
     {
@@ -38,7 +38,7 @@ export default function DsaTrackerPage() {
       timeComplexity: "O(N)",
       spaceComplexity: "O(K) / O(1)",
       highFrequencyProblems: ["Longest Substring Without Repeating Characters", "Minimum Window Substring"],
-      solved: true,
+      solved: false,
       notes: "Maintains running window state; expand right, contract left when invariant breaks.",
     },
     {
@@ -47,7 +47,7 @@ export default function DsaTrackerPage() {
       timeComplexity: "O(N)",
       spaceComplexity: "O(1)",
       highFrequencyProblems: ["Linked List Cycle II", "Find the Duplicate Number", "Happy Number"],
-      solved: true,
+      solved: false,
       notes: "Used to detect loops and find middle node in linked lists.",
     },
     {
@@ -81,10 +81,36 @@ export default function DsaTrackerPage() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("talviora_dsa_patterns");
+      if (saved) {
+        const solvedIds: number[] = JSON.parse(saved);
+        if (Array.isArray(solvedIds)) {
+          setPatterns((prev) =>
+            prev.map((p) => ({
+              ...p,
+              solved: solvedIds.includes(p.id),
+            }))
+          );
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to load DSA pattern progress", e);
+    }
+  }, []);
+
   const toggleSolved = (id: number) => {
-    setPatterns((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, solved: !p.solved } : p))
-    );
+    setPatterns((prev) => {
+      const updated = prev.map((p) => (p.id === id ? { ...p, solved: !p.solved } : p));
+      try {
+        const solvedIds = updated.filter((p) => p.solved).map((p) => p.id);
+        localStorage.setItem("talviora_dsa_patterns", JSON.stringify(solvedIds));
+      } catch (e) {
+        console.warn("Failed to persist DSA pattern progress", e);
+      }
+      return updated;
+    });
   };
 
   const filtered = patterns.filter(
@@ -99,51 +125,51 @@ export default function DsaTrackerPage() {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-creme-latte)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#c58b94]/15 text-[#843e4b] dark:text-[#d8a0ab]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/30">
               <Binary className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#c58b94] dark:text-[#d8a0ab]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
               Algorithmic Acumen
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-            DSA & Algorithmic Patterns Sprint
+          <h1 className="text-2xl sm:text-3xl font-display-serif font-bold text-[var(--color-burgundy)]">
+            Algorithm Pattern Tracker
           </h1>
-          <p className="text-xs text-zinc-500 mt-0.5">
-            Master 14 core patterns rather than memorizing hundreds of ad-hoc problems.
+          <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
+            This bundled example set has {patterns.length} patterns. Mark your own progress; checkboxes are saved in this browser.
           </p>
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[var(--color-dusty-rose)] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search pattern or problem..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-4 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#c58b94]"
+            className="pl-9 pr-4 py-2 text-xs w-full sm:w-64 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] placeholder:text-[var(--color-burgundy)]/40 focus:border-[var(--color-burgundy)] focus:outline-hidden transition shadow-xs"
           />
         </div>
       </div>
 
       {/* Progress banner */}
-      <div className="card-luxury p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-gradient-to-r from-white to-rose-50/20 dark:from-zinc-900 dark:to-zinc-900/60">
+      <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[var(--color-creme-latte)] shadow-xs">
         <div className="space-y-1">
-          <span className="text-xs font-bold uppercase text-[#c58b94] dark:text-[#d8a0ab]">
-            Pattern Mastery Progress
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
+            Your pattern checklist (this browser)
           </span>
-          <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="text-2xl font-bold text-[var(--color-burgundy)]">
             {solvedCount} of {patterns.length} Patterns Mastered ({solvedPct}%)
           </div>
         </div>
         <div className="w-full sm:w-60">
-          <div className="w-full h-2.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+          <div className="w-full h-2.5 rounded-full bg-[var(--color-creme-latte)] overflow-hidden border border-[var(--color-dusty-rose)]/20">
             <div
-              className="h-full rounded-full bg-[#c58b94] transition-all duration-500"
+              className="h-full rounded-full bg-[var(--color-burgundy)] transition-all duration-500"
               style={{ width: `${solvedPct}%` }}
             />
           </div>
@@ -155,19 +181,22 @@ export default function DsaTrackerPage() {
         {filtered.map((pattern) => (
           <div
             key={pattern.id}
-            className={`card-luxury p-5 space-y-3 transition-all ${
-              pattern.solved ? "border-emerald-500/40 bg-emerald-50/10 dark:bg-emerald-950/5" : ""
+            className={`p-5 space-y-3 rounded-2xl transition-all shadow-xs border ${
+              pattern.solved
+                ? "bg-[var(--surface-rose)]/40 border-[var(--color-dusty-rose)]/60"
+                : "bg-[var(--color-warm-ivory)] border-[var(--color-creme-latte)] hover:border-[var(--color-dusty-rose)]"
             }`}
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2.5">
                 <button
                   onClick={() => toggleSolved(pattern.id)}
-                  className="cursor-pointer text-zinc-400 hover:text-[#c58b94]"
+                  aria-pressed={pattern.solved}
+                  className="cursor-pointer text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] transition-colors"
                   aria-label={`Toggle ${pattern.name}`}
                 >
                   {pattern.solved ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                    <CheckCircle2 className="w-5 h-5 text-[var(--color-burgundy)]" />
                   ) : (
                     <Circle className="w-5 h-5" />
                   )}
@@ -175,8 +204,8 @@ export default function DsaTrackerPage() {
                 <h2
                   className={`text-sm font-bold ${
                     pattern.solved
-                      ? "line-through text-zinc-400 dark:text-zinc-500"
-                      : "text-zinc-900 dark:text-zinc-100"
+                      ? "line-through text-[var(--color-burgundy)]/50"
+                      : "text-[var(--color-burgundy)]"
                   }`}
                 >
                   {pattern.name}
@@ -184,25 +213,25 @@ export default function DsaTrackerPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3 text-[11px] font-mono-code text-zinc-500">
-              <span>Time: <strong className="text-zinc-800 dark:text-zinc-200">{pattern.timeComplexity}</strong></span>
+            <div className="flex items-center gap-3 text-[11px] font-mono-code text-[var(--color-burgundy)]/70">
+              <span>Time: <strong className="text-[var(--color-burgundy)]">{pattern.timeComplexity}</strong></span>
               <span>•</span>
-              <span>Space: <strong className="text-zinc-800 dark:text-zinc-200">{pattern.spaceComplexity}</strong></span>
+              <span>Space: <strong className="text-[var(--color-burgundy)]">{pattern.spaceComplexity}</strong></span>
             </div>
 
-            <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            <p className="text-xs text-[var(--color-burgundy)]/80 leading-relaxed">
               {pattern.notes}
             </p>
 
-            <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/80">
-              <span className="text-[10px] uppercase font-bold text-zinc-400 block mb-1">
+            <div className="pt-2 border-t border-[var(--color-creme-latte)]">
+              <span className="text-[10px] uppercase font-bold text-[var(--color-burgundy)]/70 block mb-1">
                 Curated Practice Set:
               </span>
               <div className="flex flex-wrap gap-1">
                 {pattern.highFrequencyProblems.map((prob, i) => (
                   <span
                     key={i}
-                    className="text-[10px] px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-medium"
+                    className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] border border-[var(--color-creme-latte)] font-medium"
                   >
                     {prob}
                   </span>

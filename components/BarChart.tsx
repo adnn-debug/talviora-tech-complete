@@ -18,17 +18,17 @@ export default function BarChart({ items }: BarChartProps) {
         return (
           <div key={idx} className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-[#241A1A] dark:text-[#FFF9F0]">{item.label}</span>
-              <span className="font-mono-code font-bold text-[#6F1737] dark:text-[#F0C4CC]">
+              <span className="font-semibold text-[var(--color-burgundy)]">{item.label}</span>
+              <span className="font-mono-code font-bold text-[var(--color-burgundy)]">
                 {item.subtext || `${item.value}%`}
               </span>
             </div>
-            <div className="w-full h-3 rounded-full bg-[#F5EBDD] dark:bg-[#2E1F21] overflow-hidden border border-[#B59A83]/20">
+            <div className="w-full h-3 rounded-full bg-[var(--color-creme-latte)] overflow-hidden border border-[var(--color-dusty-rose)]/20">
               <div
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${pct}%`,
-                  backgroundColor: item.color || "#6F1737",
+                  backgroundColor: item.color || "var(--color-burgundy)",
                 }}
               />
             </div>

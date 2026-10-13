@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   KanbanSquare,
   Plus,
@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Flame,
 } from "lucide-react";
+import { fetchWithAuth } from "@/lib/api-client";
 
 interface SprintTask {
   id: string;
@@ -21,114 +22,156 @@ interface SprintTask {
 }
 
 export default function SprintPlannerPage() {
-  const [tasks, setTasks] = useState<SprintTask[]>([
-    {
-      id: "t-1",
-      title: "Implement Transformer Multi-Head Attention layer in PyTorch",
-      category: "Deep Learning",
-      hours: 6,
-      column: "in-progress",
-    },
-    {
-      id: "t-2",
-      title: "Configure Redis semantic cache with cosine threshold 0.88",
-      category: "Architecture",
-      hours: 4,
-      column: "in-progress",
-    },
-    {
-      id: "t-3",
-      title: "Solve 10 LeetCode Medium Sliding Window & Two Pointer problems",
-      category: "Algorithms",
-      hours: 5,
-      column: "backlog",
-    },
-    {
-      id: "t-4",
-      title: "Write Docker multi-stage build for FastAPI inference server",
-      category: "DevOps",
-      hours: 3,
-      column: "backlog",
-    },
-    {
-      id: "t-5",
-      title: "PostgreSQL pgvector HNSW index creation and EXPLAIN testing",
-      category: "Database",
-      hours: 4,
-      column: "completed",
-    },
-    {
-      id: "t-6",
-      title: "Review STAR interview scenarios for distributed outage retrospective",
-      category: "Interview",
-      hours: 2,
-      column: "completed",
-    },
-  ]);
+  const [tasks, setTasks] = useState<SprintTask[]>([]);
+  const [syncMessage, setSyncMessage] = useState("Tasks are stored in this browser until you sign in and connect Supabase.");
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCategory, setNewTaskCategory] = useState("AI Architecture");
-  const [newTaskHours, setNewTaskHours] = useState(4);
+  const [newTaskHours, setNewTaskHours] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
 
+  useEffect(() => {
+    const suggestedTask = new URLSearchParams(window.location.search).get("task");
+    if (suggestedTask) {
+      setNewTaskTitle(suggestedTask.slice(0, 180));
+      setShowAddModal(true);
+    }
+
+    // Load this browser's own task list first; the authenticated API may replace it.
+    try {
+      const cached = localStorage.getItem("talviora_sprint_tasks");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed)) {
+          setTasks(parsed);
+        }
+      }
+    } catch {}
+
+    fetchWithAuth("/api/tasks")
+      .then(async (res) => ({ ok: res.ok, data: await res.json() }))
+      .then(({ ok, data }) => {
+        if (!ok) {
+          setSyncMessage(data?.error || "Could not sync tasks. Your browser copy is still available.");
+          return;
+        }
+        if (data?.tasks && Array.isArray(data.tasks)) {
+          if (data.persisted) {
+            setTasks(data.tasks);
+            localStorage.setItem("talviora_sprint_tasks", JSON.stringify(data.tasks));
+            setSyncMessage("Tasks loaded from your account.");
+          } else {
+            setSyncMessage("Tasks are stored in this browser until you sign in and connect Supabase.");
+          }
+        }
+      })
+      .catch(() => {
+        setSyncMessage("Task sync is unavailable. Your browser copy is still available.");
+      });
+  }, []);
+
   const moveTask = (taskId: string, targetCol: "backlog" | "in-progress" | "completed") => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, column: targetCol } : t))
-    );
+    const task = tasks.find((item) => item.id === taskId);
+    if (!task) return;
+    const updatedTask = { ...task, column: targetCol };
+    setTasks((prev) => {
+      const updated = prev.map((t) => (t.id === taskId ? updatedTask : t));
+      try {
+        localStorage.setItem("talviora_sprint_tasks", JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+    fetchWithAuth("/api/tasks", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: taskId, column: targetCol }),
+    }).then(async (response) => {
+      const data = await response.json();
+      if (response.ok && data.persisted) setSyncMessage("Task changes synced to your account.");
+      else setSyncMessage(data.error || "Task change saved in this browser only.");
+    }).catch(() => setSyncMessage("Task change saved in this browser only; sync is unavailable."));
   };
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
     const created: SprintTask = {
-      id: `t-${Date.now()}`,
+      id: crypto.randomUUID(),
       title: newTaskTitle,
       category: newTaskCategory,
       hours: newTaskHours,
       column: "backlog",
     };
 
-    setTasks([...tasks, created]);
+    const updated = [...tasks, created];
+    setTasks(updated);
     setNewTaskTitle("");
     setShowAddModal(false);
+
+    try {
+      localStorage.setItem("talviora_sprint_tasks", JSON.stringify(updated));
+    } catch {}
+
+    // Keep the local copy usable and replace its identifier if the server persists it.
+    try {
+      const response = await fetchWithAuth("/api/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(created),
+      });
+      const data = await response.json();
+      if (response.ok && data.persisted && data.task) {
+        const persisted = { ...created, id: data.task.id };
+        const synced = updated.map((task) => task.id === created.id ? persisted : task);
+        setTasks(synced);
+        localStorage.setItem("talviora_sprint_tasks", JSON.stringify(synced));
+        setSyncMessage("Task saved to your account.");
+      } else {
+        setSyncMessage(data?.error || "Task is saved in this browser only.");
+      }
+    } catch {
+      setSyncMessage("Task is saved in this browser only; sync is unavailable.");
+    }
   };
 
   const columns = [
-    { id: "backlog", title: "Sprint Backlog", color: "border-zinc-300 dark:border-zinc-700" },
-    { id: "in-progress", title: "In Progress (Active)", color: "border-[#c58b94]" },
-    { id: "completed", title: "Completed & Verified", color: "border-emerald-500" },
+    { id: "backlog", title: "Sprint Backlog", border: "border-[rgba(var(--color-burgundy-rgb),0.18)]", bg: "bg-[var(--color-creme-latte)]/70" },
+    { id: "in-progress", title: "In Progress (Active)", border: "border-[rgba(var(--color-dusty-rose-rgb),0.6)]", bg: "bg-[var(--surface-rose)]/50" },
+    { id: "completed", title: "Completed", border: "border-[rgba(var(--color-burgundy-rgb),0.2)]", bg: "bg-[var(--color-warm-ivory)]" },
   ];
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(var(--color-burgundy-rgb),0.15)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#c58b94]/15 text-[#843e4b] dark:text-[#d8a0ab]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)]">
               <KanbanSquare className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#c58b94] dark:text-[#d8a0ab]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
               Sprint Execution Engine
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100">
+          <h1 className="font-display-serif text-2xl sm:text-3xl font-bold text-[var(--color-burgundy)]">
             Weekly Sprint Kanban Planner
           </h1>
-          <p className="text-xs text-zinc-500 mt-0.5">
+          <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
             Organize actionable tasks from your roadmap and skill gap matrix into focused weekly sprints.
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="px-4 py-2 rounded-xl bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-white text-white dark:text-zinc-950 text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer self-start"
+          className="btn-burgundy px-4 py-2.5 rounded-xl text-xs font-semibold transition flex items-center gap-2 shadow-xs cursor-pointer self-start"
         >
-          <Plus className="w-4 h-4" />
+          <Plus className="w-4 h-4 text-[var(--color-warm-ivory)]" />
           <span>New Sprint Task</span>
         </button>
       </div>
+
+      <p className="rounded-lg border border-[var(--border-panel)] bg-[var(--bg-surface)] px-3 py-2 text-xs text-[var(--text-secondary)]" role="status">{syncMessage}</p>
 
       {/* Kanban Board Columns */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -139,55 +182,55 @@ export default function SprintPlannerPage() {
           return (
             <div
               key={col.id}
-              className={`rounded-2xl border ${col.color} bg-white/60 dark:bg-zinc-900/40 p-4 space-y-4 flex flex-col`}
+              className={`rounded-2xl border ${col.border} ${col.bg} p-4 space-y-4 flex flex-col shadow-xs`}
             >
               {/* Column Header */}
-              <div className="flex items-center justify-between pb-2 border-b border-zinc-200 dark:border-zinc-800">
+              <div className="flex items-center justify-between pb-2 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]">
                     {col.title}
                   </h2>
-                  <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                  <span className="text-[10px] font-mono-code font-bold px-2 py-0.5 rounded-full bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.15)]">
                     {colTasks.length}
                   </span>
                 </div>
-                <span className="text-[10px] text-zinc-400 font-mono-code">
-                  {totalHours} hrs
+                <span className="text-[10px] text-[var(--color-burgundy)]/80 font-mono-code font-semibold">
+                  {totalHours > 0 ? `${totalHours}h estimated` : "No estimate"}
                 </span>
               </div>
 
               {/* Task Cards */}
               <div className="space-y-3 flex-1">
                 {colTasks.length === 0 ? (
-                  <div className="p-6 text-center text-xs text-zinc-400 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl">
+                  <div className="p-6 text-center text-xs text-[var(--color-burgundy)]/70 border border-dashed border-[rgba(var(--color-burgundy-rgb),0.2)] rounded-xl font-medium">
                     No tasks in this column.
                   </div>
                 ) : (
                   colTasks.map((task) => (
                     <div
                       key={task.id}
-                      className="card-luxury p-4 space-y-2.5 bg-white dark:bg-zinc-900/90 hover:scale-[1.01] transition-transform"
+                      className="card-coffee p-4 space-y-2.5 border border-[rgba(var(--color-burgundy-rgb),0.14)] bg-[var(--color-warm-ivory)] hover:border-[rgba(var(--color-dusty-rose-rgb),0.7)] hover:scale-[1.01] transition-all"
                     >
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="font-bold uppercase px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                        <span className="font-bold uppercase px-2 py-0.5 rounded-md bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)]">
                           {task.category}
                         </span>
-                        <span className="text-zinc-400 font-mono-code flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {task.hours}h
+                        <span className="text-[var(--color-burgundy)]/80 font-mono-code flex items-center gap-1 font-semibold">
+                          <Clock className="w-3 h-3 text-[var(--color-burgundy)]" />
+                          {task.hours > 0 ? `${task.hours}h estimate` : "Time not entered"}
                         </span>
                       </div>
 
-                      <h3 className="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-snug">
+                      <h3 className="text-xs font-bold text-[var(--color-burgundy)] leading-snug">
                         {task.title}
                       </h3>
 
                       {/* Move Actions */}
-                      <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[10px]">
+                      <div className="pt-2 border-t border-[rgba(var(--color-burgundy-rgb),0.10)] flex items-center justify-between text-[10px]">
                         {col.id !== "backlog" && (
                           <button
                             onClick={() => moveTask(task.id, "backlog")}
-                            className="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-medium"
+                            className="text-[var(--color-burgundy)]/70 hover:text-[var(--color-burgundy)] font-semibold cursor-pointer"
                           >
                             ← Backlog
                           </button>
@@ -195,7 +238,7 @@ export default function SprintPlannerPage() {
                         {col.id !== "in-progress" && (
                           <button
                             onClick={() => moveTask(task.id, "in-progress")}
-                            className="text-[#843e4b] dark:text-[#d8a0ab] hover:underline font-semibold"
+                            className="text-[var(--color-burgundy)] hover:text-[var(--color-flowering-chestnut)] hover:underline font-bold cursor-pointer"
                           >
                             In Progress →
                           </button>
@@ -203,7 +246,7 @@ export default function SprintPlannerPage() {
                         {col.id !== "completed" && (
                           <button
                             onClick={() => moveTask(task.id, "completed")}
-                            className="text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
+                            className="text-[var(--color-burgundy)] hover:text-[var(--color-flowering-chestnut)] hover:underline font-bold cursor-pointer"
                           >
                             Done ✓
                           </button>
@@ -221,20 +264,20 @@ export default function SprintPlannerPage() {
       {/* Add Task Modal */}
       {showAddModal && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4"
           onClick={() => setShowAddModal(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl border border-zinc-300 dark:border-zinc-800 bg-[#fdf7f1] dark:bg-[#111118] p-6 space-y-4 shadow-2xl"
+            className="w-full max-w-md rounded-2xl border border-[rgba(var(--color-burgundy-rgb),0.2)] bg-[var(--color-warm-ivory)] p-6 space-y-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-base font-display-serif font-bold text-[var(--color-burgundy)]">
               Create New Sprint Task
             </h2>
 
             <form onSubmit={handleAddTask} className="space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                <label className="text-xs font-bold text-[var(--color-burgundy)]">
                   Task Title
                 </label>
                 <input
@@ -243,19 +286,19 @@ export default function SprintPlannerPage() {
                   placeholder="e.g. Implement cosine similarity cache"
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#c58b94]"
+                  className="input-coffee w-full px-3.5 py-2 text-xs"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                  <label className="text-xs font-bold text-[var(--color-burgundy)]">
                     Category
                   </label>
                   <select
                     value={newTaskCategory}
                     onChange={(e) => setNewTaskCategory(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs font-semibold text-zinc-900 dark:text-zinc-100 focus:outline-none"
+                    className="input-coffee w-full px-3 py-2 text-xs font-semibold cursor-pointer"
                   >
                     <option value="Deep Learning">Deep Learning</option>
                     <option value="Architecture">Architecture</option>
@@ -267,16 +310,16 @@ export default function SprintPlannerPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">
-                    Estimated Hours
+                  <label className="text-xs font-bold text-[var(--color-burgundy)]">
+                    Estimated Hours (optional)
                   </label>
                   <input
                     type="number"
-                    min={1}
+                    min={0}
                     max={20}
                     value={newTaskHours}
                     onChange={(e) => setNewTaskHours(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none"
+                    className="input-coffee w-full px-3 py-2 text-xs"
                   />
                 </div>
               </div>
@@ -285,13 +328,13 @@ export default function SprintPlannerPage() {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl border border-zinc-300 dark:border-zinc-700 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                  className="btn-secondary-coffee px-4 py-2 rounded-xl text-xs font-semibold"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-950 text-xs font-semibold"
+                  className="btn-burgundy px-5 py-2 rounded-xl text-xs font-semibold"
                 >
                   Add Task
                 </button>

@@ -2,7 +2,6 @@
 
 @layer base {
   :root {
-    /* Exact Modern European Coffee-House Palette */
     --color-velvet-beige: #C8B39A;
     --color-dusty-rose: #C58F98;
     --color-creme-latte: #F5EBDD;
@@ -14,157 +13,367 @@
     --color-flowering-chestnut: #8D514B;
     --color-deep-espresso: #241A1A;
     --color-warm-ivory: #FFF9F0;
+    --color-burgundy-rgb: 111, 23, 55;
+    --color-dusty-rose-rgb: 197, 143, 152;
 
-    /* Semantic Light Theme */
+    /* Soft semantic tints are mixed from the approved palette. */
+    --surface-rose: color-mix(in srgb, var(--color-dusty-rose) 18%, var(--color-warm-ivory));
+    --color-warm-greige: var(--color-velvet-beige);
+    --color-soft-blush-cream: var(--color-creme-latte);
+    --color-powder-blush: var(--surface-rose);
+    --color-deep-rose-burgundy: var(--color-burgundy);
+
+    --bg-workspace: var(--color-creme-latte);
     --bg-page: var(--color-creme-latte);
-    --bg-surface: var(--color-warm-ivory);
-    --bg-surface-elevated: #ffffff;
+    --bg-canvas: var(--color-creme-latte);
     --bg-sidebar: var(--color-warm-ivory);
-    --border-warm: rgba(181, 154, 131, 0.35); /* Cocoa Sand light border */
-    --border-accent: rgba(111, 23, 55, 0.25); /* Burgundy subtle border */
+    --bg-surface: var(--color-warm-ivory);
+    --bg-surface-secondary: var(--color-velvet-beige);
+    --bg-surface-elevated: var(--surface-rose);
+    --bg-card: var(--color-warm-ivory);
+    --bg-card-highlight: var(--surface-rose);
+
+    --border-warm: rgba(var(--color-burgundy-rgb), 0.16);
+    --border-accent: rgba(var(--color-dusty-rose-rgb), 0.45);
+    --border-subtle: rgba(var(--color-burgundy-rgb), 0.1);
+    --border-panel: rgba(var(--color-burgundy-rgb), 0.14);
+    --border-elevated: rgba(var(--color-dusty-rose-rgb), 0.55);
+
     --text-primary: var(--color-deep-espresso);
-    --text-secondary: #4A3A37;
-    --text-muted: #7E6962;
+    --text-secondary: color-mix(in srgb, var(--color-deep-espresso) 82%, transparent);
+    --text-muted: color-mix(in srgb, var(--color-deep-espresso) 64%, transparent);
+    --text-entered: var(--color-deep-espresso);
     --heading-primary: var(--color-burgundy);
+    --heading-secondary: var(--color-decadent-chocolate);
+
     --accent-primary: var(--color-burgundy);
-    --accent-hover: #55122B;
+    --accent-hover: var(--color-flowering-chestnut);
     --accent-secondary: var(--color-dusty-rose);
-    --accent-badge: var(--color-mauve-madness);
-    --accent-success: var(--color-soft-olive);
-    --accent-alert: var(--color-flowering-chestnut);
-    --glass-bg: rgba(255, 249, 240, 0.85);
-    --glass-border: rgba(200, 179, 154, 0.45);
+    --accent-badge: var(--surface-rose);
+    --accent-highlight: var(--surface-rose);
+    --accent-indicator: var(--color-mauve-madness);
+
+    --btn-primary-bg: var(--color-burgundy);
+    --btn-primary-text: var(--color-warm-ivory);
+    --btn-secondary-bg: var(--color-velvet-beige);
+    --btn-secondary-text: var(--color-deep-espresso);
+
+    --glass-bg: color-mix(in srgb, var(--color-warm-ivory) 90%, transparent);
+    --glass-border: rgba(var(--color-dusty-rose-rgb), 0.4);
+    --glass-mauve: color-mix(in srgb, var(--color-mauve-madness) 16%, var(--color-warm-ivory));
+    --glass-mauve-border: rgba(var(--color-burgundy-rgb), 0.16);
+    --shadow-card: 0 2px 10px -2px rgba(var(--color-deep-espresso-rgb, 36, 26, 26), 0.05), 0 1px 3px rgba(var(--color-deep-espresso-rgb, 36, 26, 26), 0.03);
+    --shadow-elevated: 0 8px 22px -4px rgba(var(--color-deep-espresso-rgb, 36, 26, 26), 0.08), 0 2px 6px rgba(var(--color-deep-espresso-rgb, 36, 26, 26), 0.04);
   }
 
   .dark {
-    /* Semantic Dark Theme */
-    --bg-page: var(--color-deep-espresso);
-    --bg-surface: var(--color-decadent-chocolate);
-    --bg-surface-elevated: #2E1F21;
-    --bg-sidebar: #1F1515;
-    --border-warm: rgba(181, 154, 131, 0.25);
-    --border-accent: rgba(197, 143, 152, 0.35);
-    --text-primary: var(--color-warm-ivory);
-    --text-secondary: var(--color-creme-latte);
-    --text-muted: var(--color-cocoa-sand);
-    --heading-primary: #F0C4CC;
-    --accent-primary: var(--color-dusty-rose);
-    --accent-hover: #D8A3AB;
-    --accent-secondary: var(--color-mauve-madness);
-    --accent-badge: var(--color-mauve-madness);
-    --accent-success: var(--color-soft-olive);
-    --accent-alert: #F2958D;
-    --glass-bg: rgba(59, 37, 39, 0.75);
-    --glass-border: rgba(197, 143, 152, 0.2);
+    --color-velvet-beige: #3B2527;
+    --color-dusty-rose: #C58F98;
+    --color-creme-latte: #241A1A;
+    --color-cocoa-sand: #A77C91;
+    --color-soft-olive: #96977A;
+    --color-burgundy: #D8A8B3;
+    --color-decadent-chocolate: #3B2527;
+    --color-mauve-madness: #C58F98;
+    --color-flowering-chestnut: #C58F98;
+    --color-deep-espresso: #FFF9F0;
+    --color-warm-ivory: #3B2527;
+    --color-burgundy-rgb: 216, 168, 179;
+    --color-dusty-rose-rgb: 197, 143, 152;
+    --surface-rose: rgba(167, 124, 145, 0.18);
+    --bg-sidebar: #2D2021;
+    --bg-surface-secondary: #3B2527;
+    --bg-surface-elevated: #4A3033;
+    --bg-card-highlight: #4A3033;
+    --border-warm: rgba(197, 143, 152, 0.22);
+    --border-subtle: rgba(197, 143, 152, 0.16);
+    --border-panel: rgba(197, 143, 152, 0.2);
+    --border-elevated: rgba(197, 143, 152, 0.35);
+    --text-primary: var(--color-deep-espresso);
+    --text-secondary: rgba(255, 249, 240, 0.82);
+    --text-muted: rgba(255, 249, 240, 0.66);
+    --text-entered: var(--color-deep-espresso);
+    --heading-primary: var(--color-burgundy);
+    --heading-secondary: var(--color-deep-espresso);
+    --btn-primary-bg: var(--color-burgundy);
+    --btn-primary-text: #241A1A;
+    --btn-secondary-bg: #4A3033;
+    --btn-secondary-text: var(--color-warm-ivory);
+    --glass-bg: rgba(36, 26, 26, 0.9);
+    --glass-mauve: rgba(74, 48, 51, 0.88);
   }
 
   body {
-    background-color: var(--bg-page);
+    background-color: var(--bg-workspace);
     color: var(--text-primary);
-    font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
-/* Typography Utility Classes */
-.font-display-serif {
-  font-family: 'DM Serif Display', 'Cormorant Garamond', Georgia, serif;
-  letter-spacing: 0.01em;
-}
-
-.font-editorial-italic {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-style: italic;
-  font-weight: 500;
+/* ==========================================================================
+   Typography System
+   DM Serif Display / Playfair Display for headings & DM Sans / Inter for UI
+   ========================================================================== */
+.font-display-serif,
+.font-serif {
+  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.015em;
 }
 
 .font-sans-ui {
-  font-family: 'Manrope', 'Inter', sans-serif;
+  font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .font-mono-code {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Coffee-House Glassmorphism Panels */
+.title-hero-editorial {
+  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.375rem, 4.5vw, 2.875rem); /* 38-46px */
+  line-height: 1.15;
+  color: var(--heading-primary);
+  letter-spacing: -0.02em;
+}
+
+.title-page-editorial {
+  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.875rem, 3.5vw, 2.25rem); /* 30-36px */
+  line-height: 1.2;
+  color: var(--heading-primary);
+  letter-spacing: -0.015em;
+}
+
+.title-section-editorial {
+  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem); /* 22-28px */
+  line-height: 1.25;
+  color: var(--heading-primary);
+  letter-spacing: -0.01em;
+}
+
+.title-card-editorial {
+  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.0625rem, 1.4vw, 1.3125rem); /* 17-21px */
+  line-height: 1.3;
+  color: var(--heading-primary);
+}
+
+.text-body-ui {
+  font-family: 'DM Sans', 'Inter', sans-serif;
+  font-size: clamp(0.9375rem, 1.1vw, 1.0625rem); /* 15-17px */
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-nav-ui {
+  font-family: 'DM Sans', 'Inter', sans-serif;
+  font-size: clamp(0.875rem, 1vw, 1rem); /* 14-16px */
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.text-helper-ui {
+  font-family: 'DM Sans', 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Cards & Surface Hierarchy
+   - Soft Blush Cream (var(--color-warm-ivory)) base canvas
+   - Warm Greige (var(--color-creme-latte)) secondary panels & sidebar
+   - White (var(--color-warm-ivory)) & Powder Blush (var(--surface-rose)) card highlights
+   ========================================================================== */
+.card-coffee,
+.card-luxury {
+  background-color: var(--color-warm-ivory);
+  border: 1px solid var(--border-panel);
+  border-radius: 1rem; /* 16px corner radius (within 14-18px range) */
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card-coffee:hover,
+.card-luxury:hover {
+  border-color: rgba(var(--color-dusty-rose-rgb), 0.7);
+  box-shadow: 0 4px 16px -2px rgba(var(--color-burgundy-rgb), 0.08);
+}
+
+/* Level 3: Powder Blush (var(--surface-rose)) Card Highlights */
+.card-coffee-secondary,
+.card-elevated,
+.card-highlight {
+  background-color: var(--color-powder-blush);
+  border: 1px solid var(--border-elevated);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Restrained Glassmorphism */
 .glass-panel-coffee {
-  background: var(--glass-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
 }
 
-/* Card Styling */
-.card-coffee {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-warm);
-  border-radius: 1.125rem;
-  box-shadow: 0 4px 20px -2px rgba(36, 26, 26, 0.06);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+.glass-panel-mauve {
+  background-color: var(--glass-mauve);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-mauve-border);
 }
 
-.card-coffee:hover {
-  border-color: var(--color-dusty-rose);
-  box-shadow: 0 12px 32px -4px rgba(111, 23, 55, 0.12);
+/* Featured Overview / Recommendation Panel */
+.panel-flowering-chestnut {
+  background-color: var(--surface-rose);
+  color: var(--color-burgundy);
+  border: 1px solid rgba(var(--color-dusty-rose-rgb), 0.6);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-elevated);
 }
 
-.dark .card-coffee {
-  box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.45);
+/* ==========================================================================
+   Sidebar: Warm Greige (var(--color-creme-latte)) with Deep Rose Burgundy Text
+   ========================================================================== */
+.sidebar-panel {
+  background-color: var(--color-warm-greige);
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.15);
+  box-shadow: 0 2px 12px -2px rgba(var(--color-burgundy-rgb), 0.05);
 }
 
-.dark .card-coffee:hover {
-  border-color: var(--color-dusty-rose);
-  box-shadow: 0 12px 35px -4px rgba(0, 0, 0, 0.65);
+.sidebar-item-active {
+  background-color: var(--color-powder-blush);
+  border: 1px solid rgba(var(--color-dusty-rose-rgb), 0.6);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 4px rgba(var(--color-burgundy-rgb), 0.08);
+  color: var(--color-burgundy);
 }
 
-/* Primary Button in Burgundy */
+.sidebar-item-inactive {
+  color: var(--color-burgundy);
+  transition: all 0.15s ease;
+}
+
+.sidebar-item-inactive:hover {
+  background-color: rgba(var(--color-dusty-rose-rgb), 0.6);
+  color: var(--color-burgundy);
+}
+
+/* ==========================================================================
+   Buttons & Interactive Elements
+   - Primary: Deep Rose Burgundy (var(--color-burgundy)) with Soft Blush Cream (var(--color-warm-ivory)) text
+   - Secondary: Dusty Rose (var(--color-dusty-rose)) with Deep Rose Burgundy (var(--color-burgundy)) text
+   ========================================================================== */
 .btn-burgundy {
-  background-color: var(--color-burgundy);
+  background-color: var(--color-deep-rose-burgundy);
   color: var(--color-warm-ivory);
   font-weight: 600;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.3);
   transition: all 0.2s ease;
 }
 
 .btn-burgundy:hover {
   background-color: var(--accent-hover);
-  box-shadow: 0 4px 14px rgba(111, 23, 55, 0.3);
+  box-shadow: 0 4px 14px rgba(var(--color-burgundy-rgb), 0.25);
 }
 
-.dark .btn-burgundy {
+.btn-secondary-coffee {
   background-color: var(--color-dusty-rose);
-  color: var(--color-deep-espresso);
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.2);
+  color: var(--color-burgundy);
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
 }
 
-.dark .btn-burgundy:hover {
-  background-color: #D8A3AB;
-  box-shadow: 0 4px 14px rgba(197, 143, 152, 0.4);
+.btn-secondary-coffee:hover {
+  background-color: var(--color-powder-blush);
+  color: var(--color-burgundy);
+  border-color: var(--color-burgundy);
 }
 
-/* Custom Scrollbars */
+/* ==========================================================================
+   Form Inputs & Text Fields
+   - Backgrounds: Soft Blush Cream (var(--color-warm-ivory)) or Warm Greige (var(--color-creme-latte)) or White
+   - Text & Caret: Deep Rose Burgundy (var(--color-burgundy))
+   ========================================================================== */
+.input-coffee {
+  background-color: var(--color-warm-ivory);
+  border: 1px solid var(--border-warm);
+  color: var(--color-burgundy);
+  caret-color: var(--color-deep-rose-burgundy);
+  border-radius: 0.75rem;
+  padding: 0.5625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  transition: all 0.2s ease;
+}
+
+.input-coffee::placeholder {
+  color: rgba(var(--color-burgundy-rgb), 0.45);
+}
+
+.input-coffee:focus {
+  outline: none;
+  border-color: var(--color-deep-rose-burgundy);
+  box-shadow: 0 0 0 3px rgba(var(--color-burgundy-rgb), 0.18);
+  color: var(--color-burgundy);
+}
+
+/* ==========================================================================
+   Badges & Tags
+   ========================================================================== */
+.badge-powder {
+  background-color: var(--color-powder-blush);
+  color: var(--color-deep-rose-burgundy);
+  border: 1px solid rgba(var(--color-dusty-rose-rgb), 0.5);
+}
+
+.badge-dusty {
+  background-color: rgba(var(--color-dusty-rose-rgb), 0.25);
+  color: var(--color-deep-rose-burgundy);
+  border: 1px solid rgba(var(--color-dusty-rose-rgb), 0.5);
+}
+
+.badge-burgundy {
+  background-color: rgba(var(--color-burgundy-rgb), 0.12);
+  color: var(--color-deep-rose-burgundy);
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.25);
+}
+
+/* ==========================================================================
+   Custom Scrollbars & High-Contrast WCAG Focus Indicators
+   ========================================================================== */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--color-warm-greige);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: rgba(181, 154, 131, 0.4);
+  background: var(--color-dusty-rose);
   border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(111, 23, 55, 0.5);
+  background: var(--color-deep-rose-burgundy);
 }
 
-/* High Contrast Focus States for WCAG AAA Accessibility */
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 2px solid var(--color-burgundy);
-  outline-offset: 2px;
-}
-
-.dark a:focus-visible, .dark button:focus-visible, .dark input:focus-visible, .dark select:focus-visible, .dark textarea:focus-visible {
-  outline: 2px solid var(--color-dusty-rose);
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-deep-rose-burgundy);
   outline-offset: 2px;
 }

@@ -22,6 +22,9 @@ docs/*.xlsx.xlsx
 # Production build artifacts
 build
 dist
+*.zip
+TALVIORA_TECH_COMPLETE_SOURCE_CODE/
+_backup_before_velvet_theme/
 
 # Debug logs
 npm-debug.log*
@@ -39,3 +42,5 @@ next-env.d.ts
 # OS files
 .DS_Store
 Thumbs.db
+
+.vercel

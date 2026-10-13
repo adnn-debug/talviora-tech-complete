@@ -1,39 +1,80 @@
 import { NextResponse } from "next/server";
-import { evaluateInterviewResponse } from "@/lib/gemini";
+import { evaluateInterviewResponse, isGeminiConfigured } from "@/lib/gemini";
 import { interviewQuestionsList } from "@/lib/career-data";
+import { getAuthenticatedUser, sanitizeInput } from "@/lib/auth-server";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 
 export async function GET() {
-  return NextResponse.json({
-    questions: interviewQuestionsList,
-  });
+  return NextResponse.json({ questions: interviewQuestionsList, totalCount: interviewQuestionsList.length });
 }
 
 export async function POST(req: Request) {
-  try {
-    const { role, question, answer } = await req.json();
+  if (!isGeminiConfigured) {
+    return NextResponse.json(
+      { success: false, error: "Interview feedback is unavailable until GEMINI_API_KEY is configured on the server." },
+      { status: 503 }
+    );
+  }
 
-    if (!answer || answer.trim().length < 5) {
-      return NextResponse.json(
-        { success: false, error: "Please provide a substantive answer to evaluate." },
-        { status: 400 }
-      );
+  try {
+    const body: unknown = await req.json();
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json({ success: false, error: "Invalid request payload format." }, { status: 400 });
     }
 
-    const evaluation = await evaluateInterviewResponse({
-      role: role || "AI Solutions Architect",
-      question: question || "Describe your system design methodology",
-      userAnswer: answer,
-    });
+    const input = body as Record<string, unknown>;
+    const answer = sanitizeInput(input.answer, 4000);
+    if (answer.length < 5) {
+      return NextResponse.json({ success: false, error: "Please provide a substantive answer (at least 5 characters) to evaluate." }, { status: 400 });
+    }
+
+    const role = sanitizeInput(input.role || "", 100);
+    const question = sanitizeInput(input.question || "", 500);
+    if (!role || !question) {
+      return NextResponse.json({ success: false, error: "Choose an interview role and question." }, { status: 400 });
+    }
+
+    const evaluation = await evaluateInterviewResponse({ role, question, userAnswer: answer });
+    if (!Number.isFinite(evaluation.rating) || !Array.isArray(evaluation.strengths)) {
+      return NextResponse.json({ success: false, error: "The AI provider returned invalid feedback. Please retry." }, { status: 502 });
+    }
+
+    const user = await getAuthenticatedUser(req);
+    let persisted = false;
+    let persistenceMessage = "Feedback was generated but was not saved to an account.";
+    if (user.id && isSupabaseConfigured) {
+      const { error } = await supabase.from("interview_sessions").insert({
+        user_id: user.id,
+        role,
+        question,
+        candidate_answer: answer,
+        rating: evaluation.rating,
+        strengths: evaluation.strengths,
+        areas_for_improvement: evaluation.areasForImprovement,
+        ideal_talking_points: evaluation.idealTalkingPoints,
+        verdict: evaluation.verdict,
+        evaluated_at: new Date().toISOString(),
+      });
+      persisted = !error;
+      persistenceMessage = error
+        ? "Feedback was generated but could not be saved to your account."
+        : "Feedback was saved to your account.";
+      if (error) console.error("Interview feedback save failed:", error.message);
+    }
 
     return NextResponse.json({
       success: true,
       evaluatedAt: new Date().toISOString(),
+      provider: "Google Gemini",
+      persisted,
+      persistenceMessage,
       ...evaluation,
     });
-  } catch (err: any) {
+  } catch (error) {
+    console.error("Interview evaluation failed:", error);
     return NextResponse.json(
-      { success: false, error: err?.message || "Failed to evaluate interview response" },
-      { status: 500 }
+      { success: false, error: "Interview feedback could not be generated. Check AI provider configuration and retry." },
+      { status: 502 }
     );
   }
 }

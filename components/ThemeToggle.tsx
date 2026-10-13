@@ -1,35 +1,42 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const isCurrentlyDark = document.documentElement.classList.contains("dark");
-    setIsDark(isCurrentlyDark);
+    try {
+      const mode = localStorage.getItem("talviora-theme");
+      const dark = mode ? mode === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", dark);
+      setIsDark(dark);
+    } catch (e) {}
   }, []);
 
-  const toggleTheme = () => {
-    const newDark = !isDark;
-    setIsDark(newDark);
-    if (newDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("talviora-theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("talviora-theme", "light");
-    }
+  const toggleMode = () => {
+    const next = !isDark;
+    document.documentElement.classList.toggle("dark", next);
+    setIsDark(next);
+    try {
+      localStorage.setItem("talviora-theme", next ? "dark" : "light");
+    } catch (e) {}
   };
 
   return (
     <button
-      onClick={toggleTheme}
-      aria-label="Toggle dark and light luxury theme"
-      className="p-2 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 transition-all shadow-xs flex items-center justify-center cursor-pointer"
+      onClick={toggleMode}
+      type="button"
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      title={isDark ? "Switch to light theme" : "Switch to dark theme"}
+      className="p-2 rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.2)] bg-[var(--surface-rose)] hover:bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] transition-all shadow-xs flex items-center justify-center cursor-pointer"
     >
-      {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-zinc-700" />}
+      {isDark ? (
+        <Sun className="w-4 h-4 text-[var(--color-burgundy)]" />
+      ) : (
+        <Moon className="w-4 h-4 text-[var(--color-burgundy)]" />
+      )}
     </button>
   );
 }

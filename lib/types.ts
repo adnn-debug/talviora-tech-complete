@@ -3,7 +3,7 @@ export interface UserProfile {
   name: string;
   email: string;
   targetRole: string;
-  experienceLevel: "Entry" | "Junior" | "Mid-Level" | "Senior" | "Lead";
+  experienceLevel: "" | "Entry" | "Junior" | "Mid-Level" | "Senior" | "Lead";
   readinessScore: number;
   weeklyHours: number;
   currentStreakDays: number;
@@ -19,29 +19,13 @@ export interface CareerRole {
   id: string;
   title: string;
   category: "AI & ML" | "Software Engineering" | "Data & Quant" | "Cloud & DevOps" | "Systems & Security";
-  matchPercentage: number;
-  salaryMin: number;
-  salaryMax: number;
-  currency: string;
-  demandLevel: "Very High" | "High" | "Moderate";
-  growthRatePct: number;
   description: string;
   keySkills: string[];
-  benchmarks: {
-    coreProgramming: number;
-    systemDesign: number;
-    appliedEngineering: number;
-    algorithmsDSA: number;
-  };
 }
 
 export interface SkillGapItem {
   skill: string;
   category: string;
-  currentLevel: number;
-  targetLevel: number;
-  urgency: "Critical" | "High" | "Medium" | "Low";
-  estimatedHours: number;
   actionableStep: string;
   recommendedResource: string;
 }
@@ -85,7 +69,7 @@ export interface RoadmapModule {
 export interface RoadmapPhase {
   phaseNumber: number;
   phaseTitle: string;
-  status: "completed" | "in-progress" | "locked";
+  status: "not-started";
   durationWeeks: string;
   estimatedHours: number;
   modules: RoadmapModule[];
@@ -104,16 +88,6 @@ export interface IndustryProject {
   rubricCriteria: string[];
   githubTemplateUrl?: string;
   liveDemoUrl?: string;
-}
-
-export interface MarketTrend {
-  role: string;
-  medianSalaryUSD: number;
-  salaryRange: string;
-  yoyGrowthPct: number;
-  openPostingsCount: number;
-  topSkillsInDemand: string[];
-  remoteFriendlyPct: number;
 }
 
 export interface InterviewQuestion {

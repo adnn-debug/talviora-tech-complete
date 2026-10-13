@@ -23,13 +23,13 @@ export default function Breadcrumbs() {
   return (
     <nav
       aria-label="Breadcrumb"
-      className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400 mb-4"
+      className="flex items-center gap-2 text-xs text-[var(--color-burgundy)] mb-4"
     >
       <Link
         href="/"
-        className="flex items-center gap-1 hover:text-[#6F1737] dark:hover:text-[#C58F98] transition"
+        className="flex items-center gap-1 hover:text-[var(--color-flowering-chestnut)] transition text-[var(--color-burgundy)] font-medium"
       >
-        <Home className="w-3.5 h-3.5" />
+        <Home className="w-3.5 h-3.5 text-[var(--color-burgundy)]" />
         <span>Platform</span>
       </Link>
 
@@ -39,15 +39,15 @@ export default function Breadcrumbs() {
 
         return (
           <div key={href} className="flex items-center gap-2">
-            <ChevronRight className="w-3.5 h-3.5 text-zinc-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[var(--color-dusty-rose)]" />
             {isLast ? (
-              <span className="font-semibold text-[#6F1737] dark:text-[#F0C4CC]">
+              <span className="font-bold text-[var(--color-burgundy)]">
                 {formatSegment(segment)}
               </span>
             ) : (
               <Link
                 href={href}
-                className="hover:text-[#6F1737] dark:hover:text-[#C58F98] transition"
+                className="hover:text-[var(--color-flowering-chestnut)] transition text-[var(--color-burgundy)]/80 font-medium"
               >
                 {formatSegment(segment)}
               </Link>

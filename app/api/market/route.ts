@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
-import { marketTrendsList } from "@/lib/career-data";
 
 export async function GET() {
   return NextResponse.json({
-    trends: marketTrendsList,
-    updatedAt: new Date().toISOString(),
+    success: true,
+    trends: [],
+    totalCount: 0,
+    dataMode: "unavailable",
+    source: null,
+    lastCheckedAt: null,
+    notice: "No live market provider is connected. No salary, demand, or job-count estimates are available.",
   });
 }

@@ -3,35 +3,40 @@ import { ShieldCheck, Lock } from "lucide-react";
 export default function PrivacyPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-300">
-      <div className="pb-4 border-b border-[#B59A83]/30 dark:border-zinc-800">
-        <h1 className="font-display-serif text-3xl sm:text-4xl text-[#6F1737] dark:text-[#FFF9F0]">
-          Privacy Policy & Learner Data Protections
+      <div className="pb-4 border-b border-[var(--color-creme-latte)]">
+        <h1 className="font-display-serif text-3xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
+          Privacy & Data Use
         </h1>
-        <p className="text-xs text-[#4A3A37] dark:text-zinc-400 mt-1">
-          Zero-Ad Guarantee • Strict Data Minimization
+        <p className="text-xs text-[var(--color-burgundy)]/80 mt-1">
+          Preview implementation notes · Updated October 12, 2026
         </p>
       </div>
 
-      <div className="card-coffee p-6 sm:p-8 space-y-6 text-xs sm:text-sm text-[#3B2527] dark:text-zinc-300 leading-relaxed font-sans-ui">
+      <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 text-xs sm:text-sm text-[var(--color-burgundy)]/80 leading-relaxed border border-[var(--color-creme-latte)] shadow-xs">
         <section className="space-y-2">
-          <h2 className="font-bold text-base text-[#6F1737] dark:text-[#FFF9F0]">1. Data Minimization</h2>
+          <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)]">1. Browser storage</h2>
           <p>
-            We collect only the essential information needed to personalize your roadmap and save assessment results (name, email, target role, and self-assessed skill levels). We do not track or sell learner data to third-party ad brokers.
+            This project stores theme choice, roadmap and pattern checklists, bookmarks, sprint tasks, and recent assessment output in browser storage. These values remain on that browser unless you clear its site data.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="font-bold text-base text-[#6F1737] dark:text-[#FFF9F0]">2. Secure Cloud Storage with Supabase</h2>
+          <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)]">2. Account storage</h2>
           <p>
-            Candidate profiles and session tokens are safeguarded using industry-standard PostgreSQL Row-Level Security (RLS) on Supabase with encrypted transport over HTTPS/TLS 1.3.
+            When Supabase is configured and you sign in, profile, task, bookmark, and assessment requests can be saved to that Supabase project. Database access depends on the deployed schema and policies. Review the deployment's Supabase settings and policies before use.
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="font-bold text-base text-[#6F1737] dark:text-[#FFF9F0]">3. AI Prompt Privacy</h2>
+          <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)]">3. AI requests</h2>
           <p>
-            Prompts submitted to Google Gemini for assessment and interview critique are strictly scoped to technical evaluation and are not retained to train public commercial models.
+            Assessment answers, mentor messages, and interview practice answers are sent to Google Gemini when the AI key is configured. Do not include sensitive personal information. Provider processing and retention follow Google's current terms and policies; this project makes no separate retention guarantee.
           </p>
+        </section>
+
+        <section className="space-y-2">
+          <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)]">4. Deployment responsibility</h2>
+          <p>Hosting, logs, backups, analytics, and retention can vary by deployment. This source project does not include an analytics or advertising integration; inspect your hosting and provider configuration for the behavior of a deployed site.</p>
         </section>
       </div>
     </div>

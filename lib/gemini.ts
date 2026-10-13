@@ -1,69 +1,65 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY || "";
+const apiKey = process.env.GEMINI_API_KEY?.trim() || "";
+export const isGeminiConfigured = Boolean(apiKey && apiKey !== "your_gemini_api_key_here");
+const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3.8-flash";
 
-let genAI: GoogleGenerativeAI | null = null;
-if (apiKey) {
-  try {
-    genAI = new GoogleGenerativeAI(apiKey);
-  } catch (err) {
-    console.warn("Gemini initialization warning:", err);
+const genAI = isGeminiConfigured ? new GoogleGenAI({ apiKey }) : null;
+
+async function generateText(prompt: string, temperature: number) {
+  if (!genAI) {
+    throw new Error("Gemini is not configured. Add GEMINI_API_KEY on the server to enable AI features.");
   }
+
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const result = await Promise.race([
+      genAI.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: { temperature, responseMimeType: "application/json" },
+      }),
+      new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 12000);
+      }),
+    ]);
+    if (!result.text) throw new Error("AI provider returned no text.");
+    return result.text;
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+function parseJson<T>(rawText: string): T {
+  const clean = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
+  const firstBrace = clean.indexOf("{");
+  const lastBrace = clean.lastIndexOf("}");
+  const candidate = firstBrace !== -1 && lastBrace > firstBrace
+    ? clean.slice(firstBrace, lastBrace + 1)
+    : clean;
+  return JSON.parse(candidate) as T;
 }
 
 export async function generateCareerAssessmentAnalysis(params: {
   targetRole: string;
   skills: Record<string, number>;
-  timeAvailableHours: number;
 }) {
-  const structuredPrompt = `
-You are the Chief AI Career Intelligence Evaluator for TALVIORA TECH.
-Analyze this candidate profile for the role: ${params.targetRole}
-Current assessed skill scores (0-100): ${JSON.stringify(params.skills)}
-Weekly dedicated time: ${params.timeAvailableHours} hours/week
+  const prompt = `
+You are the career-learning feedback assistant for TALVIORA TECH. Give cautious, specific educational guidance from the submitted assessment scores. Do not claim hiring outcomes, salary predictions, percentile rankings, or verified readiness.
+Learner-selected target role (for context, not an external benchmark): ${params.targetRole}
+Observed skill scores (0-100): ${JSON.stringify(params.skills)}
 
-Return ONLY a valid raw JSON object (strictly no markdown formatting, no code fences, no extra text) conforming to:
-{
-  "readinessScore": number (0-100),
-  "strongPillars": ["string", "string"],
-  "growthPillars": ["string", "string"],
-  "prioritySkills": ["string", "string", "string"],
-  "recommendedProjects": ["string", "string"],
-  "nextSprintFocus": "string",
-  "executiveSummary": "string"
-}
+Return only JSON with readinessScore (0-100, derived only from the supplied scores), strongPillars (array), growthPillars (array), prioritySkills (array), recommendedProjects (array), nextSprintFocus (string), and executiveSummary (string). Mark readiness as an assessment result, not a job guarantee.
 `;
-
-  if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(structuredPrompt);
-      const text = result.response.text();
-      const cleanJson = text.replace(/```json|```/g, "").trim();
-      return JSON.parse(cleanJson);
-    } catch (err) {
-      console.warn("Gemini API call failed, using deterministic intelligence fallback:", err);
-    }
-  }
-
-  // Deterministic fallback based on candidate input:
-  const avgScore = Math.round(
-    Object.values(params.skills).reduce((a, b) => a + b, 0) /
-      Math.max(1, Object.keys(params.skills).length)
-  );
-
-  return {
-    readinessScore: Math.min(95, Math.max(45, Math.round(avgScore * 0.95))),
-    strongPillars: ["Python & Algorithms", "Data Pipelines & Core ML"],
-    growthPillars: ["Distributed System Architecture", "Production Model Deployment & MLOps"],
-    prioritySkills: ["PyTorch", "RAG & LLM Application Engineering", "FastAPI & Vector Indexing"],
-    recommendedProjects: [
-      "Enterprise Hybrid RAG Assistant with Hybrid Search",
-      "Real-Time Stream Processing & Feature Store Architecture"
-    ],
-    nextSprintFocus: "Master Vector Embeddings, Chunking Strategies & FAISS/pgvector",
-    executiveSummary: `Based on your technical evaluation for ${params.targetRole}, your core engineering acumen is solid at ${avgScore}%. Focusing on distributed model serving and end-to-end vector pipeline architecture will accelerate your top-tier interview readiness.`
-  };
+  return parseJson<{
+    readinessScore: number;
+    strongPillars: string[];
+    growthPillars: string[];
+    prioritySkills: string[];
+    recommendedProjects: string[];
+    nextSprintFocus: string;
+    executiveSummary: string;
+  }>(await generateText(prompt, 0.3));
 }
 
 export async function evaluateInterviewResponse(params: {
@@ -72,46 +68,28 @@ export async function evaluateInterviewResponse(params: {
   userAnswer: string;
 }) {
   const prompt = `
+Evaluate this practice answer against the question and role. Give evidence-based feedback from the words supplied; do not imply this is a real hiring assessment.
 Role: ${params.role}
 Question: ${params.question}
-Candidate Answer: ${params.userAnswer}
+Candidate answer: ${params.userAnswer}
 
-Provide structured technical interview feedback in raw JSON format only (no markdown, no backticks):
-{
-  "rating": number (1-10),
-  "strengths": ["string", "string"],
-  "areasForImprovement": ["string", "string"],
-  "idealTalkingPoints": ["string", "string"],
-  "verdict": "string"
-}
+Return only JSON with rating (1-10), strengths (array), areasForImprovement (array), idealTalkingPoints (array), and verdict (string).
 `;
+  return parseJson<{
+    rating: number;
+    strengths: string[];
+    areasForImprovement: string[];
+    idealTalkingPoints: string[];
+    verdict: string;
+  }>(await generateText(prompt, 0.3));
+}
 
-  if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
-      const cleanJson = text.replace(/```json|```/g, "").trim();
-      return JSON.parse(cleanJson);
-    } catch (err) {
-      console.warn("Gemini interview eval fallback:", err);
-    }
-  }
+export async function generateMentorReply(message: string) {
+  const prompt = `
+You are TALVIORA TECH's learning and career mentor. Give a concise, practical answer that helps a learner understand, practise, build, or apply a technology skill. Do not invent personal progress, live job information, salary data, or guaranteed outcomes. If current facts are requested, explain that no live source is connected.
+Learner message: ${message}
 
-  return {
-    rating: 8,
-    strengths: [
-      "Clear explanation of trade-offs between latency and throughput",
-      "Mentioned cache invalidation strategies correctly"
-    ],
-    areasForImprovement: [
-      "Could elaborate further on backpressure handling under high load",
-      "Quantify metrics like p99 SLA targets"
-    ],
-    idealTalkingPoints: [
-      "Distributed tracing with OpenTelemetry",
-      "Graceful degradation with circuit breakers"
-    ],
-    verdict: "Strong technical competency displayed. Clear communication."
-  };
+Return only JSON with reply (string) and suggestedNextStep (string).
+`;
+  return parseJson<{ reply: string; suggestedNextStep: string }>(await generateText(prompt, 0.5));
 }

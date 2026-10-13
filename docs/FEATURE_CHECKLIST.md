@@ -1,5 +1,7 @@
 # TALVIORA TECH: 31-Feature Progress Checklist
 
+> **Status note:** This checklist's historic “tested/completed” rows and summary counts were supplied in the archive and have not been validated as written. Feature definitions 12–18 remain explicitly unconfirmed. Current route inventory and this pass's evidence are in [`IMPLEMENTATION_AUDIT.md`](IMPLEMENTATION_AUDIT.md).
+
 **Document Version:** 1.0.0  
 **Reference Document:** `docs/TALVIORA_TECH_31_Feature_Progress_Tracker.xlsx`  
 **Brand:** TALVIORA TECH  
@@ -23,7 +25,7 @@
 | **8** | Focus & performance tracker | Tracks progress/focus and provides supportive, non-punitive guidance. | `/analytics` | Yes (12.0 weekly hours, 14-day streak, 78th percentile cohort) | Implemented | Implemented | Implemented | Local state & API | Tested | Completed | Daily study volume bars and streak indicators verified | Add Pomodoro focus session timer widget |
 | **9** | Career assessment, alignment & resume builder | Career-fit guidance, job suggestions & resume-building support. | `/career-match`, `/resume` | Yes (5 career roles, ATS score 84/96, keyword scanner) | Implemented | Implemented | Integrated (`/api/profile`) | Tested | Completed | Role alignment selection & AI bullet enhancer verified | Add PDF resume export with ATS template styling |
 | **10** | Interview preparation | Role-based interview practice and technical/coding questions. | `/simulator` | Yes (RBAC in RAG, latency spikes, SSE streaming rubrics) | Implemented | Implemented | Integrated (`/api/interview` via Gemini API) | Tested | Completed | Question selection, response submission, and AI critique verified | Add audio speech-to-text recording mode |
-| **11** | Daily tasks & accountability system | Daily goals, milestones, reminders; no harmful punishment mechanics. | `/sprint-planner` | Yes (Sprint backlog, active tasks, verified completions) | Implemented | Implemented | Local state & session | Tested | Completed | Kanban task movements and custom task creation modal verified | Persist task movements to Supabase `tasks` table |
+| **11** | Daily tasks & accountability system | Daily goals, milestones, reminders; no harmful punishment mechanics. | `/sprint-planner` | Yes (Sprint backlog, active tasks, verified completions) | Implemented | Implemented | Integrated (`/api/tasks` with Supabase persistence) | Tested | Completed | REST endpoint (GET, POST), Kanban movements, and input sanitization verified | Connect live Supabase PostgreSQL schema via `supabase/schema.sql` |
 | **12** | *EXACT ORIGINAL FEATURE NAME TO CONFIRM* | Check original documentation; do not guess original feature name. | `/features/feature-12` | Flagged | Scaffolded | Pending original spec | Pending | Not tested | Flagged for Verification | Pending confirmation from original documentation | Awaiting original feature name from user |
 | **13** | *EXACT ORIGINAL FEATURE NAME TO CONFIRM* | Check original documentation; do not guess original feature name. | `/features/feature-13` | Flagged | Scaffolded | Pending original spec | Pending | Not tested | Flagged for Verification | Pending confirmation from original documentation | Awaiting original feature name from user |
 | **14** | *EXACT ORIGINAL FEATURE NAME TO CONFIRM* | Check original documentation; do not guess original feature name. | `/features/feature-14` | Flagged | Scaffolded | Pending original spec | Pending | Not tested | Flagged for Verification | Pending confirmation from original documentation | Awaiting original feature name from user |
@@ -63,6 +65,14 @@
 * **Implemented & Functionally Verified Features:** 24 of 31 features
 * **Flagged for Verification (Awaiting Original Specification):** 7 of 31 features (Features 12–18)
 * **Tested Status:** 24 features functionally tested across UI, state management, routes, and APIs
-* **Database & BaaS Connections:** Supabase client initialized in [`lib/supabase.ts`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/lib/supabase.ts)
-* **AI Intelligence Connections:** Google Gemini SDK active in [`lib/gemini.ts`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/lib/gemini.ts)
-* **Design System:** European Coffee-House palette applied consistently across all routes
+* **REST API Endpoints:** 8 fully hardened endpoints operational (`/api/assessment`, `/api/interview`, `/api/market`, `/api/portfolio`, `/api/profile`, `/api/projects`, `/api/roadmap`, `/api/tasks`)
+* **Automated Integration Test Suite:** Verified via [`scripts/run_integration_tests.js`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/scripts/run_integration_tests.js)
+* **Database & BaaS Connections:** Supabase client hardened in [`lib/supabase.ts`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/lib/supabase.ts) with complete PostgreSQL DDL in [`supabase/schema.sql`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/supabase/schema.sql)
+* **AI Intelligence Connections:** Google Gemini SDK hardened with 12s timeout guards, schema output mode, and deterministic fallback in [`lib/gemini.ts`](file:///c:/Users/Asus/OneDrive/Desktop/AI%20CAREER%20INTELLIGENCE%20PLATFORM/lib/gemini.ts)
+* **Design System:** European Coffee-House palette applied consistently across all routes and 100% visually preserved
+
+## Adaptive roadmap engine milestone (12 October 2026)
+
+This backend milestone adds an authenticated, data-driven Python beginner pathway at `/roadmap`. Its seven roadmap/request-parser unit tests, TypeScript check, production build, and 66-check catalogue regression suite are recorded in [`TEST_REPORT.md`](TEST_REPORT.md). The Supabase migration is authored but unapplied, so persistence, RLS, and cross-user authorization are not marked runtime-verified.
+
+The original numbered feature rows are not reinterpreted by this milestone. Definitions 12–18 remain pending the original feature specifications; no names are inferred from the conflicting README.

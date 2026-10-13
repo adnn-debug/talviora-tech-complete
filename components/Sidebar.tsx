@@ -27,6 +27,7 @@ import {
   Newspaper,
   Home,
   CheckCircle2,
+  ListChecks,
 } from "lucide-react";
 
 interface SidebarCategory {
@@ -48,17 +49,18 @@ export default function Sidebar() {
       items: [
         { label: "Executive Dashboard", href: "/", icon: LayoutDashboard },
         { label: "Public Landing Page", href: "/welcome", icon: Home, badge: "Hero" },
-        { label: "Technology Catalogue", href: "/catalogue", icon: Layers, badge: "50+" },
+        { label: "Feature Directory", href: "/features", icon: ListChecks, badge: "31" },
+        { label: "Technology Catalogue", href: "/catalogue", icon: Layers, badge: "18 Cats" },
         { label: "News & Opportunities", href: "/opportunities", icon: Newspaper },
       ],
     },
     {
       title: "CORE INTELLIGENCE",
       items: [
-        { label: "Adaptive Assessment", href: "/assessment", icon: BrainCircuit, badge: "Gemini" },
+        { label: "Adaptive Assessment", href: "/assessment", icon: BrainCircuit },
         { label: "Career Fit Matrix", href: "/career-match", icon: Compass },
         { label: "Skill Gap Diagnostic", href: "/skill-gap", icon: Layers },
-        { label: "Readiness Engine", href: "/readiness", icon: Gauge, badge: "72%" },
+        { label: "Readiness Engine", href: "/readiness", icon: Gauge },
         { label: "Market Intelligence", href: "/market", icon: TrendingUp },
       ],
     },
@@ -66,10 +68,10 @@ export default function Sidebar() {
       title: "LEARNING & GROWTH",
       items: [
         { label: "Learning Studio", href: "/learning", icon: BookOpen, badge: "Labs" },
-        { label: "Dynamic Roadmap", href: "/roadmap", icon: Route },
+        { label: "Learning Roadmap", href: "/roadmap", icon: Route },
         { label: "Industry Project Lab", href: "/projects", icon: FolderGit2 },
         { label: "Sprint Kanban", href: "/sprint-planner", icon: KanbanSquare },
-        { label: "14 Algorithmic Patterns", href: "/dsa-tracker", icon: Binary },
+        { label: "Algorithmic Patterns", href: "/dsa-tracker", icon: Binary },
       ],
     },
     {
@@ -78,34 +80,34 @@ export default function Sidebar() {
         { label: "AI Career Mentor", href: "/mentor", icon: Sparkles, badge: "AI" },
         { label: "AI & LLM Blueprint", href: "/ai-blueprint", icon: Cpu },
         { label: "System Architecture", href: "/architecture", icon: Workflow },
-        { label: "Smart Resume & ATS", href: "/resume", icon: FileText },
+        { label: "Resume Editor & Keywords", href: "/resume", icon: FileText },
         { label: "Interview Simulator", href: "/simulator", icon: MessageSquareCode },
-        { label: "Verified Portfolio", href: "/portfolio", icon: Award },
+        { label: "Public Profile", href: "/portfolio", icon: Award },
       ],
     },
     {
       title: "ACCOUNT & ANALYTICS",
       items: [
-        { label: "Velocity Analytics", href: "/analytics", icon: BarChart3 },
+        { label: "Learning Analytics", href: "/analytics", icon: BarChart3 },
         { label: "Saved Pathways", href: "/bookmarks", icon: BookmarkCheck },
         { label: "Learner Profile", href: "/profile", icon: UserCheck },
-        { label: "Supabase Auth", href: "/auth", icon: LockKeyhole },
+        { label: "Sign in", href: "/auth", icon: LockKeyhole },
       ],
     },
   ];
 
   return (
     <aside
-      className="hidden md:flex flex-col w-64 shrink-0 rounded-2xl border border-[#B59A83]/30 dark:border-zinc-800 bg-[#FFF9F0]/80 dark:bg-[#1F1515]/80 p-3 h-fit sticky top-20 backdrop-blur-md transition-colors"
+      className="hidden md:flex flex-col w-64 shrink-0 rounded-2xl border border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-creme-latte)] p-3.5 h-fit sticky top-20 shadow-xs transition-colors"
       aria-label="Sidebar Navigation"
     >
       <div className="space-y-5 overflow-y-auto max-h-[calc(100vh-6.5rem)] pr-1">
         {categories.map((category) => (
           <div key={category.title} className="space-y-1">
-            <h2 className="px-3 text-[10px] font-bold tracking-widest uppercase text-[#7E6962] dark:text-[#B59A83]">
+            <h2 className="px-3 text-[10px] font-bold tracking-wider uppercase text-[var(--color-burgundy)]">
               {category.title}
             </h2>
-            <div className="space-y-0.5 pt-1">
+            <div className="space-y-1 pt-1">
               {category.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.href;
@@ -113,28 +115,34 @@ export default function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all group ${
+                    className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)] ${
                       isActive
-                        ? "bg-[#6F1737] text-white dark:bg-[#C58F98] dark:text-[#241A1A] shadow-xs"
-                        : "text-[#3B2527] dark:text-zinc-300 hover:text-[#6F1737] dark:hover:text-[#F0C4CC] hover:bg-[#F5EBDD] dark:hover:bg-[#2E1F21]"
+                        ? "bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[var(--color-burgundy)] shadow-xs"
+                        : "text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)]/60 hover:text-[var(--color-burgundy)]"
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 truncate">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {isActive && (
+                        <span
+                          className="w-1 h-3.5 rounded-full bg-[var(--color-burgundy)] shrink-0"
+                          aria-hidden="true"
+                        />
+                      )}
                       <Icon
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           isActive
-                            ? "text-white dark:text-[#241A1A]"
-                            : "text-[#7E6962] dark:text-zinc-500 group-hover:text-[#6F1737] dark:group-hover:text-[#F0C4CC]"
+                            ? "text-[var(--color-burgundy)]"
+                            : "text-[var(--color-burgundy)]/80 group-hover:text-[var(--color-burgundy)]"
                         }`}
                       />
                       <span className="truncate">{item.label}</span>
                     </div>
                     {item.badge && (
                       <span
-                        className={`text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${
+                        className={`text-[9px] px-1.5 py-0.5 rounded-md font-bold uppercase transition-colors shrink-0 ml-1.5 ${
                           isActive
-                            ? "bg-white/20 text-white dark:bg-black/20 dark:text-[#241A1A]"
-                            : "bg-[#F5EBDD] dark:bg-[#2E1F21] text-[#6F1737] dark:text-[#F0C4CC]"
+                            ? "bg-[var(--color-burgundy)]/12 text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.25)]"
+                            : "bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] border border-[rgba(var(--color-dusty-rose-rgb),0.5)]"
                         }`}
                       >
                         {item.badge}

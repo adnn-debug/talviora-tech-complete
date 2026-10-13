@@ -18,6 +18,7 @@ export default function LearningStudioPage() {
   // Debugging exercise state
   const [debugBugFound, setDebugBugFound] = useState(false);
   const [debugSolutionShown, setDebugSolutionShown] = useState(false);
+  const [debugFeedback, setDebugFeedback] = useState<string | null>(null);
 
   // Code rearrangement exercise state
   const [reorderedItems, setReorderedItems] = useState([
@@ -28,6 +29,7 @@ export default function LearningStudioPage() {
     { id: 5, text: "const data = await response.json(); return data;" },
   ]);
   const [reorderVerified, setReorderVerified] = useState(false);
+  const [reorderFeedback, setReorderFeedback] = useState<string | null>(null);
 
   const moveUp = (idx: number) => {
     if (idx === 0) return;
@@ -37,6 +39,7 @@ export default function LearningStudioPage() {
     items[idx] = temp;
     setReorderedItems(items);
     setReorderVerified(false);
+    setReorderFeedback(null);
   };
 
   const moveDown = (idx: number) => {
@@ -47,6 +50,7 @@ export default function LearningStudioPage() {
     items[idx] = temp;
     setReorderedItems(items);
     setReorderVerified(false);
+    setReorderFeedback(null);
   };
 
   const checkReorder = () => {
@@ -54,28 +58,29 @@ export default function LearningStudioPage() {
     const order = reorderedItems.map((i) => i.id).join(",");
     if (order === "3,1,2,5,4") {
       setReorderVerified(true);
+      setReorderFeedback(null);
     } else {
-      alert("Not quite right yet. Make sure your 'try {' block encapsulates the fetch and JSON parsing, followed by the catch block!");
+      setReorderFeedback("Not quite right yet. Make sure your 'try {' block encapsulates the fetch and JSON parsing, followed by the catch block!");
     }
   };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#B59A83]/30 dark:border-zinc-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--color-creme-latte)]">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1 rounded-md bg-[#6F1737]/10 dark:bg-[#C58F98]/20 text-[#6F1737] dark:text-[#F0C4CC]">
+            <span className="p-1.5 rounded-lg bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[var(--color-dusty-rose)]/30">
               <BookOpen className="w-4 h-4" />
             </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#C58F98] dark:text-[#D8A3AB]">
+            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]/80">
               Interactive Learning Studio
             </span>
           </div>
-          <h1 className="font-display-serif text-3xl sm:text-4xl text-[#6F1737] dark:text-[#FFF9F0]">
+          <h1 className="font-display-serif text-3xl sm:text-4xl text-[var(--color-burgundy)] font-bold">
             Guided Lessons & Engineering Practice
           </h1>
-          <p className="text-xs text-[#4A3A37] dark:text-zinc-400 mt-0.5">
+          <p className="text-xs text-[var(--color-burgundy)]/80 mt-0.5">
             Discover core principles, solve coding challenges, and sharpen real-world debugging intuition.
           </p>
         </div>
@@ -84,30 +89,30 @@ export default function LearningStudioPage() {
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setActiveTab("lesson")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               activeTab === "lesson"
-                ? "btn-burgundy shadow-xs"
-                : "border border-[#B59A83]/40 bg-white/60 dark:bg-[#2E1F21] text-[#241A1A] dark:text-zinc-300"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "border border-[var(--color-creme-latte)] bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             Guided Lesson
           </button>
           <button
             onClick={() => setActiveTab("debug")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               activeTab === "debug"
-                ? "btn-burgundy shadow-xs"
-                : "border border-[#B59A83]/40 bg-white/60 dark:bg-[#2E1F21] text-[#241A1A] dark:text-zinc-300"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "border border-[var(--color-creme-latte)] bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             Debugging Lab
           </button>
           <button
             onClick={() => setActiveTab("reorder")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
               activeTab === "reorder"
-                ? "btn-burgundy shadow-xs"
-                : "border border-[#B59A83]/40 bg-white/60 dark:bg-[#2E1F21] text-[#241A1A] dark:text-zinc-300"
+                ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] shadow-xs"
+                : "border border-[var(--color-creme-latte)] bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)] hover:bg-[var(--color-warm-ivory)]"
             }`}
           >
             Code Arrangement
@@ -117,43 +122,43 @@ export default function LearningStudioPage() {
 
       {/* Tab 1: Guided Lesson */}
       {activeTab === "lesson" && (
-        <div className="card-coffee p-6 sm:p-8 space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-[#B59A83]/20 dark:border-zinc-800">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="flex items-center justify-between pb-4 border-b border-[var(--color-creme-latte)]">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-[#C58F98]">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
                 Module 2.2 • Applied Deep Learning
               </span>
-              <h2 className="font-display-serif text-2xl text-[#6F1737] dark:text-[#FFF9F0] mt-1">
+              <h2 className="font-display-serif text-2xl text-[var(--color-burgundy)] font-bold mt-1">
                 Transformer Multi-Head Attention: Mechanics & Autograd
               </h2>
             </div>
-            <span className="text-xs font-mono-code px-2.5 py-1 rounded bg-[#F5EBDD] dark:bg-[#2E1F21] text-[#6F1737] dark:text-[#F0C4CC] font-bold">
+            <span className="text-xs font-mono-code px-2.5 py-1 rounded bg-[var(--surface-rose)] text-[var(--color-burgundy)] font-bold border border-[var(--color-dusty-rose)]/30">
               Est: 45 mins
             </span>
           </div>
 
-          <div className="prose dark:prose-invert max-w-none text-xs sm:text-sm text-[#3B2527] dark:text-zinc-300 leading-relaxed space-y-4 font-sans-ui">
+          <div className="max-w-none text-xs sm:text-sm text-[var(--color-burgundy)]/85 leading-relaxed space-y-4">
             <p>
               In autoregressive transformer models, the self-attention mechanism enables each sequence token to compute contextual weights against every other token in parallel. Unlike recurrent architectures, which enforce sequential bottlenecks of \(O(N)\) steps, multi-head attention operates in \(O(1)\) sequential operations with \(O(N^2 \cdot d)\) computational complexity.
             </p>
 
-            <div className="p-4 rounded-2xl bg-[#FFF9F0] dark:bg-[#1F1515] border border-[#B59A83]/40 space-y-2">
-              <span className="text-xs font-bold text-[#6F1737] dark:text-[#F0C4CC] uppercase tracking-wide block">
+            <div className="p-4 rounded-2xl bg-[var(--color-warm-ivory)]/40 border border-[var(--color-creme-latte)] space-y-2">
+              <span className="text-xs font-bold text-[var(--color-burgundy)] uppercase tracking-wide block">
                 Mathematical Definition of Scaled Dot-Product Attention:
               </span>
-              <div className="font-mono-code text-xs text-[#6F1737] dark:text-[#D8A3AB] p-2 bg-[#F5EBDD] dark:bg-[#2E1F21] rounded-lg">
+              <div className="font-mono-code text-xs text-[var(--color-burgundy)] p-2 bg-[var(--color-creme-latte)] rounded-lg">
                 Attention(Q, K, V) = softmax( (Q · K^T) / √d_k ) · V
               </div>
-              <p className="text-xs text-[#4A3A37] dark:text-zinc-400">
-                The scaling factor \(1/\sqrt{d_k}\) prevents large dot-product magnitudes in high-dimensional vector spaces, avoiding vanishing gradients in the softmax region.
+              <p className="text-xs text-[var(--color-burgundy)]/80">
+                The scaling factor 1/√d_k prevents large dot-product magnitudes in high-dimensional vector spaces, avoiding vanishing gradients in the softmax region.
               </p>
             </div>
 
-            <h3 className="font-bold text-sm text-[#6F1737] dark:text-[#FFF9F0] pt-2">
+            <h3 className="font-bold text-sm text-[var(--color-burgundy)] pt-2">
               PyTorch Implementation Blueprint:
             </h3>
 
-            <div className="rounded-xl bg-[#241A1A] p-4 text-xs font-mono-code text-[#F5EBDD] overflow-x-auto">
+            <div className="rounded-xl bg-[#241A1A] p-4 text-xs font-mono-code text-[var(--color-creme-latte)] overflow-x-auto shadow-inner">
               <pre>{`import torch
 import torch.nn as nn
 import math
@@ -177,20 +182,20 @@ class ScaledDotProductAttention(nn.Module):
 
       {/* Tab 2: Debugging Practice */}
       {activeTab === "debug" && (
-        <div className="card-coffee p-6 sm:p-8 space-y-6">
-          <div className="pb-4 border-b border-[#B59A83]/20 dark:border-zinc-800">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#8D514B]">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="pb-4 border-b border-[var(--color-creme-latte)]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
               Intentionally Broken Code Challenge
             </span>
-            <h2 className="font-display-serif text-2xl text-[#6F1737] dark:text-[#FFF9F0] mt-1">
+            <h2 className="font-display-serif text-2xl text-[var(--color-burgundy)] font-bold mt-1">
               Find the Hidden Memory Leak in this PyTorch Training Loop
             </h2>
-            <p className="text-xs text-[#4A3A37] dark:text-zinc-400 mt-1">
+            <p className="text-xs text-[var(--color-burgundy)]/80 mt-1">
               Study the code snippet below. An engineer reports their GPU memory runs out (OOM) after 20 batches despite small batch sizes.
             </p>
           </div>
 
-          <div className="rounded-xl bg-[#241A1A] p-4 font-mono-code text-xs text-[#F5EBDD] overflow-x-auto">
+          <div className="rounded-xl bg-[#241A1A] p-4 font-mono-code text-xs text-[var(--color-creme-latte)] overflow-x-auto shadow-inner">
             <pre>{`total_epoch_loss = 0
 for batch_idx, (data, targets) in enumerate(dataloader):
     optimizer.zero_grad()
@@ -205,33 +210,43 @@ for batch_idx, (data, targets) in enumerate(dataloader):
 
           {!debugBugFound ? (
             <div className="space-y-3">
-              <p className="text-xs text-[#3B2527] dark:text-zinc-300">
+              <p className="text-xs text-[var(--color-burgundy)] font-semibold">
                 Why does Line 9 trigger a cumulative GPU Out-of-Memory error over time?
               </p>
               <div className="space-y-2">
                 <button
-                  onClick={() => alert("Incorrect: criterion(outputs, targets) returns a scalar tensor, not a matrix.")}
-                  className="w-full text-left p-3 rounded-xl border border-[#B59A83]/40 hover:bg-[#F5EBDD] dark:hover:bg-[#2E1F21] text-xs transition cursor-pointer"
+                  onClick={() => setDebugFeedback("Incorrect: criterion(outputs, targets) returns a scalar tensor, not a matrix.")}
+                  className="w-full text-left p-3 rounded-xl border border-[var(--color-creme-latte)] hover:bg-[var(--color-warm-ivory)] text-xs text-[var(--color-burgundy)] transition cursor-pointer"
                 >
                   A) The loss calculation criterion produces a 3D tensor instead of a scalar.
                 </button>
                 <button
-                  onClick={() => setDebugBugFound(true)}
-                  className="w-full text-left p-3 rounded-xl border border-[#B59A83]/40 hover:bg-[#F5EBDD] dark:hover:bg-[#2E1F21] text-xs transition cursor-pointer"
+                  onClick={() => {
+                    setDebugBugFound(true);
+                    setDebugFeedback(null);
+                  }}
+                  className="w-full text-left p-3 rounded-xl border border-[var(--color-creme-latte)] hover:bg-[var(--color-warm-ivory)] text-xs text-[var(--color-burgundy)] transition cursor-pointer"
                 >
                   B) Adding `loss` directly retains the entire autograd computational graph in memory. We must use `loss.item()`.
                 </button>
                 <button
-                  onClick={() => alert("Incorrect: optimizer.zero_grad() was already called at the top of the loop.")}
-                  className="w-full text-left p-3 rounded-xl border border-[#B59A83]/40 hover:bg-[#F5EBDD] dark:hover:bg-[#2E1F21] text-xs transition cursor-pointer"
+                  onClick={() => setDebugFeedback("Incorrect: optimizer.zero_grad() was already called at the top of the loop.")}
+                  className="w-full text-left p-3 rounded-xl border border-[var(--color-creme-latte)] hover:bg-[var(--color-warm-ivory)] text-xs text-[var(--color-burgundy)] transition cursor-pointer"
                 >
                   C) The dataloader failed to shuffle batches between iterations.
                 </button>
               </div>
+
+              {debugFeedback && (
+                <div className="p-3 rounded-xl bg-[var(--surface-rose)] border border-[var(--color-dusty-rose)] text-xs text-[var(--color-burgundy)] flex items-center gap-2 animate-in fade-in duration-200">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-burgundy)]" />
+                  <span>{debugFeedback}</span>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="p-4 rounded-xl bg-[#96977A]/15 border border-[#96977A]/40 text-xs space-y-2 text-[#241A1A] dark:text-[#FFF9F0]">
-              <div className="flex items-center gap-2 font-bold text-[#96977A]">
+            <div className="p-4 rounded-xl bg-[var(--surface-rose)] border border-[var(--color-dusty-rose)]/50 text-xs space-y-2 text-[var(--color-burgundy)]">
+              <div className="flex items-center gap-2 font-bold text-[var(--color-burgundy)]">
                 <CheckCircle2 className="w-5 h-5" />
                 <span>Bug Identified Successfully!</span>
               </div>
@@ -245,15 +260,15 @@ for batch_idx, (data, targets) in enumerate(dataloader):
 
       {/* Tab 3: Code Rearrangement */}
       {activeTab === "reorder" && (
-        <div className="card-coffee p-6 sm:p-8 space-y-6">
-          <div className="pb-4 border-b border-[#B59A83]/20 dark:border-zinc-800">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[#A77C91]">
+        <div className="bg-[var(--color-warm-ivory)] rounded-2xl p-6 sm:p-8 space-y-6 border border-[var(--color-creme-latte)] shadow-xs">
+          <div className="pb-4 border-b border-[var(--color-creme-latte)]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)]/70">
               Code-Rearrangement Exercise
             </span>
-            <h2 className="font-display-serif text-2xl text-[#6F1737] dark:text-[#FFF9F0] mt-1">
+            <h2 className="font-display-serif text-2xl text-[var(--color-burgundy)] font-bold mt-1">
               Order the Asynchronous Error Handling Pipeline
             </h2>
-            <p className="text-xs text-[#4A3A37] dark:text-zinc-400 mt-1">
+            <p className="text-xs text-[var(--color-burgundy)]/80 mt-1">
               Use the arrow buttons to arrange these code blocks into a robust, production-grade Next.js API client handler with HTTP error validation.
             </p>
           </div>
@@ -262,21 +277,21 @@ for batch_idx, (data, targets) in enumerate(dataloader):
             {reorderedItems.map((item, idx) => (
               <div
                 key={item.id}
-                className="p-3 rounded-xl bg-white dark:bg-[#241A1A] border border-[#B59A83]/40 flex items-center justify-between text-xs font-mono-code text-[#241A1A] dark:text-[#FFF9F0]"
+                className="p-3 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] flex items-center justify-between text-xs font-mono-code text-[var(--color-burgundy)]"
               >
                 <span>{item.text}</span>
                 <div className="flex items-center gap-1">
                   <button
                     onClick={() => moveUp(idx)}
                     disabled={idx === 0}
-                    className="px-2 py-0.5 rounded bg-[#F5EBDD] dark:bg-[#3B2527] text-xs font-bold disabled:opacity-30 cursor-pointer"
+                    className="px-2 py-0.5 rounded bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] hover:bg-[var(--color-dusty-rose)]/40 text-xs font-bold disabled:opacity-30 cursor-pointer"
                   >
                     ↑
                   </button>
                   <button
                     onClick={() => moveDown(idx)}
                     disabled={idx === reorderedItems.length - 1}
-                    className="px-2 py-0.5 rounded bg-[#F5EBDD] dark:bg-[#3B2527] text-xs font-bold disabled:opacity-30 cursor-pointer"
+                    className="px-2 py-0.5 rounded bg-[var(--color-creme-latte)] text-[var(--color-burgundy)] hover:bg-[var(--color-dusty-rose)]/40 text-xs font-bold disabled:opacity-30 cursor-pointer"
                   >
                     ↓
                   </button>
@@ -285,13 +300,20 @@ for batch_idx, (data, targets) in enumerate(dataloader):
             ))}
           </div>
 
+          {reorderFeedback && (
+            <div className="p-3 rounded-xl bg-[var(--surface-rose)] border border-[var(--color-dusty-rose)] text-xs text-[var(--color-burgundy)] flex items-center gap-2 animate-in fade-in duration-200">
+              <AlertCircle className="w-4 h-4 shrink-0 text-[var(--color-burgundy)]" />
+              <span>{reorderFeedback}</span>
+            </div>
+          )}
+
           <div className="flex items-center justify-between pt-2">
             {reorderVerified ? (
-              <span className="text-xs font-bold text-[#96977A] flex items-center gap-1.5">
+              <span className="text-xs font-bold text-[var(--color-burgundy)] flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4" /> Correct Sequence Verified!
               </span>
             ) : (
-              <span className="text-xs text-[#4A3A37] dark:text-zinc-400">
+              <span className="text-xs text-[var(--color-burgundy)]/70">
                 Arrange blocks, then verify logic.
               </span>
             )}
