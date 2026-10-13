@@ -38,6 +38,12 @@ import {
   CATALOGUE_CATEGORIES,
   CatalogueItem,
 } from "@/lib/catalogue-data";
+import OnboardingFlowModal from "@/components/OnboardingFlowModal";
+import PersonalisedJourneyDashboard from "@/components/PersonalisedJourneyDashboard";
+import {
+  PersonalisedJourney,
+  loadSavedJourney,
+} from "@/lib/personalised-journey";
 
 // Curated tasteful motivational quotes (Section B)
 const MOTIVATIONAL_QUOTES = [
@@ -176,6 +182,16 @@ export default function Home() {
   // Quote rotation state (Section B)
   const [quoteIndex, setQuoteIndex] = useState(0);
 
+  // Onboarding & Personalised Journey state (Requirement 6)
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [savedJourney, setSavedJourney] = useState<PersonalisedJourney | null>(null);
+
+  // Load saved journey from localStorage on mount
+  useEffect(() => {
+    const journey = loadSavedJourney();
+    if (journey) setSavedJourney(journey);
+  }, []);
+
   // Set initial random quote on client mount
   useEffect(() => {
     const randomIdx = Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length);
@@ -264,13 +280,20 @@ export default function Home() {
           </p>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
-            <a
-              href="#start-cta"
-              className="btn-burgundy px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide transition shadow-xs flex items-center gap-2"
+            <button
+              type="button"
+              onClick={() => {
+                if (savedJourney) {
+                  document.getElementById("personalised-dashboard")?.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  setIsOnboardingOpen(true);
+                }
+              }}
+              className="btn-burgundy px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide transition shadow-xs flex items-center gap-2 cursor-pointer"
             >
-              <span>Start My Journey</span>
+              <span>{savedJourney ? "Resume My Saved Journey" : "Start My Journey"}</span>
               <ArrowRight className="w-4 h-4 text-[var(--color-warm-ivory)]" />
-            </a>
+            </button>
 
             <a
               href="#catalogue-section"
@@ -336,13 +359,14 @@ export default function Home() {
         </div>
 
         <div className="shrink-0 flex flex-wrap items-center gap-3">
-          <a
-            href="#catalogue-section"
+          <button
+            type="button"
+            onClick={() => setIsOnboardingOpen(true)}
             className="btn-burgundy px-6 py-3.5 rounded-xl font-bold text-sm tracking-wide transition shadow-xs flex items-center gap-2 cursor-pointer"
           >
-            <span>Yes, Let&apos;s Start</span>
+            <span>{savedJourney ? "Update Learning Preferences" : "Yes, Let's Start"}</span>
             <ArrowRight className="w-4 h-4 text-[var(--color-warm-ivory)]" />
-          </a>
+          </button>
 
           <Link
             href="/learning"
@@ -353,6 +377,19 @@ export default function Home() {
           </Link>
         </div>
       </section>
+
+      {/* -------------------------------------------------------------------------- */}
+      {/* PERSONALISED LEARNING DASHBOARD (SAVED JOURNEY)                            */}
+      {/* -------------------------------------------------------------------------- */}
+      {savedJourney && (
+        <section id="personalised-dashboard" className="pt-2">
+          <PersonalisedJourneyDashboard
+            journey={savedJourney}
+            onUpdatePreferences={() => setIsOnboardingOpen(true)}
+            onJourneyChange={(updated) => setSavedJourney(updated)}
+          />
+        </section>
+      )}
 
       {/* -------------------------------------------------------------------------- */}
       {/* D. SEARCHABLE & FILTERABLE TECHNOLOGY CATALOGUE (ALL 30 ENTRIES)           */}
@@ -881,6 +918,20 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      {/* Onboarding Flow Modal */}
+      <OnboardingFlowModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+        onComplete={(newJourney) => {
+          setSavedJourney(newJourney);
+          setIsOnboardingOpen(false);
+          setTimeout(() => {
+            document.getElementById("personalised-dashboard")?.scrollIntoView({ behavior: "smooth" });
+          }, 100);
+        }}
+        existingJourney={savedJourney}
+      />
     </div>
   );
 }

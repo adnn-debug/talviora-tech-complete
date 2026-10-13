@@ -93,3 +93,54 @@ Return only JSON with reply (string) and suggestedNextStep (string).
 `;
   return parseJson<{ reply: string; suggestedNextStep: string }>(await generateText(prompt, 0.5));
 }
+
+export async function generatePersonalisedLearningPlan(params: {
+  targetField: string;
+  experienceLevel: string;
+  dailyStudyMinutes: number;
+  mainGoal: string;
+}) {
+  const prompt = `
+You are the curriculum and career planning guide for TALVIORA TECH.
+Create an honest, realistic, encouraging, and structured learning journey plan for a learner based ONLY on their provided answers.
+Target field: ${params.targetField}
+Experience level: ${params.experienceLevel}
+Daily study commitment: ${params.dailyStudyMinutes} minutes/day
+Main practical goal: ${params.mainGoal}
+
+Return ONLY valid JSON with this exact schema:
+{
+  "summary": "one or two sentence supportive summary of this custom plan",
+  "todayTasks": [
+    { "title": "concrete action", "durationMinutes": 20, "type": "reading" }
+  ],
+  "weeklyGoalHours": 5,
+  "roadmapMilestones": [
+    { "week": 1, "title": "Foundation Milestone", "desc": "description of what they will achieve" }
+  ],
+  "recommendedExercises": [
+    { "title": "exercise title", "desc": "brief instructions", "actionUrl": "/learning", "actionLabel": "Practice in Sandbox" }
+  ],
+  "suggestedProjects": [
+    { "title": "project name", "level": "Beginner", "deliverable": "what is built", "desc": "why this matters" }
+  ],
+  "recommendedNextAction": {
+    "title": "immediate next step",
+    "desc": "why do this first",
+    "actionUrl": "/learning",
+    "actionLabel": "Start Step 1"
+  }
+}
+Do not guarantee hiring or make inflated claims. Tailor tasks realistically to ${params.dailyStudyMinutes} minutes per day.
+`;
+  return parseJson<{
+    summary: string;
+    todayTasks: { title: string; durationMinutes: number; type: "reading" | "practice" | "quiz" | "project" }[];
+    weeklyGoalHours: number;
+    roadmapMilestones: { week: number; title: string; desc: string }[];
+    recommendedExercises: { title: string; desc: string; actionUrl: string; actionLabel: string }[];
+    suggestedProjects: { title: string; level: string; deliverable: string; desc: string }[];
+    recommendedNextAction: { title: string; desc: string; actionUrl: string; actionLabel: string };
+  }>(await generateText(prompt, 0.4));
+}
+
