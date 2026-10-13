@@ -1492,6 +1492,13 @@ export default function CompleteCataloguePage() {
               </button>
 
               <div className="flex items-center gap-2">
+                <Link
+                  href="/learning"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[var(--surface-rose)] text-[var(--color-burgundy)] border border-[rgba(var(--color-burgundy-rgb),0.2)] hover:bg-[var(--color-dusty-rose)]/40 transition flex items-center gap-1.5"
+                >
+                  <Code2 className="w-3.5 h-3.5" />
+                  <span>Practice in Sandbox</span>
+                </Link>
                 <a
                   href={selectedItem.officialDocsUrl}
                   target="_blank"

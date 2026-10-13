@@ -102,6 +102,23 @@ export default function Sidebar() {
       aria-label="Sidebar Navigation"
     >
       <div className="space-y-5 overflow-y-auto max-h-[calc(100vh-6.5rem)] pr-1">
+        {/* Beginner Fast-Track Card */}
+        <div className="rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.18)] bg-[var(--surface-rose)]/60 p-3 space-y-1.5 shadow-2xs">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--color-burgundy)]">
+            <Sparkles className="w-3.5 h-3.5 text-[var(--color-burgundy)] shrink-0" />
+            <span>Beginner Fast-Track</span>
+          </div>
+          <p className="text-[10px] text-[var(--color-burgundy)]/85 leading-snug">
+            New to code? Follow our interactive tutorials & "Try It Yourself" sandboxes.
+          </p>
+          <Link
+            href="/learning"
+            className="inline-flex items-center gap-1 text-[10px] font-bold text-[var(--color-burgundy)] hover:underline pt-0.5"
+          >
+            Start Chapter 1 &rarr;
+          </Link>
+        </div>
+
         {categories.map((category) => (
           <div key={category.title} className="space-y-1">
             <h2 className="px-3 text-[10px] font-bold tracking-wider uppercase text-[var(--color-burgundy)]">
