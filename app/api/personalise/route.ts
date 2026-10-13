@@ -160,3 +160,46 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const user = await getAuthenticatedUser(req);
+    if (user.id && isSupabaseConfigured) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (profile && profile.target_role) {
+        const matched =
+          CATALOGUE_ITEMS.find((c) =>
+            c.name.toLowerCase().includes(profile.target_role.toLowerCase())
+          ) || CATALOGUE_ITEMS[0];
+        const journey = createDeterministicPlan({
+          fieldId: matched.id,
+          experienceLevel:
+            profile.experience_level === "Entry"
+              ? "Complete Beginner"
+              : profile.experience_level === "Junior"
+              ? "Some Basics"
+              : "Intermediate",
+          dailyStudyMinutes: profile.weekly_hours
+            ? Math.round((profile.weekly_hours * 60) / 7)
+            : 45,
+        });
+        return NextResponse.json({ success: true, journey });
+      }
+    }
+
+    // Default fallback plan for guest visitors
+    const defaultJourney = createDeterministicPlan({ fieldId: "lang-python" });
+    return NextResponse.json({ success: true, journey: defaultJourney });
+  } catch (err: any) {
+    console.error("Personalised journey fetch error:", err);
+    return NextResponse.json(
+      { success: false, error: err?.message || "Failed to fetch learning plan" },
+      { status: 500 }
+    );
+  }
+}
