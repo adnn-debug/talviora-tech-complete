@@ -99,32 +99,45 @@ export const skillGapsList: SkillGapItem[] = [
 export const assessmentQuestionsList: AssessmentQuestion[] = [
   {
     id: 1,
-    category: "System Design & Distributed AI",
-    title: "High-Throughput Vector Search Architecture",
-    question: "When designing an enterprise Retrieval-Augmented Generation (RAG) system with over 10 million document chunks and sub-100ms latency requirements, which architectural approach offers optimal recall vs latency trade-offs?",
-    codeSnippet: `// Embedding indexing strategy\nconst searchConfig = {\n  vectorDimensions: 1536,\n  similarityMetric: "cosine",\n  indexType: ???\n};`,
+    category: "Web & API Architecture",
+    title: "Client-Side vs Server-Side Execution",
+    expectedTask: "Explain the architectural boundary between client and server code in modern web applications.",
+    taskType: "explain",
+    difficulty: "Foundational",
+    questionType: "Foundational Knowledge",
+    question:
+      "When a user signs in or submits a credit card payment on a website, which part of the application must be responsible for validating secrets, charging the card, and writing changes to the database?",
+    codeSnippet: `// Client (Browser) vs Server (Backend) Boundary
+function handleCheckout(paymentDetails) {
+  // Where must payment verification and database writes happen?
+  // Option 1: Browser JavaScript
+  // Option 2: Trusted Backend Server
+}`,
+    explanation:
+      "Security-critical operations like credential verification and payment processing must always occur on a trusted server. Client-side browser code can be inspected, modified, or bypassed by anyone using developer tools.",
+    hint: "Think about who controls the environment: the user's browser is untrusted, while your server is a secure, private environment.",
     options: [
       {
         label: "A",
-        text: "Hierarchical Navigable Small World (HNSW) graphs combined with IVF (Inverted File) clustering and scalar quantization.",
+        text: "The backend server, because client browser code can be inspected and altered by any user.",
         weight: 25,
-        skillTags: ["System Design", "LLMs & RAG", "Vector Databases"],
+        skillTags: ["Web Architecture", "API Security", "Backend Development"],
       },
       {
         label: "B",
-        text: "Exact brute-force Flat L2 distance search across the entire in-memory dataset on every request.",
+        text: "The user's web browser, using JavaScript stored inside localStorage to save hosting costs.",
         weight: 5,
-        skillTags: ["System Design"],
+        skillTags: ["Frontend"],
       },
       {
         label: "C",
-        text: "Relational B-Tree index on the raw float array columns in SQLite without vector indexing.",
+        text: "The DNS server that translated the domain name into an IP address.",
         weight: 0,
-        skillTags: ["Database"],
+        skillTags: ["Networking"],
       },
       {
         label: "D",
-        text: "Stashing embeddings in local browser localStorage and performing vector dot product on the client device.",
+        text: "The CSS stylesheet that styled the checkout button layout.",
         weight: 0,
         skillTags: ["Frontend"],
       },
@@ -132,136 +145,333 @@ export const assessmentQuestionsList: AssessmentQuestion[] = [
   },
   {
     id: 2,
-    category: "AI & Deep Learning Fundamentals",
-    title: "Vanishing Gradients & Attention Mechanisms",
-    question: "In deep neural networks, how does the Scaled Dot-Product Attention mechanism in Transformer architectures solve the information bottleneck inherent to recurrent networks (RNNs/LSTMs)?",
-    codeSnippet: `Attention(Q, K, V) = softmax( (Q * K^T) / sqrt(d_k) ) * V`,
+    category: "AI & Machine Learning Foundations",
+    title: "Text Embeddings & Semantic Meaning",
+    expectedTask: "Choose the accurate explanation of how text embeddings represent meaning for AI applications.",
+    taskType: "choose",
+    difficulty: "Foundational",
+    questionType: "Foundational Knowledge",
+    question:
+      "Modern AI systems convert sentences into 'vector embeddings' before searching or generating text. What does an embedding actually represent, and why is it useful?",
+    codeSnippet: `// Converting natural language to vector coordinates
+const vectorA = embed("automobile maintenance");
+const vectorB = embed("car repair");
+// Result: vectorA and vectorB have high mathematical similarity (~0.93)`,
+    explanation:
+      "An embedding is a list of numbers representing coordinates in a semantic concept space. Because computers understand numbers better than raw text, embeddings allow programs to determine that 'automobile maintenance' and 'car repair' mean nearly the same thing, even without shared words.",
+    hint: "Notice that 'automobile' and 'car' share zero letters, yet an AI understands they are closely related.",
     options: [
       {
         label: "A",
-        text: "It computes direct all-to-all token relationships in parallel with constant path length O(1) between any two tokens, scaling by sqrt(d_k) to prevent softmax saturation in high dimensions.",
+        text: "A list of numeric coordinates capturing semantic meaning, allowing computers to measure mathematical similarity between phrases.",
         weight: 25,
-        skillTags: ["Machine Learning", "PyTorch", "Deep Learning"],
+        skillTags: ["AI & ML", "Vector Databases", "LLMs & RAG"],
       },
       {
         label: "B",
-        text: "It executes tokens sequentially one-by-one through hidden state vectors without matrix multiplications.",
+        text: "An encrypted hash string like SHA-256 used strictly to scramble passwords in transit.",
         weight: 5,
-        skillTags: ["Machine Learning"],
+        skillTags: ["Cybersecurity"],
       },
       {
         label: "C",
-        text: "It removes all non-linear activation functions entirely from the neural network.",
+        text: "An exact alphabetical count of vowels and consonants in each sentence.",
         weight: 0,
-        skillTags: ["Machine Learning"],
+        skillTags: ["Data Structures"],
       },
       {
         label: "D",
-        text: "It relies on convolution kernels with fixed 3x3 receptive fields across sentence tokens.",
-        weight: 8,
-        skillTags: ["Machine Learning"],
+        text: "A compressed video file that plays back a model's training process.",
+        weight: 0,
+        skillTags: ["AI & ML"],
       },
     ],
   },
   {
     id: 3,
-    category: "Data Engineering & Database Optimization",
-    title: "PostgreSQL Concurrency & Isolation Levels",
-    question: "In a high-concurrency payment and ledger system built with PostgreSQL, you need to prevent non-repeatable reads and phantom reads while avoiding race conditions in inventory deduction. Which isolation pattern is recommended?",
-    codeSnippet: `BEGIN TRANSACTION ISOLATION LEVEL ???;\nSELECT balance FROM user_wallet WHERE id = $1 FOR UPDATE;\nUPDATE user_wallet SET balance = balance - $2 WHERE id = $1;\nCOMMIT;`,
+    category: "Full-Stack Web & Streaming UX",
+    title: "Streaming AI Responses with React & Next.js",
+    expectedTask: "Choose the component structure that renders static content immediately while streaming dynamic AI text.",
+    taskType: "choose",
+    difficulty: "Intermediate",
+    questionType: "Practical Problem-Solving",
+    question:
+      "You are building an AI learning assistant that displays a user's static profile header alongside a live, streaming AI response. How should you structure your React and Next.js components so the page displays immediately without waiting for the full AI response to finish?",
+    codeSnippet: `// Next.js App Router streaming architecture
+export default function AssistantPage() {
+  return (
+    <div>
+      <UserProfileHeader user={currentUser} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <StreamingAiAssistant prompt={prompt} />
+      </Suspense>
+    </div>
+  );
+}`,
+    explanation:
+      "React Server Components with Suspense allow the static layout (the profile header) to render immediately. Meanwhile, the dynamic AI assistant streams generated tokens across HTTP as they arrive using a ReadableStream, giving users an instant, responsive experience.",
+    hint: "Look at the Suspense boundary: it lets part of the page show right away while other parts load asynchronously in the background.",
     options: [
       {
         label: "A",
-        text: "SERIALIZABLE isolation or READ COMMITTED with explicit row-level locking (SELECT ... FOR UPDATE) to ensure deterministic serialization.",
-        weight: 25,
-        skillTags: ["SQL", "Data Engineering", "System Design"],
-      },
-      {
-        label: "B",
-        text: "READ UNCOMMITTED with dirty reads allowed to maximize write speed.",
-        weight: 0,
-        skillTags: ["SQL"],
-      },
-      {
-        label: "C",
-        text: "Running all updates asynchronously in background setTimeout without transaction wrappers.",
-        weight: 0,
-        skillTags: ["Architecture"],
-      },
-      {
-        label: "D",
-        text: "Relying purely on client-side state checks before issuing optimistic updates.",
-        weight: 5,
-        skillTags: ["Architecture"],
-      },
-    ],
-  },
-  {
-    id: 4,
-    category: "Full-Stack Web & API Performance",
-    title: "Next.js App Router & Server Component Caching",
-    question: "When architecting a high-traffic AI dashboard that renders real-time streaming LLM responses while caching static candidate portfolio metadata, how should you structure the Next.js components?",
-    codeSnippet: `// Server Component vs Client Component boundary\nimport { Suspense } from 'react';\n// streaming AI responses with edge runtime`,
-    options: [
-      {
-        label: "A",
-        text: "Use React Server Components (RSC) for initial page shell & static caching with fetch revalidation, streaming dynamic AI tokens via React Suspense and ReadableStream in Client Components.",
+        text: "Render the static profile immediately on the server, and wrap the AI response in a React Suspense boundary that streams tokens over a ReadableStream.",
         weight: 25,
         skillTags: ["Next.js", "TypeScript", "Frontend Architecture"],
       },
       {
         label: "B",
-        text: "Mark every component with 'use client' and disable all Next.js caching globally in next.config.js.",
+        text: "Block page loading until the AI finishes generating its entire answer, displaying a blank screen for 8 seconds.",
         weight: 5,
-        skillTags: ["Next.js"],
+        skillTags: ["Frontend Architecture"],
       },
       {
         label: "C",
-        text: "Fetch all data inside useEffect with un-debounced polling every 100 milliseconds.",
+        text: "Fetch tokens using rapid, un-debounced polling every 10 milliseconds inside a raw useEffect hook.",
         weight: 0,
         skillTags: ["Frontend"],
       },
       {
         label: "D",
-        text: "Pre-render the entire web application statically at build time with hardcoded mock variables.",
+        text: "Pre-render the entire AI conversation statically at build time with hardcoded mock answers.",
         weight: 0,
         skillTags: ["Frontend"],
       },
     ],
   },
   {
-    id: 5,
-    category: "Algorithms & Production Resilience",
-    title: "Rate Limiting & Backpressure in Distributed APIs",
-    question: "To protect an inference gateway handling unpredictable bursts of API traffic from cascading microservice failures, which algorithm and architectural pattern should you implement at the API gateway layer?",
+    id: 4,
+    category: "Search Systems & Scale",
+    title: "Indexing 10 Million Records for Sub-100ms Search",
+    expectedTask: "Compare indexing strategies to balance fast query speed with accurate search recall at scale.",
+    taskType: "compare",
+    difficulty: "Intermediate",
+    questionType: "Practical Problem-Solving",
+    question:
+      "You need to build a search feature that searches through 10 million document records. Users require search results within 100 milliseconds. Which indexing approach provides the best balance of fast query response time and high search accuracy?",
+    codeSnippet: `// Vector Search Index Configuration
+const searchConfig = {
+  totalRecords: 10_000_000,
+  targetLatencyMs: 100,
+  indexStructure: ??? // Which structure provides sub-linear retrieval?
+};`,
+    explanation:
+      "Scanning 10 million items one-by-one (brute force) takes multiple seconds per query. Graph-based indexes like HNSW (Hierarchical Navigable Small World) cluster vectors into navigable layers, allowing queries to find top results in logarithmic/sub-linear time (milliseconds) rather than scanning all records.",
+    hint: "Think about looking up a word in an organized index vs reading every single page of a 10,000-page book.",
     options: [
       {
         label: "A",
-        text: "Token Bucket or Sliding Window Counter algorithm backed by Redis, paired with Circuit Breakers (hystrix pattern) and Dead Letter Queues for downstream backpressure.",
+        text: "An Approximate Nearest Neighbor graph index (such as HNSW) combined with vector quantization for sub-linear search time.",
+        weight: 25,
+        skillTags: ["System Design", "Vector Databases", "LLMs & RAG"],
+      },
+      {
+        label: "B",
+        text: "A brute-force scan that calculates distances against every single record sequentially on each request.",
+        weight: 5,
+        skillTags: ["System Design"],
+      },
+      {
+        label: "C",
+        text: "Downloading all 10 million records to the user's browser localStorage and filtering with a JavaScript loop.",
+        weight: 0,
+        skillTags: ["Frontend"],
+      },
+      {
+        label: "D",
+        text: "Opening a raw CSV file and running regular expressions across it on every search.",
+        weight: 0,
+        skillTags: ["Backend Development"],
+      },
+    ],
+  },
+  {
+    id: 5,
+    category: "Code Reading & Debugging",
+    title: "Debugging an Asynchronous State Bug",
+    expectedTask: "Debug this JavaScript function and identify why it returns 'Hello undefined' or displays stale data.",
+    taskType: "debug",
+    difficulty: "Intermediate",
+    questionType: "Code Reading & Debugging",
+    question:
+      "A developer wrote the function below to fetch a user profile and return a greeting. However, users report that the function consistently returns 'Hello undefined'. What is the bug in this code?",
+    codeSnippet: `function getUserGreeting(userId) {
+  let profile = null;
+  fetch('/api/users/' + userId)
+    .then(response => response.json())
+    .then(data => {
+      profile = data;
+    });
+  return "Hello " + profile.name;
+}`,
+    explanation:
+      "Network fetch requests are asynchronous. In the snippet, 'return Hello + profile.name' executes immediately on the main thread before the server network response arrives. Because profile is still null when return runs, the code fails. The fix is to use async/await or return the Promise chain.",
+    hint: "Pay attention to when the .then() callback runs compared to when the final return statement executes.",
+    options: [
+      {
+        label: "A",
+        text: "The return statement runs synchronously before the network request resolves, accessing profile while it is still null.",
+        weight: 25,
+        skillTags: ["TypeScript", "Frontend", "Debugging"],
+      },
+      {
+        label: "B",
+        text: "The '+' concatenation operator cannot be used with string variables in JavaScript.",
+        weight: 5,
+        skillTags: ["TypeScript"],
+      },
+      {
+        label: "C",
+        text: "The userId argument must be converted to Roman numerals before making a web request.",
+        weight: 0,
+        skillTags: ["TypeScript"],
+      },
+      {
+        label: "D",
+        text: "Fetch requests are only allowed inside CSS files, not JavaScript.",
+        weight: 0,
+        skillTags: ["Web Architecture"],
+      },
+    ],
+  },
+  {
+    id: 6,
+    category: "Database Concurrency & Integrity",
+    title: "Debugging an E-Commerce Race Condition",
+    expectedTask: "Debug this database transaction to prevent two concurrent buyers from purchasing the same remaining item.",
+    taskType: "debug",
+    difficulty: "Intermediate",
+    questionType: "Code Reading & Debugging",
+    question:
+      "During a product drop, exactly 1 item remains in stock. Two shoppers click 'Purchase' at the exact same millisecond. Look at the database transaction below. Why does this code allow both shoppers to complete the purchase (overselling by 1), and how do you fix it?",
+    codeSnippet: `BEGIN TRANSACTION;
+-- Step 1: Read current stock count
+SELECT stock FROM inventory WHERE item_id = 101;
+-- Step 2: (Application check: if stock > 0 ...)
+-- Step 3: Decrement stock
+UPDATE inventory SET stock = stock - 1 WHERE item_id = 101;
+COMMIT;`,
+    explanation:
+      "Without locking or an atomic condition, both parallel queries read stock = 1 before either executes the UPDATE. Both pass the check and decrement the count to 0, resulting in two sales. The fix is to add row-level locking (SELECT ... FOR UPDATE) or use an atomic guard: 'UPDATE ... WHERE item_id = 101 AND stock > 0'.",
+    hint: "What happens if Transaction B executes Step 1 before Transaction A executes Step 3?",
+    options: [
+      {
+        label: "A",
+        text: "Both transactions read stock = 1 before either writes an update. Fix it with 'SELECT ... FOR UPDATE' or an atomic check 'AND stock > 0'.",
+        weight: 25,
+        skillTags: ["SQL", "Database Optimization", "System Design"],
+      },
+      {
+        label: "B",
+        text: "SQL table names must be enclosed in double dollar signs to prevent simultaneous reads.",
+        weight: 5,
+        skillTags: ["SQL"],
+      },
+      {
+        label: "C",
+        text: "Remove the COMMIT statement so the database discards the purchase after completion.",
+        weight: 0,
+        skillTags: ["SQL"],
+      },
+      {
+        label: "D",
+        text: "Run the database transaction inside client-side localStorage on the buyer's phone.",
+        weight: 0,
+        skillTags: ["Frontend"],
+      },
+    ],
+  },
+  {
+    id: 7,
+    category: "System Resilience & Production Operations",
+    title: "Handling 50x Traffic Spikes Under Pressure",
+    expectedTask: "Compare API gateway patterns and choose the strategy that protects servers from crashing during traffic spikes.",
+    taskType: "compare",
+    difficulty: "Advanced",
+    questionType: "Scenario-Based",
+    question:
+      "A marketing campaign causes API traffic to surge 50 times beyond normal volume within 3 minutes. Your database CPU hits 98% and response times degrade rapidly. Which gateway architecture pattern best protects the system from cascading failure?",
+    codeSnippet: `// Real-world traffic incident
+const currentRPS = 50_000; // Normal traffic: 1,000 requests/sec
+const databaseLoad = 0.98; // 98% CPU utilization
+// How should the API gateway respond?`,
+    explanation:
+      "When servers are overloaded, allowing requests to queue up indefinitely causes out-of-memory crashes. Implementing rate limiting (Token Bucket) caps traffic to manageable rates, Circuit Breakers fail fast on failing services to give them time to recover, and asynchronous queues absorb burst traffic safely.",
+    hint: "Think about crowd control at an event: letting everyone push into a crowded room causes a stampede. You need a turnstile (rate limiter) and an orderly waiting line (queue).",
+    options: [
+      {
+        label: "A",
+        text: "Implement rate limiting (e.g. Token Bucket in Redis), activate Circuit Breakers to fail fast on overloaded services, and queue non-critical tasks asynchronously.",
         weight: 25,
         skillTags: ["Algorithms & DSA", "System Design", "Cloud & DevOps"],
       },
       {
         label: "B",
-        text: "An unbounded in-memory array queue on a single Node.js process without memory limits.",
-        weight: 0,
-        skillTags: ["Architecture"],
+        text: "Increase server request timeout to 120 seconds so all 50,000 requests wait in server RAM simultaneously.",
+        weight: 5,
+        skillTags: ["System Design"],
       },
       {
         label: "C",
-        text: "Dropping all requests whenever CPU exceeds 50% without returning HTTP 429 status codes.",
-        weight: 5,
-        skillTags: ["DevOps"],
+        text: "Disable all HTTPS security certificates to reduce server cryptographic math.",
+        weight: 0,
+        skillTags: ["Cybersecurity"],
       },
       {
         label: "D",
-        text: "Spawning an infinite number of child processes for every incoming HTTP request.",
+        text: "Hard reboot the main database every 60 seconds whenever CPU usage exceeds 50%.",
         weight: 0,
-        skillTags: ["DevOps"],
+        skillTags: ["Cloud & DevOps"],
+      },
+    ],
+  },
+  {
+    id: 8,
+    category: "Distributed Systems & Fault Tolerance",
+    title: "Distributed Idempotency & Network Retries",
+    expectedTask: "Explain how to guarantee that a payment executes exactly once despite automatic client network retries.",
+    taskType: "explain",
+    difficulty: "Advanced",
+    questionType: "Advanced Challenge",
+    question:
+      "In a mobile banking application, a user taps 'Transfer $50'. The server successfully charges the account, but a mobile network disconnect drops the confirmation response before reaching the user's screen. The user's app automatically retries the request 3 seconds later. How do you guarantee the customer is not charged a second time?",
+    codeSnippet: `// Client retry with Idempotency Key
+POST /api/v1/transfers
+Headers:
+  Authorization: Bearer <token>
+  Idempotency-Key: "txn_order_99482_attempt1"
+Body: { "recipient": "acc_481", "amount": 5000 }`,
+    explanation:
+      "An Idempotency Key is a unique identifier generated by the client for an operation. The server records the key alongside the initial transaction result. When a retry arrives with the identical key, the server recognizes the operation was already completed and returns the original cached result without re-executing the transfer.",
+    hint: "If you give the server a unique receipt number for the request, the server can check whether it already processed that exact receipt.",
+    options: [
+      {
+        label: "A",
+        text: "Require a unique client-generated Idempotency Key stored with the transaction; on duplicates, return the original cached result without re-executing.",
+        weight: 25,
+        skillTags: ["System Design", "API Security", "Cloud & DevOps"],
+      },
+      {
+        label: "B",
+        text: "Disable client network retries entirely and display a generic failure notice whenever any packet drops.",
+        weight: 5,
+        skillTags: ["System Design"],
+      },
+      {
+        label: "C",
+        text: "Inspect the user's battery percentage and reject payments if the battery is below 20%.",
+        weight: 0,
+        skillTags: ["Frontend"],
+      },
+      {
+        label: "D",
+        text: "Execute every incoming charge regardless of duplicates and let customer support manually issue refunds later.",
+        weight: 0,
+        skillTags: ["Backend Development"],
       },
     ],
   },
 ];
+
 
 export const roadmapPhasesList: RoadmapPhase[] = [
   {

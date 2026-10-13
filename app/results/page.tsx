@@ -37,7 +37,19 @@ export default function ResultsPage() {
       if (stored) {
         try {
           const parsed = JSON.parse(stored) as Partial<StoredAssessment>;
-          if (parsed.success === true && parsed.provider === "Google Gemini" && typeof parsed.readinessScore === "number" && Number.isFinite(parsed.readinessScore) && parsed.readinessScore >= 0 && parsed.readinessScore <= 100 && Array.isArray(parsed.strongPillars) && Array.isArray(parsed.growthPillars) && Array.isArray(parsed.prioritySkills) && Array.isArray(parsed.recommendedProjects) && typeof parsed.executiveSummary === "string") {
+          if (
+            parsed.success === true &&
+            typeof parsed.provider === "string" &&
+            typeof parsed.readinessScore === "number" &&
+            Number.isFinite(parsed.readinessScore) &&
+            parsed.readinessScore >= 0 &&
+            parsed.readinessScore <= 100 &&
+            Array.isArray(parsed.strongPillars) &&
+            Array.isArray(parsed.growthPillars) &&
+            Array.isArray(parsed.prioritySkills) &&
+            Array.isArray(parsed.recommendedProjects) &&
+            typeof parsed.executiveSummary === "string"
+          ) {
             setResult(parsed as StoredAssessment);
           }
         } catch (e) {
@@ -52,10 +64,10 @@ export default function ResultsPage() {
       <div className="mx-auto max-w-3xl rounded-3xl border border-[var(--border-panel)] bg-[var(--bg-surface)] p-8 text-center shadow-[var(--shadow-card)] sm:p-12">
         <h1 className="font-display-serif text-3xl font-bold text-[var(--heading-primary)]">No completed assessment result yet</h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-secondary)]">
-            Complete the assessment after the AI provider is configured. Older sample results are not presented as evaluated learner data.
+            Complete the diagnostic assessment to discover your strengths and recommended focus topics.
         </p>
         <Link href="/assessment" className="btn-burgundy mt-6 inline-flex min-h-11 items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold">
-          Start assessment <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          Start Assessment <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>
     );
@@ -78,11 +90,11 @@ export default function ResultsPage() {
               <CheckCircle2 className="w-4 h-4 text-[var(--color-burgundy)]" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
-              AI feedback for this assessment
+              Diagnostic Knowledge Report
             </span>
           </div>
           <h1 className="font-display-serif text-2xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
-            AI Assessment Results & Diagnostic
+            Diagnostic Assessment Results
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
             Learner-selected target role:{" "}
@@ -103,19 +115,19 @@ export default function ResultsPage() {
       <div className="card-coffee p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.14)]">
         <div className="space-y-2 text-center md:text-left">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]/80">
-            Evaluated Readiness Score
+            Diagnostic Knowledge Score
           </span>
           <div className="font-display-serif text-5xl sm:text-6xl text-[var(--color-burgundy)]">
             {readiness} <span className="text-2xl text-[var(--color-burgundy)]/70 font-sans">/ 100</span>
           </div>
           <p className="text-xs text-[var(--color-burgundy)]/85 max-w-md font-medium">
-            This score summarizes the submitted assessment responses. It is not a hiring prediction or comparison with other learners.
+            This score reflects your conceptual understanding and code reasoning on this quiz. It is an educational indicator to help guide your study journey.
           </p>
         </div>
 
         <div className="w-full md:w-64 space-y-2">
           <div className="flex justify-between text-xs font-semibold text-[var(--color-burgundy)]">
-            <span>Assessment score</span>
+            <span>Diagnostic Mastery</span>
             <span className="text-[var(--color-burgundy)] font-bold">{readiness}%</span>
           </div>
           <div className="w-full h-3 rounded-full bg-[var(--color-creme-latte)] overflow-hidden border border-[rgba(var(--color-burgundy-rgb),0.12)]">
@@ -125,8 +137,38 @@ export default function ResultsPage() {
             />
           </div>
           <span className="text-[10px] text-[var(--color-dusty-rose)] font-semibold block text-right">
-            Calculated from the responses provided
+            Calculated from your submitted responses
           </span>
+        </div>
+      </div>
+
+      {/* What This Score Measures (and What It Does Not) */}
+      <div className="card-coffee p-6 space-y-4 bg-[var(--color-creme-latte)] border border-[rgba(var(--color-burgundy-rgb),0.18)]">
+        <div className="flex items-center gap-2 pb-2 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
+          <Award className="w-4 h-4 text-[var(--color-burgundy)]" />
+          <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]">
+            Transparency: What This Score Measures (and What It Does Not)
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.12)] space-y-1.5">
+            <span className="font-bold text-emerald-800 flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+              <span>What This Measures</span>
+            </span>
+            <p className="text-[11px] text-[var(--color-burgundy)]/90 leading-relaxed font-medium">
+              Grasp of core engineering principles (client/server boundaries, embeddings, vector indexing), code reading and debugging ability (race conditions, async promises), and reasoning on architectural trade-offs under traffic pressure.
+            </p>
+          </div>
+          <div className="p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.12)] space-y-1.5">
+            <span className="font-bold text-amber-900 flex items-center gap-1.5">
+              <AlertCircle className="w-4 h-4 text-amber-700" />
+              <span>What It Does NOT Measure</span>
+            </span>
+            <p className="text-[11px] text-[var(--color-burgundy)]/90 leading-relaxed font-medium">
+              This score does <strong>NOT label you as job-ready</strong> or guarantee hiring outcomes. It cannot evaluate day-to-day team communication, production reliability, Git collaboration, or complex multi-file engineering. Real readiness requires building verified projects.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -135,7 +177,7 @@ export default function ResultsPage() {
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-[var(--color-burgundy)]" />
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]">
-            AI feedback · {result.provider}
+            Diagnostic Analysis · {result.provider}
           </span>
         </div>
         <p className="text-sm text-[var(--color-burgundy)] leading-relaxed font-normal">

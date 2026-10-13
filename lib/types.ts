@@ -35,7 +35,13 @@ export interface AssessmentQuestion {
   category: string;
   title: string;
   question: string;
+  expectedTask?: string;
+  taskType?: "explain" | "choose" | "compare" | "debug" | "write";
+  difficulty?: "Foundational" | "Intermediate" | "Advanced";
+  questionType?: "Foundational Knowledge" | "Practical Problem-Solving" | "Code Reading & Debugging" | "Scenario-Based" | "Advanced Challenge";
   codeSnippet?: string;
+  explanation?: string;
+  hint?: string;
   options: {
     label: string;
     text: string;
