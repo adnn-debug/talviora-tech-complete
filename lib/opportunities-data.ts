@@ -324,7 +324,7 @@ export const OPPORTUNITY_SEED_DATA: OpportunityItem[] = [
     category: "govtech_recruitment",
     locationAndEligibility: "India • Degree/Diploma completed in 2023–2024.",
     requiredSkills: ["Python", "SQL", "Linux Administration"],
-    sourceUrl: "https://recruitment.nic.in/",
+    sourceUrl: "https://recruitment.nic.in/archive/2024-graduate-apprenticeship",
     publicationDate: "2024-03-01",
     applicationDeadline: "2024-06-30", // Past date to demonstrate Expired status
     lastChecked: "2026-10-13T12:25:00.000Z",
@@ -481,8 +481,9 @@ export function deduplicateOpportunities(items: OpportunityItem[]): OpportunityI
 
   for (const item of items) {
     const normalized = item.sourceUrl.toLowerCase().trim().replace(/\/$/, "");
-    if (!seen.has(normalized)) {
-      seen.add(normalized);
+    const key = `${item.id}::${normalized}`;
+    if (!seen.has(key)) {
+      seen.add(key);
       deduped.push(item);
     }
   }
