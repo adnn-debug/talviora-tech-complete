@@ -14,12 +14,18 @@ export async function POST(req: Request) {
       { status: 429, headers: { "Retry-After": String(rateLimit.retryAfter) } }
     );
   }
+  let body: unknown;
   try {
-    const body: unknown = await req.json();
-    if (!body || typeof body !== "object" || Array.isArray(body)) {
-      return NextResponse.json({ success: false, error: "Invalid request payload format." }, { status: 400 });
-    }
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON request payload." }, { status: 400 });
+  }
 
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ success: false, error: "Invalid request payload format." }, { status: 400 });
+  }
+
+  try {
     const input = body as Record<string, unknown>;
     const fieldId = sanitizeInput(String(input.fieldId || "lang-python"), 50);
     const experienceLevel = (input.experienceLevel as PlanGenerationParams["experienceLevel"]) || "Complete Beginner";

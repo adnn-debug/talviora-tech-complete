@@ -130,6 +130,9 @@ export default function SimulatorPage() {
       // Evaluate in an isolated Function scope to prevent global mutation
       const runner = new Function(
         "console",
+        "window",
+        "document",
+        "localStorage",
         `"use strict";
         ${userCode}
         if (typeof ${activeExercise.functionName} !== "undefined") {
@@ -139,7 +142,7 @@ export default function SimulatorPage() {
         `
       );
 
-      const userFn = runner(customConsole);
+      const userFn = runner(customConsole, undefined, undefined, undefined);
 
       if (typeof userFn !== "function") {
         throw new Error(
