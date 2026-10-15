@@ -88,9 +88,9 @@ export default function InteractiveCodeSandbox({
           },
         };
 
-        // Run isolated in Function wrapper
-        const runner = new Function("console", `"use strict";\n${code}`);
-        runner(customConsole);
+        // Run isolated in Function wrapper with shadowed browser globals
+        const runner = new Function("console", "window", "document", "localStorage", `"use strict";\n${code}`);
+        runner(customConsole, undefined, undefined, undefined);
 
         const duration = Math.round(performance.now() - startTime);
         setExecTime(duration);

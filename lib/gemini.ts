@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY?.trim() || "";
 export const isGeminiConfigured = Boolean(apiKey && apiKey !== "your_gemini_api_key_here");
-const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3.8-flash";
+const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
 
 const genAI = isGeminiConfigured ? new GoogleGenAI({ apiKey }) : null;
 

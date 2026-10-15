@@ -4,8 +4,16 @@ import { createDeterministicPlan, PersonalisedJourney, PlanGenerationParams } fr
 import { getAuthenticatedUser, sanitizeInput, sanitizeNumber } from "@/lib/auth-server";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
 import { CATALOGUE_ITEMS } from "@/lib/catalogue-data";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: Request) {
+  const rateLimit = checkRateLimit(req, { limit: 30, windowSeconds: 60 });
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { success: false, error: "Too many personalisation requests. Please wait a moment before trying again." },
+      { status: 429, headers: { "Retry-After": String(rateLimit.retryAfter) } }
+    );
+  }
   try {
     const body: unknown = await req.json();
     if (!body || typeof body !== "object" || Array.isArray(body)) {
@@ -38,7 +46,7 @@ export async function POST(req: Request) {
 
         if (aiPlan && Array.isArray(aiPlan.todayTasks) && aiPlan.todayTasks.length > 0) {
           isAiGenerated = true;
-          generationModel = "Google Gemini (gemini-3.8-flash)";
+          generationModel = "Google Gemini (gemini-2.5-flash)";
           aiNotice = "Personalised by Google Gemini based on your learning goals and study schedule.";
 
           const existingCompletedTopics = previousJourney?.completedTopicIds || [];

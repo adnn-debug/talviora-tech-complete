@@ -3,12 +3,20 @@ import { evaluateInterviewResponse, isGeminiConfigured } from "@/lib/gemini";
 import { interviewQuestionsList } from "@/lib/career-data";
 import { getAuthenticatedUser, sanitizeInput } from "@/lib/auth-server";
 import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 export async function GET() {
   return NextResponse.json({ questions: interviewQuestionsList, totalCount: interviewQuestionsList.length });
 }
 
 export async function POST(req: Request) {
+  const rateLimit = checkRateLimit(req, { limit: 15, windowSeconds: 60 });
+  if (!rateLimit.allowed) {
+    return NextResponse.json(
+      { success: false, error: "Too many interview feedback requests. Please wait a moment before trying again." },
+      { status: 429, headers: { "Retry-After": String(rateLimit.retryAfter) } }
+    );
+  }
   if (!isGeminiConfigured) {
     return NextResponse.json(
       { success: false, error: "Interview feedback is unavailable until GEMINI_API_KEY is configured on the server." },
