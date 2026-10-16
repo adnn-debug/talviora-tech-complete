@@ -222,7 +222,7 @@ export default function MentorPage() {
         <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
           {messages.length === 0 && !loading && (
             <p className="mx-auto max-w-lg py-16 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-              Ask anything to begin. Your assistant follows the recent conversation and saves this chat in your browser.
+              Ask anything to begin. Your assistant follows the recent conversation and saves this chat in your browser. Questions are also shared with the Talviora admin; replies are not.
             </p>
           )}
           {messages.map((m, idx) => (
