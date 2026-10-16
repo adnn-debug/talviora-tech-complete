@@ -98,19 +98,80 @@ Return only JSON with rating (1-10), strengths (array), areasForImprovement (arr
   }>(await generateText(prompt, 0.3));
 }
 
-export async function generateMentorReply(
+export async function* streamMentorReply(
   message: string,
   history: { role: "user" | "assistant"; content: string }[] = []
-) {
-  const prompt = `
-You are TALVIORA TECH's learning and career mentor. Give practical, accurate guidance that helps a learner understand, practise, build, or apply a technology skill. Do not invent personal progress, live job information, salary data, or guaranteed outcomes. If current facts are requested, explain that no live source is connected.
-Conversation so far (earliest first):
-${history.map((item) => `${item.role === "user" ? "Learner" : "Mentor"}: ${item.content}`).join("\\n")}
-Learner's latest message: ${message}
+): AsyncGenerator<string> {
+  if (!genAI) {
+    throw new Error("Gemini is not configured. Add GEMINI_API_KEY on the server to enable AI features.");
+  }
 
-Return only JSON with reply (string) and suggestedNextStep (string). Give a thorough, well-structured answer when the question merits it; include examples and steps while staying focused.
-`;
-  return parseJson<{ reply: string; suggestedNextStep: string }>(await generateText(prompt, 0.5, 8192));
+  const prompt = [
+    "You are Talviora's capable, careful general AI assistant and learning mentor.",
+    "Answer the user's actual question regardless of topic, including technology, school, work, writing, creativity, everyday knowledge, and casual conversation. Do not refuse a harmless question because it is outside technology or career topics.",
+    "Be accurate and direct. Do not invent facts, citations, actions, memory, or personal experience. If you are uncertain, say so plainly. You have no live web access in this chat; identify when an answer may be out of date and do not present guesses as current facts.",
+    "For medical, legal, financial, or other high-stakes topics, give general information carefully and encourage checking with a qualified professional when the situation needs it.",
+    "Use a polished, friendly tone. Keep simple answers concise; give structured detail, examples, and steps when the question calls for them or the user asks for depth. Ask one focused clarification only when it is needed to answer correctly.",
+    "Conversation history (oldest first):",
+    history.slice(-40).map((item) => (item.role === "user" ? "User: " : "Assistant: ") + item.content).join("\n"),
+    "User: " + message,
+    "Assistant:"
+  ].join("\n\n");
+
+  const models = [...new Set([modelName, "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.8-flash"])];
+  let lastError: unknown;
+
+  for (let index = 0; index < models.length; index += 1) {
+    let emittedText = false;
+    try {
+      const stream = await genAI.models.generateContentStream({
+        model: models[index],
+        contents: prompt,
+        config: {
+          maxOutputTokens: 4096,
+          thinkingConfig: {
+            thinkingLevel: models[index] === "gemini-3.5-flash-lite" ? "minimal" : "low"
+          }
+        }
+      });
+      const iterator = stream[Symbol.asyncIterator]();
+      while (true) {
+        let timeoutId: ReturnType<typeof setTimeout> | undefined;
+        let next: IteratorResult<Awaited<ReturnType<typeof iterator.next>> extends IteratorResult<infer T> ? T : never>;
+        try {
+          next = await Promise.race([
+            iterator.next(),
+            new Promise<never>((_, reject) => {
+              timeoutId = setTimeout(() => reject(new Error("AI provider stream timed out.")), 30000);
+            })
+          ]);
+        } finally {
+          if (timeoutId) clearTimeout(timeoutId);
+        }
+
+        if (next.done) break;
+        const text = next.value.text;
+        if (text) {
+          emittedText = true;
+          yield text;
+        }
+      }
+
+      if (!emittedText) throw new Error("AI provider returned no text.");
+      return;
+    } catch (error) {
+      lastError = error;
+      if (emittedText) throw error;
+      const status = (error as { status?: number })?.status;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const temporarilyUnavailable = status === 429 || status === 503 ||
+        /UNAVAILABLE|high demand|timed out/i.test(errorMessage);
+      if (!temporarilyUnavailable || index === models.length - 1) throw error;
+      console.warn("Gemini model temporarily unavailable; trying the next configured fallback.");
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("AI provider request failed.");
 }
 
 export async function generatePersonalisedLearningPlan(params: {
