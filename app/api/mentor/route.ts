@@ -3,6 +3,8 @@ import { generateMentorReply, isGeminiConfigured } from "@/lib/gemini";
 import { sanitizeInput } from "@/lib/auth-server";
 import { checkRateLimit } from "@/lib/rate-limit";
 
+type ChatMessage = { role: "user" | "assistant"; content: string };
+
 export async function POST(req: Request) {
   const rateLimit = checkRateLimit(req, { limit: 15, windowSeconds: 60 });
   if (!rateLimit.allowed) {
@@ -30,12 +32,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid mentor request." }, { status: 400 });
     }
 
-    const message = sanitizeInput((body as Record<string, unknown>).message, 2000);
+    const data = body as Record<string, unknown>;
+    const message = sanitizeInput(data.message, 4000);
     if (message.length < 3) {
       return NextResponse.json({ success: false, error: "Enter a question of at least 3 characters." }, { status: 400 });
     }
 
-    const result = await generateMentorReply(message);
+    const rawHistory = Array.isArray(data.history) ? data.history : [];
+    const history: ChatMessage[] = rawHistory
+      .slice(-20)
+      .filter((item): item is Record<string, unknown> =>
+        Boolean(item && typeof item === "object" && !Array.isArray(item))
+      )
+      .filter((item) => (item.role === "user" || item.role === "assistant") && typeof item.content === "string")
+      .map((item) => ({ role: item.role as ChatMessage["role"], content: sanitizeInput(item.content, 4000) }))
+      .filter((item) => item.content.length > 0);
+
+    const result = await generateMentorReply(message, history);
     if (!result.reply?.trim()) {
       return NextResponse.json({ success: false, error: "The AI mentor returned an empty response. Please try again." }, { status: 502 });
     }
