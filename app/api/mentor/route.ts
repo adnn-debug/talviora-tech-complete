@@ -56,8 +56,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, ...result, provider: "Google Gemini" });
   } catch (error) {
     console.error("Mentor request failed:", error);
+    const providerStatus = (error as { status?: number })?.status;
+    const publicError = providerStatus === 429 || providerStatus === 503
+      ? "Gemini is temporarily busy. Your message is saved; please retry shortly."
+      : "The AI mentor could not answer right now. Your message is saved; please retry in a moment.";
     return NextResponse.json(
-      { success: false, error: "The AI mentor could not answer right now. Check provider configuration and retry." },
+      { success: false, error: publicError },
       { status: 502 }
     );
   }
