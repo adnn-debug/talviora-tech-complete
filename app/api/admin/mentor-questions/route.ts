@@ -36,7 +36,7 @@ async function getAdminClient(req: Request) {
   const email = data.user.email?.trim().toLowerCase() || "";
   const hasAdminClaim = data.user.app_metadata?.role === "admin";
   if (!email || !allowedEmails.has(email) || !hasAdminClaim) {
-    return { response: NextResponse.json({ error: "This account is not allowed to view mentor questions." }, { status: 403 }) };
+    return { response: NextResponse.json({ error: "This account is not allowed to view mentor questions. Check the Render admin email allowlist and set app_metadata.role to admin for this account in Supabase." }, { status: 403 }) };
   }
 
   return { client };
