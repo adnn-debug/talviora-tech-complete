@@ -34,7 +34,7 @@ export default function MentorPage() {
       const res = await fetch("/api/mentor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText }),
+        body: JSON.stringify({ message: userText, history: messages.slice(-40) }),
       });
       const data = await res.json();
       if (!res.ok || !data.success || !data.reply) {
@@ -98,7 +98,7 @@ export default function MentorPage() {
         <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
           {messages.length === 0 && !loading && (
             <p className="mx-auto max-w-lg py-16 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-              Ask a learning or career question to begin. Responses require a configured Gemini API key and are not based on saved learner progress.
+              Ask a learning or career question to begin. Your mentor can follow the conversation across up to 20 recent exchanges. Add a Gemini API key on the server to enable replies.
             </p>
           )}
           {messages.map((m, idx) => (
@@ -151,7 +151,7 @@ export default function MentorPage() {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your mentor about system design, code trade-offs, or career strategy..."
+            placeholder="Ask your mentor anything about learning, code, projects, or your career..."
             className="input-coffee flex-1 px-4 py-2.5 text-xs sm:text-sm bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)]"
           />
           <button
