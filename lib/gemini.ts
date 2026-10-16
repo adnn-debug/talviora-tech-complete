@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY?.trim() || "";
 export const isGeminiConfigured = Boolean(apiKey && apiKey !== "your_gemini_api_key_here");
-const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3.6-flash";
+const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3.5-flash-lite";
 
 const genAI = isGeminiConfigured ? new GoogleGenAI({ apiKey }) : null;
 
@@ -11,8 +11,7 @@ async function generateText(prompt: string, temperature: number, maxOutputTokens
     throw new Error("Gemini is not configured. Add GEMINI_API_KEY on the server to enable AI features.");
   }
 
-  const fallbackModel = modelName === "gemini-3.6-flash" ? "gemini-3.8-flash" : "gemini-3.6-flash";
-  const models = [modelName, fallbackModel];
+  const models = [...new Set([modelName, "gemini-3.6-flash", "gemini-3.8-flash", "gemini-3.5-flash-lite"])];
   let lastError: unknown;
 
   for (let index = 0; index < models.length; index += 1) {
