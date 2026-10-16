@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sparkles,
   Send,
   Bot,
   Loader2,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 
 interface Message {
@@ -14,11 +15,51 @@ interface Message {
   content: string;
 }
 
+const CHAT_STORAGE_KEY = "talviora-mentor-chat-v1";
+const MAX_SAVED_MESSAGES = 200;
+
 export default function MentorPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          const validMessages = parsed.filter((item): item is Message => {
+            if (!item || typeof item !== "object") return false;
+            const message = item as Record<string, unknown>;
+            return (message.role === "user" || message.role === "assistant") &&
+              typeof message.content === "string" && message.content.length <= 4000;
+          });
+          setMessages(validMessages.slice(-MAX_SAVED_MESSAGES));
+        }
+      }
+    } catch {
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+    } finally {
+      setHistoryLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!historyLoaded) return;
+    try {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(messages.slice(-MAX_SAVED_MESSAGES)));
+    } catch {
+      setErrorMessage("This browser could not save the chat. Check its available storage.");
+    }
+  }, [messages, historyLoaded]);
+
+  const clearChat = () => {
+    setMessages([]);
+    setErrorMessage(null);
+  };
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,6 +118,18 @@ export default function MentorPage() {
           <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
             Ask any question about programming concepts, learning steps, practical projects, or career preparation in simple language.
           </p>
+        </div>
+        <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
+          <span className="text-[11px] text-[var(--color-burgundy)]/70">Saved in this browser</span>
+          <button
+            type="button"
+            onClick={clearChat}
+            disabled={messages.length === 0}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-[rgba(var(--color-burgundy-rgb),0.15)] px-3 py-1.5 text-xs font-semibold text-[var(--color-burgundy)] hover:bg-[var(--surface-rose)] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+            <span>Clear chat</span>
+          </button>
         </div>
       </div>
 
@@ -149,6 +202,7 @@ export default function MentorPage() {
         <form onSubmit={handleSend} className="pt-4 border-t border-[rgba(var(--color-burgundy-rgb),0.12)] flex gap-2">
           <input
             type="text"
+            maxLength={4000}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask your mentor anything about learning, code, projects, or your career..."
