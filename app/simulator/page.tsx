@@ -698,7 +698,7 @@ export default function SimulatorPage() {
                 </span>
                 {activeExercise.requirements.map((req, rIdx) => (
                   <div key={rIdx} className="flex items-start gap-1.5 text-xs text-[var(--color-burgundy)]/90 font-medium">
-                    <span className="text-[var(--color-dusty-rose)] font-bold">•</span>
+                    <span className="text-[var(--color-flowering-chestnut)] font-bold">•</span>
                     <span>{req}</span>
                   </div>
                 ))}
@@ -1010,13 +1010,13 @@ export default function SimulatorPage() {
               {/* Hints & Suggested Improvements */}
               <div className="p-4 rounded-xl bg-[var(--color-creme-latte)] border border-[rgba(var(--color-burgundy-rgb),0.14)] space-y-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)] flex items-center gap-1.5">
-                  <Lightbulb className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+                  <Lightbulb className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
                   <span>Hints & Suggested Improvements</span>
                 </span>
                 <div className="space-y-1">
                   {codeCritique.suggestedImprovements.map((tip, idx) => (
                     <div key={idx} className="text-xs text-[var(--color-burgundy)]/90 font-medium flex items-start gap-1.5">
-                      <span className="text-[var(--color-dusty-rose)] font-bold">•</span>
+                      <span className="text-[var(--color-flowering-chestnut)] font-bold">•</span>
                       <span>{tip}</span>
                     </div>
                   ))}
@@ -1100,7 +1100,7 @@ export default function SimulatorPage() {
               <div className="space-y-1">
                 {activeInterviewQ.rubricKeyPoints.map((pt, idx) => (
                   <div key={idx} className="text-xs text-[var(--color-burgundy)]/90 flex items-start gap-2 font-medium">
-                    <span className="text-[var(--color-dusty-rose)] font-bold">•</span>
+                    <span className="text-[var(--color-flowering-chestnut)] font-bold">•</span>
                     <span>{pt}</span>
                   </div>
                 ))}
@@ -1199,7 +1199,7 @@ export default function SimulatorPage() {
                 {/* Improvements */}
                 <div className="space-y-3">
                   <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)] flex items-center gap-1.5">
-                    <AlertCircle className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+                    <AlertCircle className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
                     <span>Areas for Improvement</span>
                   </span>
                   <div className="space-y-2">
@@ -1219,7 +1219,7 @@ export default function SimulatorPage() {
               {interviewResult.idealTalkingPoints && (
                 <div className="p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.14)] space-y-2">
                   <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)] flex items-center gap-1.5">
-                    <Lightbulb className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+                    <Lightbulb className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
                     <span>Interviewer Pro-Tip Talking Points</span>
                   </span>
                   <div className="space-y-1">

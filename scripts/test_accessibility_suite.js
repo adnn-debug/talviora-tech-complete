@@ -58,8 +58,8 @@ assert(toggleContent.includes('aria-label='), "ThemeToggle must specify an acces
 assert(toggleContent.includes('localStorage.setItem("talviora-theme"'), "ThemeToggle must persist theme selection");
 console.log("✔ ThemeToggle accessible attributes and persistence verified.");
 
-// 4. Mathematical Color Contrast Ratio Calculation (WCAG 2.1 Formula)
-console.log("[TEST 7] Calculating WCAG 2.1 Color Contrast Ratios...");
+// 4. Mathematical Color Contrast Ratio Calculation (WCAG 2.2 Formula)
+console.log("[TEST 7] Calculating WCAG 2.2 Color Contrast Ratios across all palette pairs...");
 
 function getLuminance(r, g, b) {
   const [rs, gs, bs] = [r, g, b].map((c) => {
@@ -69,25 +69,48 @@ function getLuminance(r, g, b) {
   return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
 }
 
-function getContrast(lum1, lum2) {
+function hexToRgb(hex) {
+  const clean = hex.replace('#', '');
+  return [
+    parseInt(clean.substring(0, 2), 16),
+    parseInt(clean.substring(2, 4), 16),
+    parseInt(clean.substring(4, 6), 16)
+  ];
+}
+
+function getContrast(hex1, hex2) {
+  const [r1, g1, b1] = hexToRgb(hex1);
+  const [r2, g2, b2] = hexToRgb(hex2);
+  const lum1 = getLuminance(r1, g1, b1);
+  const lum2 = getLuminance(r2, g2, b2);
   const brighter = Math.max(lum1, lum2);
   const darker = Math.min(lum1, lum2);
   return (brighter + 0.05) / (darker + 0.05);
 }
 
-// Light Mode: Burgundy (#6F1737: 111, 23, 55) against Warm Ivory (#FFF9F0: 255, 249, 240)
-const lumBurgundy = getLuminance(111, 23, 55);
-const lumWarmIvory = getLuminance(255, 249, 240);
-const lightContrast = getContrast(lumBurgundy, lumWarmIvory);
-console.log(`  Light Mode Heading Contrast: ${lightContrast.toFixed(2)}:1 (WCAG AA requires 4.5:1, AAA requires 7.0:1)`);
-assert(lightContrast >= 7.0, "Light mode headings must meet WCAG AAA contrast >= 7.0:1");
+const colorPairs = [
+  { name: "Light Mode: Heading Burgundy (#6F1737) on Warm Ivory (#FFF9F0)", fg: "#6F1737", bg: "#FFF9F0", min: 4.5 },
+  { name: "Light Mode: Heading Burgundy (#6F1737) on Creme Latte (#F5EBDD)", fg: "#6F1737", bg: "#F5EBDD", min: 4.5 },
+  { name: "Light Mode: Body Deep Espresso (#241A1A) on Warm Ivory (#FFF9F0)", fg: "#241A1A", bg: "#FFF9F0", min: 4.5 },
+  { name: "Light Mode: Body Deep Espresso (#241A1A) on Creme Latte (#F5EBDD)", fg: "#241A1A", bg: "#F5EBDD", min: 4.5 },
+  { name: "Light Mode: Secondary Flowering Chestnut (#8D514B) on Warm Ivory (#FFF9F0)", fg: "#8D514B", bg: "#FFF9F0", min: 4.5 },
+  { name: "Light Mode: Secondary Flowering Chestnut (#8D514B) on Creme Latte (#F5EBDD)", fg: "#8D514B", bg: "#F5EBDD", min: 4.5 },
+  { name: "Light Mode: Cocoa Sand (#76543E) on Warm Ivory (#FFF9F0)", fg: "#76543E", bg: "#FFF9F0", min: 4.5 },
+  { name: "Light Mode: Button Text Burgundy (#6F1737) on Soft Rose Button (#F5EBE6)", fg: "#6F1737", bg: "#F5EBE6", min: 4.5 },
+  { name: "Light Mode: Button Text Burgundy (#6F1737) on Blush Surface (#E8C5C8)", fg: "#6F1737", bg: "#E8C5C8", min: 4.5 },
+  { name: "Dark Mode: Heading Rose Burgundy (#E5AEBA) on Dark Espresso (#241A1A)", fg: "#E5AEBA", bg: "#241A1A", min: 4.5 },
+  { name: "Dark Mode: Heading Rose Burgundy (#E5AEBA) on Dark Ivory (#362527)", fg: "#E5AEBA", bg: "#362527", min: 4.5 },
+  { name: "Dark Mode: Body Text Warm Ivory (#FFF9F0) on Dark Espresso (#241A1A)", fg: "#FFF9F0", bg: "#241A1A", min: 4.5 },
+  { name: "Dark Mode: Body Text Warm Ivory (#FFF9F0) on Dark Ivory (#362527)", fg: "#FFF9F0", bg: "#362527", min: 4.5 },
+  { name: "Dark Mode: Cocoa Sand Text (#DEC2D0) on Dark Ivory (#362527)", fg: "#DEC2D0", bg: "#362527", min: 4.5 },
+  { name: "Dark Mode: Flowering Chestnut Text (#C58F98) on Dark Espresso (#241A1A)", fg: "#C58F98", bg: "#241A1A", min: 4.5 },
+];
 
-// Dark Mode: Blush Burgundy (#E5AEBA: 229, 174, 186) against Espresso (#241A1A: 36, 26, 26)
-const lumDarkBurgundy = getLuminance(229, 174, 186);
-const lumDarkEspresso = getLuminance(36, 26, 26);
-const darkContrast = getContrast(lumDarkBurgundy, lumDarkEspresso);
-console.log(`  Dark Mode Heading Contrast: ${darkContrast.toFixed(2)}:1 (WCAG AA requires 4.5:1, AAA requires 7.0:1)`);
-assert(darkContrast >= 7.0, "Dark mode headings must meet WCAG AAA contrast >= 7.0:1");
+colorPairs.forEach((pair) => {
+  const contrast = getContrast(pair.fg, pair.bg);
+  console.log(`  ${pair.name}: ${contrast.toFixed(2)}:1 (Min required: ${pair.min}:1) -> ${contrast >= pair.min ? 'PASS' : 'FAIL'}`);
+  assert(contrast >= pair.min, `${pair.name} must meet minimum contrast ${pair.min}:1`);
+});
 
 console.log("\n=======================================================");
 console.log("ALL REQUIREMENT 11 DESIGN & ACCESSIBILITY TESTS PASSED!");

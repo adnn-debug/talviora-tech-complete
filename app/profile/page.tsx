@@ -195,7 +195,7 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex items-center gap-1.5 text-xs text-[var(--color-burgundy)] font-semibold">
-          <ShieldCheck className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+          <ShieldCheck className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
           <span>
             {authStatus === "authenticated"
               ? userEmail ? `Signed in: ${userEmail}` : "Cloud profile connected"

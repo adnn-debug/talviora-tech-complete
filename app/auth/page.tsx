@@ -117,7 +117,7 @@ export default function AuthPage() {
           </div>
 
           <span className="flex items-center gap-1 text-[11px] text-[var(--color-burgundy)] font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-dusty-rose)]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)]" />
             <span>Supabase Auth</span>
           </span>
         </div>
@@ -146,7 +146,7 @@ export default function AuthPage() {
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-[var(--color-dusty-rose)] absolute left-3 top-3" />
+              <Mail className="w-4 h-4 text-[var(--color-flowering-chestnut)] absolute left-3 top-3" />
               <input
                 type="email"
                 id="auth-email"
@@ -154,7 +154,7 @@ export default function AuthPage() {
                 placeholder="developer@talviora.tech"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] placeholder:text-[var(--color-burgundy)]/40 focus:border-[var(--color-burgundy)] focus:outline-hidden transition shadow-xs"
+                className="w-full pl-9 pr-3.5 py-2.5 text-xs rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] placeholder:text-[var(--color-flowering-chestnut)] focus:border-[var(--color-burgundy)] focus:outline-hidden transition shadow-xs"
               />
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function AuthPage() {
               Password
             </label>
             <div className="relative">
-              <KeyRound className="w-4 h-4 text-[var(--color-dusty-rose)] absolute left-3 top-3" />
+              <KeyRound className="w-4 h-4 text-[var(--color-flowering-chestnut)] absolute left-3 top-3" />
               <input
                 type="password"
                 id="auth-password"

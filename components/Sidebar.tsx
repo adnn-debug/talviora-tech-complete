@@ -165,7 +165,7 @@ export default function Sidebar() {
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           isActive
                             ? "text-[var(--color-burgundy)]"
-                            : "text-[var(--color-dusty-rose)] group-hover:text-[var(--color-burgundy)]"
+                            : "text-[var(--color-flowering-chestnut)] group-hover:text-[var(--color-burgundy)]"
                         }`}
                       />
                       <span className="truncate">{item.label}</span>

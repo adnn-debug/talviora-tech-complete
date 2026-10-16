@@ -145,13 +145,13 @@ export default function DsaTrackerPage() {
 
         {/* Search */}
         <div className="relative">
-          <Search className="w-4 h-4 text-[var(--color-dusty-rose)] absolute left-3 top-2.5" />
+          <Search className="w-4 h-4 text-[var(--color-flowering-chestnut)] absolute left-3 top-2.5" />
           <input
             type="text"
             placeholder="Search pattern or problem..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 pr-4 py-2 text-xs w-full sm:w-64 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] placeholder:text-[var(--color-burgundy)]/40 focus:border-[var(--color-burgundy)] focus:outline-hidden transition shadow-xs"
+            className="pl-9 pr-4 py-2 text-xs w-full sm:w-64 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-[var(--color-burgundy)] placeholder:text-[var(--color-flowering-chestnut)] focus:border-[var(--color-burgundy)] focus:outline-hidden transition shadow-xs"
           />
         </div>
       </div>
@@ -192,7 +192,7 @@ export default function DsaTrackerPage() {
                 <button
                   onClick={() => toggleSolved(pattern.id)}
                   aria-pressed={pattern.solved}
-                  className="cursor-pointer text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] transition-colors"
+                  className="cursor-pointer text-[var(--color-flowering-chestnut)] hover:text-[var(--color-burgundy)] transition-colors"
                   aria-label={`Toggle ${pattern.name}`}
                 >
                   {pattern.solved ? (

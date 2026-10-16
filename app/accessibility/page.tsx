@@ -19,7 +19,7 @@ export default function AccessibilityPage() {
 
         <section className="space-y-2">
           <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)] flex items-center gap-2">
-            <Eye className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+            <Eye className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
             <span>1. Color Contrast & Theme Balance</span>
           </h2>
           <p>
@@ -29,7 +29,7 @@ export default function AccessibilityPage() {
 
         <section className="space-y-2">
           <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)] flex items-center gap-2">
-            <Keyboard className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+            <Keyboard className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
             <span>2. Keyboard Navigation & Visible Focus Rings</span>
           </h2>
           <p>
@@ -39,7 +39,7 @@ export default function AccessibilityPage() {
 
         <section className="space-y-2">
           <h2 className="font-display-serif font-bold text-base text-[var(--color-burgundy)] flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+            <ShieldCheck className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
             <span>3. Touch Targets & Responsive Layouts</span>
           </h2>
           <p>

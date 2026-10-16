@@ -211,7 +211,7 @@ export default function ResultsPage() {
         {/* Growth Pillars */}
         <div className="card-coffee p-6 space-y-4 bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.14)]">
           <div className="flex items-center gap-2 pb-3 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
-            <AlertCircle className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+            <AlertCircle className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
             <h2 className="text-xs font-bold uppercase tracking-wider text-[var(--color-burgundy)]">
               Priority Growth Pillars
             </h2>
@@ -241,7 +241,7 @@ export default function ResultsPage() {
               className="p-4 rounded-xl border border-[rgba(var(--color-burgundy-rgb),0.12)] bg-[var(--color-warm-ivory)] space-y-2 shadow-xs"
             >
               <div className="flex items-center gap-2 text-xs font-bold text-[var(--color-burgundy)]">
-                <FolderGit2 className="w-4 h-4 text-[var(--color-dusty-rose)]" />
+                <FolderGit2 className="w-4 h-4 text-[var(--color-flowering-chestnut)]" />
                 <span>{proj}</span>
               </div>
               <p className="text-[11px] text-[var(--color-burgundy)]/80 font-normal">

@@ -88,7 +88,7 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1 text-[var(--color-burgundy)] font-semibold">
-              <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-dusty-rose)]" /> WCAG 2.1 AA Accessible
+              <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)]" /> WCAG 2.1 AA Accessible
             </span>
             <span>•</span>
             <span>7 Navigation Groups</span>

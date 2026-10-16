@@ -306,8 +306,8 @@
   gap: 0.5rem;
   min-height: 2.625rem;
   padding: 0.625rem 1.25rem;
-  background-color: var(--color-dusty-rose);
-  border: 1px solid rgba(var(--color-burgundy-rgb), 0.2);
+  background-color: var(--surface-rose);
+  border: 1px solid rgba(var(--color-burgundy-rgb), 0.25);
   color: var(--color-burgundy);
   font-weight: 600;
   font-size: 0.875rem;
@@ -317,8 +317,8 @@
 }
 
 .btn-secondary-coffee:hover {
-  background-color: var(--color-powder-blush);
-  color: var(--color-burgundy);
+  background-color: var(--color-burgundy);
+  color: var(--color-warm-ivory);
   border-color: var(--color-burgundy);
   transform: translateY(-1px);
 }
@@ -370,7 +370,7 @@
 }
 
 .input-coffee::placeholder {
-  color: rgba(var(--color-burgundy-rgb), 0.45);
+  color: var(--color-flowering-chestnut);
 }
 
 .input-coffee:focus {
