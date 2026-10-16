@@ -22,6 +22,7 @@ export default function MentorPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [responseStarted, setResponseStarted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [historyLoaded, setHistoryLoaded] = useState(false);
 
@@ -73,6 +74,7 @@ export default function MentorPage() {
     const userText = input;
     setInput("");
     setErrorMessage(null);
+    setResponseStarted(false);
     const updatedMessages = [...messages, { role: "user" as const, content: userText }];
     try {
       localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(updatedMessages.slice(-MAX_SAVED_MESSAGES)));
@@ -88,26 +90,84 @@ export default function MentorPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText, history: messages.slice(-40) }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success || !data.reply) {
-        setErrorMessage(data?.error || "The AI mentor is unavailable. Try again after provider configuration is checked.");
-      } else {
-        const reply = data.suggestedNextStep
-          ? `${data.reply}\n\nSuggested next step: ${data.suggestedNextStep}`
-          : data.reply;
-        setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        setErrorMessage(data?.error || "The AI could not answer right now. Please try again.");
+        return;
       }
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("Streaming is not supported by this connection.");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let streamedReply = "";
+      let streamError: string | null = null;
+
+      const handleFrame = (frame: string) => {
+        const line = frame.split(/\r?\n/).find((item) => item.startsWith("data:"));
+        if (!line) return;
+        try {
+          const event = JSON.parse(line.slice(5).trim()) as { text?: string; error?: string };
+          if (event.text) {
+            streamedReply += event.text;
+            setResponseStarted(true);
+            setMessages((prev) => {
+              const last = prev[prev.length - 1];
+              if (last?.role === "assistant") {
+                return [...prev.slice(0, -1), { role: "assistant", content: streamedReply }];
+              }
+              return [...prev, { role: "assistant", content: streamedReply }];
+            });
+          }
+          if (event.error) streamError = event.error;
+        } catch {
+          streamError = "The AI response could not be read. Please try again.";
+        }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (value) buffer += decoder.decode(value, { stream: !done });
+        if (done) buffer += decoder.decode();
+
+        const frames = buffer.split(/\r?\n\r?\n/);
+        buffer = frames.pop() || "";
+        frames.forEach(handleFrame);
+
+        if (done) {
+          if (buffer.trim()) handleFrame(buffer);
+          break;
+        }
+      }
+
+      if (streamError) setErrorMessage(streamError);
+      if (!streamedReply && !streamError) {
+        setErrorMessage("The AI returned an empty reply. Please try again.");
+      }
+
+      const completedMessages = streamedReply
+        ? [...updatedMessages, { role: "assistant" as const, content: streamedReply }]
+        : updatedMessages;
+      try {
+        localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(completedMessages.slice(-MAX_SAVED_MESSAGES)));
+      } catch {
+        setErrorMessage("This browser could not save the chat. Check its available storage.");
+      }
+      setMessages(completedMessages);
     } catch {
-      setErrorMessage("The AI mentor service could not be reached. Your question was not answered.");
+      setErrorMessage("The AI service could not be reached. Your message is saved; please try again.");
     } finally {
       setLoading(false);
+      setResponseStarted(false);
     }
   };
 
   const samplePrompts = [
-    "What are the top 3 architectural trade-offs in enterprise RAG?",
-    "How should I structure a weekly study schedule?",
-    "How do I explain model quantization during a technical screen?",
+    "Explain a difficult idea in simple language.",
+    "Help me solve a problem step by step.",
+    "Ask me anything about tech, study, writing, or everyday life.",
   ];
 
   return (
@@ -120,14 +180,14 @@ export default function MentorPage() {
               <Sparkles className="w-4 h-4 text-[var(--color-burgundy)]" />
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-burgundy)]">
-              Your AI Learning Guide
+              Your AI Assistant & Learning Mentor
             </span>
           </div>
           <h1 className="font-display-serif text-3xl sm:text-4xl font-bold text-[var(--color-burgundy)]">
-            Your AI Learning Guide & Career Mentor
+            AI Assistant & Learning Mentor
           </h1>
           <p className="text-xs text-[var(--color-burgundy)]/85 mt-0.5 font-medium">
-            Ask any question about programming concepts, learning steps, practical projects, or career preparation in simple language.
+            Ask about technology, study, work, writing, everyday questions, or anything else. The assistant will be clear when it is unsure.
           </p>
         </div>
         <div className="flex flex-col items-start sm:items-end gap-2 shrink-0">
@@ -162,7 +222,7 @@ export default function MentorPage() {
         <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
           {messages.length === 0 && !loading && (
             <p className="mx-auto max-w-lg py-16 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-              Ask a learning or career question to begin. Your mentor can follow the conversation across up to 20 recent exchanges. This chat is saved in this browser.
+              Ask anything to begin. Your assistant follows the recent conversation and saves this chat in your browser.
             </p>
           )}
           {messages.map((m, idx) => (
@@ -179,7 +239,7 @@ export default function MentorPage() {
               )}
 
               <div
-                className={`p-4 rounded-2xl max-w-xl text-xs sm:text-sm leading-relaxed ${
+                className={`p-4 rounded-2xl max-w-xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap break-words ${
                   m.role === "user"
                     ? "bg-[var(--color-burgundy)] text-[var(--color-warm-ivory)] rounded-tr-xs font-medium"
                     : "bg-[var(--color-creme-latte)] border border-[rgba(var(--color-burgundy-rgb),0.12)] text-[var(--color-burgundy)] rounded-tl-xs font-medium"
@@ -203,7 +263,7 @@ export default function MentorPage() {
               </div>
               <div className="p-3.5 rounded-2xl bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-xs text-[var(--color-burgundy)] flex items-center gap-2 font-medium">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[var(--color-burgundy)]" />
-                <span>Waiting for AI mentor response…</span>
+                <span>{responseStarted ? "Writing your answer…" : "Connecting to AI…"}</span>
               </div>
             </div>
           )}
@@ -216,7 +276,7 @@ export default function MentorPage() {
             maxLength={4000}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask your mentor anything about learning, code, projects, or your career..."
+            placeholder="Ask anything… technology, writing, study, work, or everyday questions"
             className="input-coffee flex-1 px-4 py-2.5 text-xs sm:text-sm bg-[var(--color-warm-ivory)] text-[var(--color-burgundy)]"
           />
           <button
