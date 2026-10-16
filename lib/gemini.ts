@@ -6,7 +6,7 @@ const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-2.5-flash";
 
 const genAI = isGeminiConfigured ? new GoogleGenAI({ apiKey }) : null;
 
-async function generateText(prompt: string, temperature: number) {
+async function generateText(prompt: string, temperature: number, maxOutputTokens?: number) {
   if (!genAI) {
     throw new Error("Gemini is not configured. Add GEMINI_API_KEY on the server to enable AI features.");
   }
@@ -17,7 +17,7 @@ async function generateText(prompt: string, temperature: number) {
       genAI.models.generateContent({
         model: modelName,
         contents: prompt,
-        config: { temperature, responseMimeType: "application/json" },
+        config: { temperature, responseMimeType: "application/json", ...(maxOutputTokens ? { maxOutputTokens } : {}) },
       }),
       new Promise<never>((_, reject) => {
         timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 12000);
@@ -84,14 +84,19 @@ Return only JSON with rating (1-10), strengths (array), areasForImprovement (arr
   }>(await generateText(prompt, 0.3));
 }
 
-export async function generateMentorReply(message: string) {
+export async function generateMentorReply(
+  message: string,
+  history: { role: "user" | "assistant"; content: string }[] = []
+) {
   const prompt = `
-You are TALVIORA TECH's learning and career mentor. Give a concise, practical answer that helps a learner understand, practise, build, or apply a technology skill. Do not invent personal progress, live job information, salary data, or guaranteed outcomes. If current facts are requested, explain that no live source is connected.
-Learner message: ${message}
+You are TALVIORA TECH's learning and career mentor. Give practical, accurate guidance that helps a learner understand, practise, build, or apply a technology skill. Do not invent personal progress, live job information, salary data, or guaranteed outcomes. If current facts are requested, explain that no live source is connected.
+Conversation so far (earliest first):
+${history.map((item) => `${item.role === "user" ? "Learner" : "Mentor"}: ${item.content}`).join("\\n")}
+Learner's latest message: ${message}
 
-Return only JSON with reply (string) and suggestedNextStep (string).
+Return only JSON with reply (string) and suggestedNextStep (string). Give a thorough, well-structured answer when the question merits it; include examples and steps while staying focused.
 `;
-  return parseJson<{ reply: string; suggestedNextStep: string }>(await generateText(prompt, 0.5));
+  return parseJson<{ reply: string; suggestedNextStep: string }>(await generateText(prompt, 0.5, 8192));
 }
 
 export async function generatePersonalisedLearningPlan(params: {
