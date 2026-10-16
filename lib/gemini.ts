@@ -11,23 +11,39 @@ async function generateText(prompt: string, temperature: number, maxOutputTokens
     throw new Error("Gemini is not configured. Add GEMINI_API_KEY on the server to enable AI features.");
   }
 
-  let timeoutId: ReturnType<typeof setTimeout> | undefined;
-  try {
-    const result = await Promise.race([
-      genAI.models.generateContent({
-        model: modelName,
-        contents: prompt,
-        config: { temperature, responseMimeType: "application/json", ...(maxOutputTokens ? { maxOutputTokens } : {}) },
-      }),
-      new Promise<never>((_, reject) => {
-        timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 12000);
-      }),
-    ]);
-    if (!result.text) throw new Error("AI provider returned no text.");
-    return result.text;
-  } finally {
-    if (timeoutId) clearTimeout(timeoutId);
+  const models = modelName === "gemini-3.6-flash"
+    ? [modelName]
+    : [modelName, "gemini-3.6-flash"];
+  let lastError: unknown;
+
+  for (let index = 0; index < models.length; index += 1) {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    try {
+      const result = await Promise.race([
+        genAI.models.generateContent({
+          model: models[index],
+          contents: prompt,
+          config: { temperature, responseMimeType: "application/json", ...(maxOutputTokens ? { maxOutputTokens } : {}) },
+        }),
+        new Promise<never>((_, reject) => {
+          timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 12000);
+        }),
+      ]);
+      if (!result.text) throw new Error("AI provider returned no text.");
+      return result.text;
+    } catch (error) {
+      lastError = error;
+      const status = (error as { status?: number }).status;
+      const message = error instanceof Error ? error.message : String(error);
+      const temporarilyUnavailable = status === 429 || status === 503 || /UNAVAILABLE|high demand/i.test(message);
+      if (!temporarilyUnavailable || index === models.length - 1) throw error;
+      console.warn(`Gemini model ${models[index]} is temporarily unavailable; retrying with ${models[index + 1]}.`);
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
+    }
   }
+
+  throw lastError instanceof Error ? lastError : new Error("AI provider request failed.");
 }
 
 function parseJson<T>(rawText: string): T {
