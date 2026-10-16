@@ -222,7 +222,7 @@ export default function MentorPage() {
         <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
           {messages.length === 0 && !loading && (
             <p className="mx-auto max-w-lg py-16 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-              Ask anything to begin. Your assistant follows the recent conversation and saves this chat in your browser. Questions are also shared with the Talviora admin; replies are not.
+              Ask anything to begin. Your assistant follows the recent conversation and saves this chat in your browser. Questions are also shared with the Talviora admin; AI replies are not shown there.
             </p>
           )}
           {messages.map((m, idx) => (
@@ -268,6 +268,8 @@ export default function MentorPage() {
             </div>
           )}
         </div>
+
+        <p className="pt-3 text-[11px] leading-relaxed text-[var(--text-secondary)]" role="note">Questions are shared with the Talviora admin for service review. AI replies are not included in the admin inbox. Please avoid sensitive personal details.</p>
 
         {/* Input Bar */}
         <form onSubmit={handleSend} className="pt-4 border-t border-[rgba(var(--color-burgundy-rgb),0.12)] flex gap-2">
