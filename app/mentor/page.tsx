@@ -269,7 +269,7 @@ export default function MentorPage() {
           )}
         </div>
 
-        <p className="pt-3 text-[11px] leading-relaxed text-[var(--text-secondary)]" role="note">Questions are shared with the Talviora admin for service review. AI replies are not included in the admin inbox. Please avoid sensitive personal details.</p>
+        <p className="pt-3 text-[11px] leading-relaxed text-[var(--text-secondary)]" role="note">When the admin inbox is enabled, your question is saved for authorized Talviora admins to review. AI replies are not included in that inbox. Please avoid sensitive personal details.</p>
 
         {/* Input Bar */}
         <form onSubmit={handleSend} className="pt-4 border-t border-[rgba(var(--color-burgundy-rgb),0.12)] flex gap-2">
