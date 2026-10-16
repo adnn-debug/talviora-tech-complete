@@ -57,6 +57,11 @@ export default function MentorPage() {
   }, [messages, historyLoaded]);
 
   const clearChat = () => {
+    try {
+      localStorage.removeItem(CHAT_STORAGE_KEY);
+    } catch {
+      setErrorMessage("This browser could not clear the saved chat.");
+    }
     setMessages([]);
     setErrorMessage(null);
   };
@@ -68,7 +73,13 @@ export default function MentorPage() {
     const userText = input;
     setInput("");
     setErrorMessage(null);
-    setMessages((prev) => [...prev, { role: "user", content: userText }]);
+    const updatedMessages = [...messages, { role: "user" as const, content: userText }];
+    try {
+      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(updatedMessages.slice(-MAX_SAVED_MESSAGES)));
+    } catch {
+      setErrorMessage("This browser could not save the chat. Check its available storage.");
+    }
+    setMessages(updatedMessages);
     setLoading(true);
 
     try {
@@ -151,7 +162,7 @@ export default function MentorPage() {
         <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
           {messages.length === 0 && !loading && (
             <p className="mx-auto max-w-lg py-16 text-center text-sm leading-relaxed text-[var(--text-secondary)]">
-              Ask a learning or career question to begin. Your mentor can follow the conversation across up to 20 recent exchanges. Add a Gemini API key on the server to enable replies.
+              Ask a learning or career question to begin. Your mentor can follow the conversation across up to 20 recent exchanges. This chat is saved in this browser.
             </p>
           )}
           {messages.map((m, idx) => (
