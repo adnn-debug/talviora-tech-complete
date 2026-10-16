@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import {
   UserCheck,
   Save,
@@ -11,46 +12,145 @@ import {
   RefreshCw,
   Github,
   Linkedin,
+  LogIn,
+  AlertCircle,
+  Info,
+  Loader2,
 } from "lucide-react";
 import { initialUserProfile, careerRolesList } from "@/lib/career-data";
 import { UserProfile } from "@/lib/types";
 import { fetchWithAuth } from "@/lib/api-client";
+import { supabase } from "@/lib/supabase";
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile>(initialUserProfile);
+  const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "guest" | "expired">("loading");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [isEmptyProfile, setIsEmptyProfile] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Attempt fetching saved profile
-    fetchWithAuth("/api/profile")
-      .then(async (res) => ({ ok: res.ok, data: await res.json() }))
-      .then(({ ok, data }) => {
-        if (ok && data.profile) {
-          setProfile(data.profile);
-        } else if (!ok && !data?.isGuest) {
-          setSaveError(data?.error || "Sign in and configure profile storage to load account details.");
+    let isMounted = true;
+
+    async function loadAccountAndProfile() {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (!isMounted) return;
+
+        if (error || !data?.session?.user) {
+          // Logged-out / Guest state: Do NOT dispatch unauthenticated network request
+          setAuthStatus("guest");
+          return;
         }
-      })
-      .catch(() => setSaveError("Could not load your profile from the account service."));
+
+        const session = data.session;
+        setAuthStatus("authenticated");
+        setUserEmail(session.user.email || null);
+
+        // Fetch user's profile with verified access token
+        const res = await fetchWithAuth("/api/profile", {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (!isMounted) return;
+
+        if (res.status === 401) {
+          setAuthStatus("expired");
+          setSaveError("Your session has expired. Please sign in again to access and save your cloud profile.");
+          return;
+        }
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          setSaveError(errData?.error || "Could not load saved profile from the account service.");
+          return;
+        }
+
+        const json = await res.json();
+        if (json.profile) {
+          setProfile(json.profile);
+          setIsEmptyProfile(false);
+        } else {
+          // Empty profile in database (row not yet created for this user)
+          setIsEmptyProfile(true);
+          if (session.user.email) {
+            setProfile((prev) => ({ ...prev, email: session.user.email || prev.email }));
+          }
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.warn("Profile load error:", err);
+          setSaveError("Network connection error: Unable to reach the profile service.");
+        }
+      } finally {
+        if (isMounted) {
+          setAuthStatus((prev) => (prev === "loading" ? "guest" : prev));
+        }
+      }
+    }
+
+    loadAccountAndProfile();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!isMounted) return;
+      if (event === "SIGNED_OUT") {
+        setAuthStatus("guest");
+        setUserEmail(null);
+        setProfile(initialUserProfile);
+        setIsEmptyProfile(false);
+        setSaveError(null);
+      } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+        if (session?.user) {
+          setAuthStatus("authenticated");
+          setUserEmail(session.user.email || null);
+          setSaveError(null);
+        }
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
     setSavedSuccess(false);
     setSaveError(null);
 
+    if (authStatus === "guest") {
+      setSaveError("You are currently in Guest Mode. Please sign in to save your profile to the cloud.");
+      return;
+    }
+
+    if (authStatus === "expired") {
+      setSaveError("Your session has expired. Please sign in again to save changes.");
+      return;
+    }
+
+    setIsSaving(true);
     try {
       const res = await fetchWithAuth("/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...profile, weeklyHours: profile.weeklyHours > 0 ? profile.weeklyHours : undefined }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+
+      if (res.status === 401) {
+        setAuthStatus("expired");
+        setSaveError("Your session has expired. Please sign in again to save changes.");
+        return;
+      }
+
       if (res.ok && data.success && data.persisted) {
         setSavedSuccess(true);
+        setIsEmptyProfile(false);
         if (data.profile) setProfile(data.profile);
         setTimeout(() => setSavedSuccess(false), 3500);
       } else {
@@ -96,9 +196,66 @@ export default function ProfilePage() {
 
         <div className="flex items-center gap-1.5 text-xs text-[var(--color-burgundy)] font-semibold">
           <ShieldCheck className="w-4 h-4 text-[var(--color-dusty-rose)]" />
-          <span>Profile details appear after you save or load them</span>
+          <span>
+            {authStatus === "authenticated"
+              ? userEmail ? `Signed in: ${userEmail}` : "Cloud profile connected"
+              : authStatus === "loading"
+              ? "Initializing session..."
+              : "Guest Mode (Local session)"}
+          </span>
         </div>
       </div>
+
+      {authStatus === "loading" && (
+        <div className="flex items-center gap-2.5 p-3.5 rounded-xl bg-[var(--surface-rose)] border border-[var(--border-warm)] text-[var(--color-burgundy)] text-xs font-semibold shadow-2xs">
+          <Loader2 className="w-4 h-4 animate-spin shrink-0 text-[var(--color-burgundy)]" />
+          <span>Checking account authentication status...</span>
+        </div>
+      )}
+
+      {authStatus === "guest" && (
+        <div className="p-4 rounded-xl bg-[var(--surface-rose)] border border-[var(--border-warm)] text-[var(--text-primary)] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <Info className="w-4 h-4 text-[var(--color-burgundy)] shrink-0" />
+            <div>
+              <span className="font-bold text-[var(--color-burgundy)]">Guest Mode Active:</span>{" "}
+              Settings can be adjusted locally for this session. Sign in to sync your candidate profile across devices.
+            </div>
+          </div>
+          <Link
+            href="/auth"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg btn-burgundy text-xs font-semibold whitespace-nowrap self-start sm:self-auto"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span>Sign In / Create Account</span>
+          </Link>
+        </div>
+      )}
+
+      {authStatus === "expired" && (
+        <div className="p-4 rounded-xl bg-[var(--surface-rose)] border border-[var(--color-burgundy)] text-[var(--color-burgundy)] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs" role="alert">
+          <div className="flex items-center gap-2.5">
+            <AlertCircle className="w-4 h-4 text-[var(--color-burgundy)] shrink-0" />
+            <div>
+              <span className="font-bold">Session Expired:</span> Please sign in again to load or save your personal data.
+            </div>
+          </div>
+          <Link
+            href="/auth"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg btn-burgundy text-xs font-semibold whitespace-nowrap self-start sm:self-auto"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span>Sign In Again</span>
+          </Link>
+        </div>
+      )}
+
+      {isEmptyProfile && authStatus === "authenticated" && (
+        <div className="p-3.5 rounded-xl bg-[var(--surface-rose)] border border-[var(--border-warm)] text-[var(--color-burgundy)] text-xs font-medium flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-[var(--color-burgundy)] shrink-0" />
+          <span>New account detected. Complete your target role and study capacity below, then click Save Profile to create your cloud record.</span>
+        </div>
+      )}
 
       {savedSuccess && (
         <div className="p-3.5 rounded-xl bg-[var(--surface-rose)] border border-[var(--color-dusty-rose)]/40 text-[var(--color-burgundy)] text-xs font-semibold flex items-center gap-2 shadow-2xs">
@@ -260,7 +417,7 @@ export default function ProfilePage() {
             className="btn-burgundy px-6 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition flex items-center gap-2 shadow-xs cursor-pointer"
           >
             <Save className="w-4 h-4" />
-            <span>{isSaving ? "Saving..." : "Save profile"}</span>
+            <span>{isSaving ? "Saving..." : authStatus === "guest" ? "Save profile (Sign in required)" : "Save profile"}</span>
           </button>
         </div>
       </form>

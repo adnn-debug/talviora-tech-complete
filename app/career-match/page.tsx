@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, Check, ChevronRight, Compass } from "lucide-react";
 import { careerRolesList } from "@/lib/career-data";
 import { fetchWithAuth } from "@/lib/api-client";
+import { supabase } from "@/lib/supabase";
 
 const categories = ["All", "AI & ML", "Software Engineering", "Data & Quant", "Systems & Security"];
 
@@ -16,8 +17,13 @@ export default function CareerMatchPage() {
 
   const handleSetTarget = async (roleTitle: string) => {
     setActiveTargetRole(roleTitle);
-    setMessage("Selected for this visit. Sign in and configure Supabase to save it to your profile.");
+    setMessage("Selected for this visit. Sign in to save it to your cloud profile.");
     try {
+      const { data: authData } = await supabase.auth.getSession();
+      if (!authData?.session) {
+        // Guest mode: Selected in-memory for this session without firing an unauthenticated network request
+        return;
+      }
       const response = await fetchWithAuth("/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
