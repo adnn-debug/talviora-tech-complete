@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
     const rawHistory = Array.isArray(data.history) ? data.history : [];
     const history: ChatMessage[] = rawHistory
-      .slice(-20)
+      .slice(-40)
       .filter((item): item is Record<string, unknown> =>
         Boolean(item && typeof item === "object" && !Array.isArray(item))
       )
