@@ -148,6 +148,7 @@ export default function Sidebar() {
                   <Link
                     key={item.label}
                     href={item.href}
+                    prefetch={false}
                     className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)] ${
                       isActive
                         ? "bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[var(--color-burgundy)] shadow-xs"

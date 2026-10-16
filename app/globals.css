@@ -106,7 +106,7 @@
   body {
     background-color: var(--bg-workspace);
     color: var(--text-primary);
-    font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -119,20 +119,20 @@
    ========================================================================== */
 .font-display-serif,
 .font-serif {
-  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-family: var(--font-dm-serif), 'DM Serif Display', 'Playfair Display', Georgia, serif;
   letter-spacing: -0.015em;
 }
 
 .font-sans-ui {
-  font-family: 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-dm-sans), 'DM Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .font-mono-code {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
 }
 
 .title-hero-editorial {
-  font-family: 'DM Serif Display', 'Playfair Display', Georgia, serif;
+  font-family: var(--font-dm-serif), 'DM Serif Display', 'Playfair Display', Georgia, serif;
   font-size: clamp(2.375rem, 4.5vw, 2.875rem); /* 38-46px */
   line-height: 1.15;
   color: var(--heading-primary);

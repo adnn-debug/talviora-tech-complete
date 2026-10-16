@@ -8,7 +8,11 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "@/components/Footer";
-import CommandPalette from "@/components/CommandPalette";
+import dynamic from "next/dynamic";
+
+const CommandPalette = dynamic(() => import("@/components/CommandPalette"), {
+  ssr: false,
+});
 
 const publicRoutes = new Set([
   "/welcome",

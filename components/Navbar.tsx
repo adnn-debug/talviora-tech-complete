@@ -154,6 +154,7 @@ export default function Navbar() {
           {/* Candidate Profile Pill */}
           <Link
             href="/profile"
+            prefetch={false}
             className="flex items-center gap-2 p-1.5 pr-2.5 rounded-full border border-[rgba(var(--color-burgundy-rgb),0.15)] bg-[var(--color-warm-ivory)] hover:border-[var(--color-burgundy)] transition group"
             title="Learner Profile"
           >
