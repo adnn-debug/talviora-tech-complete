@@ -6,6 +6,8 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  compress: true,
+  poweredByHeader: false,
   webpack(config) {
     config.resolve.alias["@"] = projectRoot;
     return config;

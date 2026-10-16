@@ -102,7 +102,7 @@ export default function Navbar() {
               <span className="font-display-serif font-bold text-base tracking-wider text-[var(--color-burgundy)]">
                 TALVIORA
               </span>
-              <span className="text-[9px] uppercase tracking-widest font-bold text-[var(--color-dusty-rose)]">
+              <span className="text-[9px] uppercase tracking-widest font-bold text-[var(--color-flowering-chestnut)]">
                 Career Intelligence
               </span>
             </div>

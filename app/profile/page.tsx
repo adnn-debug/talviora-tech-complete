@@ -27,8 +27,11 @@ export default function ProfilePage() {
     fetchWithAuth("/api/profile")
       .then(async (res) => ({ ok: res.ok, data: await res.json() }))
       .then(({ ok, data }) => {
-        if (ok && data.profile) setProfile(data.profile);
-        else if (!ok) setSaveError(data?.error || "Sign in and configure profile storage to load account details.");
+        if (ok && data.profile) {
+          setProfile(data.profile);
+        } else if (!ok && !data?.isGuest) {
+          setSaveError(data?.error || "Sign in and configure profile storage to load account details.");
+        }
       })
       .catch(() => setSaveError("Could not load your profile from the account service."));
   }, []);

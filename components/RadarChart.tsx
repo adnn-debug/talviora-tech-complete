@@ -159,8 +159,8 @@ export default function RadarChart({
           <span className="text-[var(--color-burgundy)]">Your Current Acumen</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-0.5 border-t-2 border-dashed border-[var(--color-dusty-rose)]"></span>
-          <span className="text-[var(--color-dusty-rose)]">Target Role Benchmark</span>
+          <span className="w-3 h-0.5 border-t-2 border-dashed border-[var(--color-flowering-chestnut)]"></span>
+          <span className="text-[var(--color-flowering-chestnut)]">Target Role Benchmark</span>
         </div>
       </div>
     </div>

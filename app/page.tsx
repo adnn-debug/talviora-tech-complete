@@ -842,7 +842,7 @@ export default function Home() {
               >
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono-code text-[10px] font-bold text-[var(--color-dusty-rose)]">
+                    <span className="font-mono-code text-[10px] font-bold text-[var(--color-flowering-chestnut)]">
                       {step.num}
                     </span>
                     <Icon className="w-3.5 h-3.5 text-[var(--color-burgundy)]/70" />

@@ -942,7 +942,7 @@ export default function SimulatorPage() {
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-dusty-rose)]">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-flowering-chestnut)]">
                     Step 7 of 8 • Explain and Improve
                   </span>
                   <h3 className="text-lg font-display-serif font-bold text-[var(--color-burgundy)] mt-0.5">
@@ -1159,7 +1159,7 @@ export default function SimulatorPage() {
             <div className="card-coffee p-6 sm:p-8 space-y-6 animate-in slide-in-from-bottom duration-300 border border-[rgba(var(--color-burgundy-rgb),0.14)] bg-[var(--color-warm-ivory)]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[rgba(var(--color-burgundy-rgb),0.12)]">
                 <div>
-                  <span className="text-xs font-bold uppercase text-[var(--color-dusty-rose)]">
+                  <span className="text-xs font-bold uppercase text-[var(--color-flowering-chestnut)]">
                     AI Interviewer Critique
                   </span>
                   <h3 className="text-lg font-display-serif font-bold text-[var(--color-burgundy)] mt-0.5">

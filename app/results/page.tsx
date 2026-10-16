@@ -136,7 +136,7 @@ export default function ResultsPage() {
               style={{ width: `${readiness}%` }}
             />
           </div>
-          <span className="text-[10px] text-[var(--color-dusty-rose)] font-semibold block text-right">
+          <span className="text-[10px] text-[var(--color-flowering-chestnut)] font-semibold block text-right">
             Calculated from your submitted responses
           </span>
         </div>

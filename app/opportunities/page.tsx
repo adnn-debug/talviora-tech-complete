@@ -490,7 +490,7 @@ export default function OpportunitiesPage() {
                       <div className="flex items-center gap-2 mt-1 text-xs text-[var(--color-burgundy)]/80 font-medium">
                         <span className="font-bold">{item.organisation}</span>
                         <span>•</span>
-                        <span className="text-[11px] text-[var(--color-dusty-rose)] font-semibold">
+                        <span className="text-[11px] text-[var(--color-flowering-chestnut)] font-semibold">
                           {item.opportunityType}
                         </span>
                       </div>

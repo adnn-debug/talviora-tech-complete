@@ -41,7 +41,7 @@ export default function WelcomePage() {
 
           <h1 className="title-hero-editorial font-bold text-[var(--color-burgundy)] tracking-tight leading-[1.08]">
             Master Technology. <br />
-            <span className="font-serif italic font-normal text-[var(--color-dusty-rose)]">
+            <span className="font-serif italic font-normal text-[var(--color-flowering-chestnut)]">
               Prove What You Build.
             </span>
           </h1>
@@ -98,7 +98,7 @@ export default function WelcomePage() {
               key={stage.step}
               className="card-coffee p-4 space-y-2 border border-[rgba(var(--color-burgundy-rgb),0.14)] border-t-4 border-t-[var(--color-burgundy)] bg-[var(--color-warm-ivory)] shadow-xs"
             >
-              <span className="font-mono-code font-bold text-xs text-[var(--color-dusty-rose)]">
+              <span className="font-mono-code font-bold text-xs text-[var(--color-flowering-chestnut)]">
                 {stage.step}
               </span>
               <h3 className="font-bold text-sm text-[var(--color-burgundy)] tracking-wide">
