@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { streamMentorReply, isGeminiConfigured } from "@/lib/gemini";
 import { sanitizeInput } from "@/lib/auth-server";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 type ChatMessage = { role: "user" | "assistant"; content: string };
 
@@ -36,6 +37,12 @@ export async function POST(req: Request) {
     const message = sanitizeInput(data.message, 4000);
     if (message.length < 3) {
       return NextResponse.json({ success: false, error: "Enter a question of at least 3 characters." }, { status: 400 });
+    }
+
+    // Persist only the new question. The inbox never receives AI replies or chat history.
+    if (isSupabaseConfigured) {
+      const { error: inboxError } = await supabase.from("mentor_questions").insert({ question: message });
+      if (inboxError) console.error("Mentor question inbox save failed:", inboxError.message);
     }
 
     const rawHistory = Array.isArray(data.history) ? data.history : [];
