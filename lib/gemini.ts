@@ -26,7 +26,7 @@ async function generateText(prompt: string, temperature: number, maxOutputTokens
           config: { temperature, responseMimeType: "application/json", ...(maxOutputTokens ? { maxOutputTokens } : {}) },
         }),
         new Promise<never>((_, reject) => {
-          timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 12000);
+          timeoutId = setTimeout(() => reject(new Error("AI provider request timed out.")), 25000);
         }),
       ]);
       if (!result.text) throw new Error("AI provider returned no text.");
@@ -35,7 +35,7 @@ async function generateText(prompt: string, temperature: number, maxOutputTokens
       lastError = error;
       const status = (error as { status?: number }).status;
       const message = error instanceof Error ? error.message : String(error);
-      const temporarilyUnavailable = status === 429 || status === 503 || /UNAVAILABLE|high demand/i.test(message);
+      const temporarilyUnavailable = status === 429 || status === 503 || /UNAVAILABLE|high demand|timed out/i.test(message);
       if (!temporarilyUnavailable || index === models.length - 1) throw error;
       console.warn(`Gemini model ${models[index]} is temporarily unavailable; retrying with ${models[index + 1]}.`);
     } finally {
