@@ -53,9 +53,9 @@ export async function POST(req: Request) {
       async start(controller) {
         try {
           for await (const text of streamMentorReply(message, history)) {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\\n\\n`));
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text })}\n\n`));
           }
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\\n\\n`));
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ done: true })}\n\n`));
         } catch (error) {
           console.error("Mentor request failed:", error);
           const providerStatus = (error as { status?: number })?.status;
@@ -64,7 +64,7 @@ export async function POST(req: Request) {
           const publicError = isBusy
             ? "The AI is busy right now. Your message is saved; please try again shortly."
             : "The AI could not finish this reply. Your message is saved; please try again.";
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: publicError })}\\n\\n`));
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: publicError })}\n\n`));
         } finally {
           controller.close();
         }
