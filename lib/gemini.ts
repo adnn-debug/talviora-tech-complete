@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY?.trim() || "";
 export const isGeminiConfigured = Boolean(apiKey && apiKey !== "your_gemini_api_key_here");
@@ -130,7 +130,7 @@ export async function* streamMentorReply(
         config: {
           maxOutputTokens: 4096,
           thinkingConfig: {
-            thinkingLevel: models[index] === "gemini-3.5-flash-lite" ? "minimal" : "low"
+            thinkingLevel: models[index] === "gemini-3.5-flash-lite" ? ThinkingLevel.MINIMAL : ThinkingLevel.LOW
           }
         }
       });
