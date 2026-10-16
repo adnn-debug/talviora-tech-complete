@@ -18,8 +18,14 @@ export async function POST(req: Request) {
     );
   }
 
+  let body: unknown;
   try {
-    const body: unknown = await req.json();
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ success: false, error: "Invalid JSON request payload." }, { status: 400 });
+  }
+
+  try {
     if (!body || typeof body !== "object" || Array.isArray(body)) {
       return NextResponse.json({ success: false, error: "Invalid mentor request." }, { status: 400 });
     }
