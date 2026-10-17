@@ -934,7 +934,7 @@ INSERT INTO public.learning_resources (
 )
 SELECT s.id, seed.resource_slug, seed.title, seed.resource_type, seed.description,
   seed.content_markdown, seed.url, seed.provider, 'en', seed.access_type,
-  seed.verification_status, seed.last_verified_at, seed.estimated_minutes,
+  seed.verification_status, seed.last_verified_at::TIMESTAMPTZ, seed.estimated_minutes,
   seed.completion_criteria, seed.sort_order
 FROM (VALUES
   ('python-first-program', 'first-program-lesson', 'A gentle first Python program', 'lesson',
