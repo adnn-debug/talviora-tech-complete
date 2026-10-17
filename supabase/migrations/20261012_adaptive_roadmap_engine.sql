@@ -523,10 +523,10 @@ BEGIN
 
   IF p_total_learning_minutes IS DISTINCT FROM v_computed_total
     OR p_estimated_total_minutes IS DISTINCT FROM CEIL(v_computed_total * 1.2)::INTEGER
-    OR p_estimated_duration_weeks IS DISTINCT FROM CASE
+    OR p_estimated_duration_weeks IS DISTINCT FROM (CASE
       WHEN v_computed_total = 0 THEN 0
       ELSE CEIL(CEIL(v_computed_total * 1.2)::NUMERIC / p_weekly_study_minutes)::INTEGER
-    END THEN
+    END) THEN
     RAISE EXCEPTION 'INVALID_ROADMAP_ESTIMATE' USING ERRCODE = '22023';
   END IF;
 
