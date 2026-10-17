@@ -523,10 +523,10 @@ BEGIN
 
   IF p_total_learning_minutes IS DISTINCT FROM v_computed_total
     OR p_estimated_total_minutes IS DISTINCT FROM CEIL(v_computed_total * 1.2)::INTEGER
-    OR p_estimated_duration_weeks IS DISTINCT FROM (CASE
+    OR p_estimated_duration_weeks IS DISTINCT FROM CASE
       WHEN v_computed_total = 0 THEN 0
       ELSE CEIL(CEIL(v_computed_total * 1.2)::NUMERIC / p_weekly_study_minutes)::INTEGER
-    END) THEN
+    END THEN
     RAISE EXCEPTION 'INVALID_ROADMAP_ESTIMATE' USING ERRCODE = '22023';
   END IF;
 
@@ -934,7 +934,7 @@ INSERT INTO public.learning_resources (
 )
 SELECT s.id, seed.resource_slug, seed.title, seed.resource_type, seed.description,
   seed.content_markdown, seed.url, seed.provider, 'en', seed.access_type,
-  seed.verification_status, seed.last_verified_at::TIMESTAMPTZ, seed.estimated_minutes,
+  seed.verification_status, seed.last_verified_at, seed.estimated_minutes,
   seed.completion_criteria, seed.sort_order
 FROM (VALUES
   ('python-first-program', 'first-program-lesson', 'A gentle first Python program', 'lesson',

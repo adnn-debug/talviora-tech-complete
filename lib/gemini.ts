@@ -2,7 +2,10 @@ import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 
 const apiKey = process.env.GEMINI_API_KEY?.trim() || "";
 export const isGeminiConfigured = Boolean(apiKey && apiKey !== "your_gemini_api_key_here");
-const modelName = process.env.GEMINI_MODEL?.trim() || "gemini-3.5-flash-lite";
+const requestedModel = process.env.GEMINI_MODEL?.trim();
+const modelName = requestedModel === "gemini-3.8-flash" || requestedModel === "gemini-3.6-flash"
+  ? requestedModel
+  : "gemini-3.8-flash";
 
 const genAI = isGeminiConfigured ? new GoogleGenAI({ apiKey }) : null;
 
@@ -33,7 +36,7 @@ async function generateText(prompt: string, temperature: number, maxOutputTokens
       lastError = error;
       const status = (error as { status?: number }).status;
       const message = error instanceof Error ? error.message : String(error);
-      const temporarilyUnavailable = status === 429 || status === 503 || /UNAVAILABLE|high demand|timed out/i.test(message);
+      const temporarilyUnavailable = status === 404 || status === 429 || status === 503 || /NOT_FOUND|not available to new users|UNAVAILABLE|high demand|timed out/i.test(message);
       if (!temporarilyUnavailable || index === models.length - 1) throw error;
       console.warn(`Gemini model ${models[index]} is temporarily unavailable; retrying with ${models[index + 1]}.`);
     } finally {
@@ -108,7 +111,6 @@ export async function* streamMentorReply(
 
   const prompt = [
     "You are Talviora's capable, careful general AI assistant and learning mentor.",
-    "The same note says she likes burgundy, nude and coffee-nude shades, the pink bow emoji 🎀, Dairy Milk Silk with nuts, strawberries, and dramas such as Jodha Akbar. It explicitly says she does not like coffee as a drink. Treat these as reported preferences that may change.",
     "Answer the user's actual question regardless of topic, including technology, school, work, writing, creativity, everyday knowledge, and casual conversation. Do not refuse a harmless question because it is outside technology or career topics.",
     "Be accurate and direct. Do not invent facts, citations, actions, memory, or personal experience. If you are uncertain, say so plainly. You have no live web access in this chat; identify when an answer may be out of date and do not present guesses as current facts.",
     "For medical, legal, financial, or other high-stakes topics, give general information carefully and encourage checking with a qualified professional when the situation needs it.",
@@ -166,8 +168,8 @@ export async function* streamMentorReply(
       if (emittedText) throw error;
       const status = (error as { status?: number })?.status;
       const errorMessage = error instanceof Error ? error.message : String(error);
-      const temporarilyUnavailable = status === 429 || status === 503 ||
-        /UNAVAILABLE|high demand|timed out/i.test(errorMessage);
+      const temporarilyUnavailable = status === 404 || status === 429 || status === 503 ||
+        /NOT_FOUND|not available to new users|UNAVAILABLE|high demand|timed out/i.test(errorMessage);
       if (!temporarilyUnavailable || index === models.length - 1) throw error;
       console.warn("Gemini model temporarily unavailable; trying the next configured fallback.");
     }
