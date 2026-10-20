@@ -53,7 +53,7 @@ export default function WelcomePage() {
 
           {/* Free Learning Manifesto Badge */}
           <div className="flex items-center gap-2 text-xs font-semibold text-[var(--color-burgundy)]">
-            <ShieldCheck className="w-4 h-4 shrink-0 text-[var(--color-dusty-rose)]" />
+            <ShieldCheck className="w-4 h-4 shrink-0 text-[var(--color-flowering-chestnut)]" />
             <span>Preview workspace • Add your own profile details • Configure account and AI services for personal features</span>
           </div>
 

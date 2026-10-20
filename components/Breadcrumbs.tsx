@@ -93,7 +93,7 @@ export default function Breadcrumbs() {
         {matched ? (
           <>
             <li className="flex items-center gap-1.5" aria-hidden="true">
-              <ChevronRight className="w-3.5 h-3.5 text-[var(--color-dusty-rose)] shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)] shrink-0" />
             </li>
             <li className="flex items-center gap-1.5">
               <Link
@@ -104,7 +104,7 @@ export default function Breadcrumbs() {
               </Link>
             </li>
             <li className="flex items-center gap-1.5" aria-hidden="true">
-              <ChevronRight className="w-3.5 h-3.5 text-[var(--color-dusty-rose)] shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)] shrink-0" />
             </li>
             <li className="flex items-center gap-1.5 font-bold text-[var(--color-burgundy)]" aria-current="page">
               <span>{matched.title}</span>
@@ -118,7 +118,7 @@ export default function Breadcrumbs() {
 
             return (
               <li key={href} className="flex items-center gap-1.5">
-                <ChevronRight className="w-3.5 h-3.5 text-[var(--color-dusty-rose)] shrink-0" aria-hidden="true" />
+                <ChevronRight className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)] shrink-0" aria-hidden="true" />
                 {isLast ? (
                   <span className="font-bold text-[var(--color-burgundy)]" aria-current="page">
                     {subMatched?.title || formatSegment(segment)}

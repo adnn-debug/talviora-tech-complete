@@ -48,7 +48,7 @@ export async function GET(req: Request) {
     console.error("Profile read failed:", error.message);
     return NextResponse.json(
       { success: false, error: "Could not load the saved profile." },
-      { status: 503 }
+      { status: 500 }
     );
   }
 
@@ -134,13 +134,14 @@ export async function POST(req: Request) {
     if (error || !data) {
       console.error("Profile save failed:", error?.message);
       return NextResponse.json(
-        { success: false, error: "Profile changes were not saved. Check Supabase configuration and schema." },
-        { status: 503 }
+        { success: false, error: "Profile changes were not saved. Check database configuration." },
+        { status: 500 }
       );
     }
 
     return NextResponse.json({ success: true, profile: toClientProfile(data), persisted: true });
-  } catch {
-    return NextResponse.json({ success: false, error: "Failed to save profile changes." }, { status: 400 });
+  } catch (err) {
+    console.error("Unexpected error in profile POST:", err);
+    return NextResponse.json({ success: false, error: "Failed to save profile changes." }, { status: 500 });
   }
 }

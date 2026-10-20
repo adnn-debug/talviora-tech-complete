@@ -99,8 +99,8 @@ export default function ArchitecturePage() {
                 <span className="text-[10px] text-[var(--color-burgundy)]/70 block">PDF / Markdown → split into overlapping chunks</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 md:hidden" />
 
               {/* Step 2 */}
               <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border-2 border-[var(--color-burgundy)] text-center space-y-2 shadow-xs">
@@ -109,8 +109,8 @@ export default function ArchitecturePage() {
                 <span className="text-[10px] text-[var(--color-burgundy)]/70 block">Compare similarity with a threshold selected for your data</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 md:hidden" />
 
               {/* Step 3 */}
               <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-dusty-rose)] text-center space-y-2 shadow-xs">
@@ -119,8 +119,8 @@ export default function ArchitecturePage() {
                 <span className="text-[10px] text-[var(--color-burgundy)]/70 block">Tune vector-index settings and combine with lexical search as needed</span>
               </div>
 
-              <ArrowRight className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 hidden md:block" />
-              <ArrowDown className="w-5 h-5 text-[var(--color-dusty-rose)] shrink-0 md:hidden" />
+              <ArrowRight className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 hidden md:block" />
+              <ArrowDown className="w-5 h-5 text-[var(--color-flowering-chestnut)] shrink-0 md:hidden" />
 
               {/* Step 4 */}
               <div className="w-48 p-4 rounded-xl bg-[var(--color-warm-ivory)] border border-[var(--color-creme-latte)] text-center space-y-2 shadow-xs">

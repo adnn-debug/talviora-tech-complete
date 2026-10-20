@@ -164,6 +164,7 @@ export default function Sidebar() {
                   <Link
                     key={item.label}
                     href={item.href}
+                    prefetch={false}
                     className={`relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-150 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-burgundy)] ${
                       isActive
                         ? "bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[var(--color-burgundy)] shadow-xs"
@@ -181,7 +182,7 @@ export default function Sidebar() {
                         className={`w-4 h-4 shrink-0 transition-colors ${
                           isActive
                             ? "text-[var(--color-burgundy)]"
-                            : "text-[var(--color-dusty-rose)] group-hover:text-[var(--color-burgundy)]"
+                            : "text-[var(--color-flowering-chestnut)] group-hover:text-[var(--color-burgundy)]"
                         }`}
                       />
                       <span className="truncate">{item.label}</span>

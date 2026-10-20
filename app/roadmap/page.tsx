@@ -195,7 +195,7 @@ export default function RoadmapPage() {
                       type="button"
                       onClick={() => toggleModule(pIdx, mod.id)}
                       aria-pressed={mod.completed}
-                      className="mt-0.5 text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] transition cursor-pointer"
+                      className="mt-0.5 text-[var(--color-flowering-chestnut)] hover:text-[var(--color-burgundy)] transition cursor-pointer"
                       aria-label={`Toggle module ${mod.title}`}
                     >
                       {mod.completed ? (
@@ -230,7 +230,7 @@ export default function RoadmapPage() {
                         href={mod.resourceLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[var(--color-dusty-rose)] hover:text-[var(--color-burgundy)] p-1 transition"
+                        className="text-[var(--color-flowering-chestnut)] hover:text-[var(--color-burgundy)] p-1 transition"
                         title="View Documentation"
                       >
                         <ExternalLink className="w-4 h-4" />

@@ -559,13 +559,13 @@ export default function CompleteCataloguePage() {
           <div className="p-4 sm:p-5 rounded-2xl bg-[var(--color-warm-ivory)] border border-[rgba(var(--color-burgundy-rgb),0.15)] shadow-xs space-y-4">
             {/* Search Input */}
             <div className="relative">
-              <Search className="w-4 h-4 text-[var(--color-burgundy)]/60 absolute left-3.5 top-3 pointer-events-none" />
+              <Search className="w-4 h-4 text-[var(--color-flowering-chestnut)] absolute left-3.5 top-3 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search languages, technologies, tools, careers, or side hustles..."
-                className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm rounded-xl bg-[var(--color-warm-ivory)]/40 border border-[rgba(var(--color-burgundy-rgb),0.2)] text-[var(--color-burgundy)] placeholder:text-[var(--color-burgundy)]/50 focus:outline-none focus:border-[var(--color-burgundy)] transition"
+                className="w-full pl-10 pr-10 py-2.5 text-xs sm:text-sm rounded-xl bg-[var(--color-warm-ivory)]/40 border border-[rgba(var(--color-burgundy-rgb),0.2)] text-[var(--color-burgundy)] placeholder:text-[var(--color-flowering-chestnut)] focus:outline-none focus:border-[var(--color-burgundy)] transition"
               />
               {searchQuery && (
                 <button
@@ -1605,7 +1605,7 @@ export default function CompleteCataloguePage() {
             <div className="p-5 bg-[var(--color-creme-latte)] border-b border-[rgba(var(--color-burgundy-rgb),0.18)] flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-burgundy)] flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-[var(--color-dusty-rose)]" />
+                  <Sparkles className="w-3 h-3 text-[var(--color-flowering-chestnut)]" />
                   <span>Interactive Career Discovery Wizard</span>
                 </span>
                 <h3 className="font-display-serif text-xl font-bold text-[var(--color-burgundy)]">

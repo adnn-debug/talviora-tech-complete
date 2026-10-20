@@ -103,7 +103,7 @@ export default function ProjectsPage() {
               <span className="text-xs font-bold text-[var(--color-burgundy)] uppercase tracking-wider">
                 {activeProject.architectureDiagramType}
               </span>
-              <span className="text-[var(--color-dusty-rose)]">•</span>
+              <span className="text-[var(--color-flowering-chestnut)] font-bold">•</span>
               <span className="text-xs text-[var(--color-burgundy)]/75 font-medium">
                 Estimated Scope: {activeProject.estimatedHours} Hours
               </span>
@@ -204,7 +204,7 @@ export default function ProjectsPage() {
                 key={idx}
                 className="p-3.5 rounded-xl bg-[var(--color-creme-latte)] border border-[rgba(var(--color-burgundy-rgb),0.15)] text-xs text-[var(--color-burgundy)] flex items-center gap-3"
               >
-                <ShieldCheck className="w-4 h-4 text-[var(--color-dusty-rose)] shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-[var(--color-flowering-chestnut)] shrink-0" />
                 <span className="leading-relaxed font-medium">{criterion}</span>
               </div>
             ))}

@@ -511,7 +511,7 @@ export default function OpportunitiesPage() {
                     {/* Location & Eligibility */}
                     <div className="text-xs text-[var(--color-burgundy)]/85 space-y-1">
                       <div className="flex items-start gap-1.5 font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-[var(--color-dusty-rose)] shrink-0 mt-0.5" />
+                        <MapPin className="w-3.5 h-3.5 text-[var(--color-flowering-chestnut)] shrink-0 mt-0.5" />
                         <span>{item.locationAndEligibility}</span>
                       </div>
                     </div>
@@ -554,7 +554,7 @@ export default function OpportunitiesPage() {
                     {/* Verification Notes */}
                     <div className="p-2.5 rounded-xl bg-[var(--surface-rose)]/50 border border-[rgba(var(--color-dusty-rose-rgb),0.4)] text-[11px] text-[var(--color-burgundy)]/85 space-y-1">
                       <div className="flex items-center gap-1 font-semibold text-[10px] uppercase text-[var(--color-burgundy)]">
-                        <Info className="w-3 h-3 text-[var(--color-dusty-rose)]" />
+                        <Info className="w-3 h-3 text-[var(--color-flowering-chestnut)]" />
                         <span>Audit Note:</span>
                       </div>
                       <p className="leading-snug">{item.verificationNotes}</p>

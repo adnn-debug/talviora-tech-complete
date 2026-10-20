@@ -1,6 +1,28 @@
 import type { Metadata } from "next";
+import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-dm-sans",
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-dm-serif",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ["400", "500"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   title: "TALVIORA TECH | AI Career Intelligence Platform",
@@ -29,12 +51,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap"
-          rel="stylesheet"
-        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -49,7 +65,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="antialiased selection:bg-[var(--color-dusty-rose)]/40 selection:text-[var(--color-burgundy)]">
+      <body className={`${dmSans.variable} ${dmSerifDisplay.variable} ${jetbrainsMono.variable} antialiased selection:bg-[var(--color-dusty-rose)]/40 selection:text-[var(--color-burgundy)]`}>
         <AppShell>{children}</AppShell>
       </body>
     </html>

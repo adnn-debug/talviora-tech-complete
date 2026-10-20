@@ -38,7 +38,10 @@ import {
   CATALOGUE_CATEGORIES,
   CatalogueItem,
 } from "@/lib/catalogue-data";
-import OnboardingFlowModal from "@/components/OnboardingFlowModal";
+import dynamic from "next/dynamic";
+const OnboardingFlowModal = dynamic(() => import("@/components/OnboardingFlowModal"), {
+  ssr: false,
+});
 import PersonalisedJourneyDashboard from "@/components/PersonalisedJourneyDashboard";
 import {
   PersonalisedJourney,

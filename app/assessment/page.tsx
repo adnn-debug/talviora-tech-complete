@@ -342,7 +342,7 @@ export default function AssessmentPage() {
 
         {errorMsg && (
           <div className="p-3.5 rounded-xl bg-[var(--surface-rose)] border border-[rgba(var(--color-dusty-rose-rgb),0.6)] text-[var(--color-burgundy)] text-xs flex items-center gap-2 font-medium">
-            <ShieldAlert className="w-4 h-4 shrink-0 text-[var(--color-dusty-rose)]" />
+            <ShieldAlert className="w-4 h-4 shrink-0 text-[var(--color-flowering-chestnut)]" />
             <span>{errorMsg}</span>
           </div>
         )}
